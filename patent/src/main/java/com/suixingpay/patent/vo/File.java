@@ -15,6 +15,7 @@ public class File {
     private int fileId;//交底书主键
     private int filePatentId;//专利id
     private String filePath;//文件路径
+    private String fileName;//文件名
     private int fileStatus;//文件状态 0不启用 1启用
     private Date fileCreateTime;//创建时间
 }
