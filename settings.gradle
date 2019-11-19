@@ -1,0 +1,3 @@
+rootProject.name = 'patent-system'
+include 'patent'
+
