@@ -20,6 +20,7 @@ public class Patent {
     private Date patentApplyTime;//申请时间
     private String patentTechnicalContact;//技术联系人
     private String patentApplyPerson;//申请人
+    private int patentCreatePerson;//专利创建人
     private String patentName;//专利名
     private int patentSign;//是否需要审核
     private int patentStatusId;//专利状态
