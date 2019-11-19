@@ -8,4 +8,5 @@ import org.apache.ibatis.annotations.Select;
 public interface PatentDao {
     @Select("SELECT * FROM patent")
     public Patent findAll();
+    
 }
