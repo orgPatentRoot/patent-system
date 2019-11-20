@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suixingpay.patent.mapper.HistoryMapper">
+  <resultMap id="BaseResultMap" type="com.suixingpay.patent.pojo.History">
+    <result column="hid" jdbcType="INTEGER" property="hid" />
+    <result column="aid" jdbcType="INTEGER" property="aid" />
+    <result column="bid" jdbcType="INTEGER" property="bid" />
+    <result column="card" jdbcType="CHAR" property="card" />
+    <result column="bookname" jdbcType="CHAR" property="bookname" />
+    <result column="adminname" jdbcType="CHAR" property="adminname" />
+    <result column="username" jdbcType="CHAR" property="username" />
+    <result column="begintime" jdbcType="CHAR" property="begintime" />
+    <result column="endtime" jdbcType="CHAR" property="endtime" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+  </resultMap>
+  <insert id="insert" parameterType="com.suixingpay.patent.pojo.History">
+    insert into history (hid, aid, bid, 
+      card, bookname, adminname, username, 
+      begintime, endtime, status
+      )
+    values (#{hid,jdbcType=INTEGER}, #{aid,jdbcType=INTEGER}, #{bid,jdbcType=INTEGER}, 
+      #{card,jdbcType=CHAR}, #{bookname,jdbcType=CHAR}, #{adminname,jdbcType=CHAR}, #{username,jdbcType=CHAR}, 
+      #{begintime,jdbcType=CHAR}, #{endtime,jdbcType=CHAR}, #{status,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.suixingpay.patent.pojo.History">
+    insert into history
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="hid != null">
+        hid,
+      </if>
+      <if test="aid != null">
+        aid,
+      </if>
+      <if test="bid != null">
+        bid,
+      </if>
+      <if test="card != null">
+        card,
+      </if>
+      <if test="bookname != null">
+        bookname,
+      </if>
+      <if test="adminname != null">
+        adminname,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+      <if test="begintime != null">
+        begintime,
+      </if>
+      <if test="endtime != null">
+        endtime,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="hid != null">
+        #{hid,jdbcType=INTEGER},
+      </if>
+      <if test="aid != null">
+        #{aid,jdbcType=INTEGER},
+      </if>
+      <if test="bid != null">
+        #{bid,jdbcType=INTEGER},
+      </if>
+      <if test="card != null">
+        #{card,jdbcType=CHAR},
+      </if>
+      <if test="bookname != null">
+        #{bookname,jdbcType=CHAR},
+      </if>
+      <if test="adminname != null">
+        #{adminname,jdbcType=CHAR},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=CHAR},
+      </if>
+      <if test="begintime != null">
+        #{begintime,jdbcType=CHAR},
+      </if>
+      <if test="endtime != null">
+        #{endtime,jdbcType=CHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <resultMap id="BaseResultMap" type="com.suixingpay.patent.pojo.History">
+    <id column="history_id" jdbcType="INTEGER" property="historyId" />
+    <result column="history_patent" jdbcType="VARCHAR" property="historyPatent" />
+    <result column="history_modification" jdbcType="VARCHAR" property="historyModification" />
+    <result column="history_user" jdbcType="VARCHAR" property="historyUser" />
+    <result column="history_create_time" jdbcType="TIMESTAMP" property="historyCreateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    history_id, history_patent, history_modification, history_user, history_create_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from history
+    where history_id = #{historyId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="Integer">
+    delete from history
+    where history_id = #{historyId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.suixingpay.patent.pojo.History">
+    insert into history (history_id, history_patent, history_modification, 
+      history_user, history_create_time)
+    values (#{historyId,jdbcType=INTEGER}, #{historyPatent,jdbcType=VARCHAR}, #{historyModification,jdbcType=VARCHAR}, 
+      #{historyUser,jdbcType=VARCHAR}, #{historyCreateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.suixingpay.patent.pojo.History">
+    insert into history
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="historyId != null">
+        history_id,
+      </if>
+      <if test="historyPatent != null">
+        history_patent,
+      </if>
+      <if test="historyModification != null">
+        history_modification,
+      </if>
+      <if test="historyUser != null">
+        history_user,
+      </if>
+      <if test="historyCreateTime != null">
+        history_create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="historyId != null">
+        #{historyId,jdbcType=INTEGER},
+      </if>
+      <if test="historyPatent != null">
+        #{historyPatent,jdbcType=VARCHAR},
+      </if>
+      <if test="historyModification != null">
+        #{historyModification,jdbcType=VARCHAR},
+      </if>
+      <if test="historyUser != null">
+        #{historyUser,jdbcType=VARCHAR},
+      </if>
+      <if test="historyCreateTime != null">
+        #{historyCreateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.suixingpay.patent.pojo.History">
+    update history
+    <set>
+      <if test="historyPatent != null">
+        history_patent = #{historyPatent,jdbcType=VARCHAR},
+      </if>
+      <if test="historyModification != null">
+        history_modification = #{historyModification,jdbcType=VARCHAR},
+      </if>
+      <if test="historyUser != null">
+        history_user = #{historyUser,jdbcType=VARCHAR},
+      </if>
+      <if test="historyCreateTime != null">
+        history_create_time = #{historyCreateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where history_id = #{historyId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.suixingpay.patent.pojo.History">
+    update history
+    set history_patent = #{historyPatent,jdbcType=VARCHAR},
+      history_modification = #{historyModification,jdbcType=VARCHAR},
+      history_user = #{historyUser,jdbcType=VARCHAR},
+      history_create_time = #{historyCreateTime,jdbcType=TIMESTAMP}
+    where history_id = #{historyId,jdbcType=INTEGER}
+  </update>
+</mapper>
