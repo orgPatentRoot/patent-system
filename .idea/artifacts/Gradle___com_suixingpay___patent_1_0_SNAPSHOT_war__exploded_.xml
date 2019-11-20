@@ -17,53 +17,54 @@
           <element id="dir-copy" path="$PROJECT_DIR$/patent/out/production/resources" />
         </element>
         <element id="directory" name="lib">
-          <element id="file-copy" path="$PROJECT_DIR$/../../gradleDirectory/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-web/2.0.4.RELEASE/98d49e981ecf804da877d84259b7b0d1ec2fb6f6/spring-boot-starter-web-2.0.4.RELEASE.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../gradleDirectory/caches/modules-2/files-2.1/org.mybatis.spring.boot/mybatis-spring-boot-starter/1.3.2/cb6de087ae0d34b23ad0671aacdbcc433d84875f/mybatis-spring-boot-starter-1.3.2.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../gradleDirectory/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-json/2.0.4.RELEASE/c7afabf0d7c85db178da4ce0634e3bd2ddb0eb71/spring-boot-starter-json-2.0.4.RELEASE.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../gradleDirectory/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-jdbc/1.5.9.RELEASE/6769ecea55e952afb64f17975638c5afd1e59ef3/spring-boot-starter-jdbc-1.5.9.RELEASE.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../gradleDirectory/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter/1.5.9.RELEASE/6bfb34db2715ee86c6e2337fa145650588b4b1b3/spring-boot-starter-1.5.9.RELEASE.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../gradleDirectory/caches/modules-2/files-2.1/org.projectlombok/lombok/1.16.16/245b50f714bf89ed7659266ace12f9e509d13551/lombok-1.16.16.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../gradleDirectory/caches/modules-2/files-2.1/org.hibernate/hibernate-validator/5.3.6.Final/4c730be8bf55a8e9a61e79a2f2c079abf48b718/hibernate-validator-5.3.6.Final.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../gradleDirectory/caches/modules-2/files-2.1/mysql/mysql-connector-java/5.1.47/9de4159aaf2d08817a276610b8114a825fca6cfd/mysql-connector-java-5.1.47.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../gradleDirectory/caches/modules-2/files-2.1/org.mybatis.spring.boot/mybatis-spring-boot-autoconfigure/1.3.2/cada00d6bb4e7b8a733b3cd376ad69a307008685/mybatis-spring-boot-autoconfigure-1.3.2.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../gradleDirectory/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-autoconfigure/1.5.9.RELEASE/88dd18bdaf317ae40971573a051fd47265f2ed39/spring-boot-autoconfigure-1.5.9.RELEASE.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../gradleDirectory/caches/modules-2/files-2.1/org.springframework.boot/spring-boot/1.5.9.RELEASE/f472cdf948288796fb31e0bb03f6e7b022b763a0/spring-boot-1.5.9.RELEASE.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../gradleDirectory/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-logging/1.5.9.RELEASE/30fd62a1ce9639759d90d49608501082314c1628/spring-boot-starter-logging-1.5.9.RELEASE.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../gradleDirectory/caches/modules-2/files-2.1/org.springframework/spring-webmvc/4.3.13.RELEASE/87a095c7a1d13fe433ae6712787238c1dbaa6919/spring-webmvc-4.3.13.RELEASE.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../gradleDirectory/caches/modules-2/files-2.1/org.springframework/spring-web/4.3.13.RELEASE/7cd084992d546165ede3e99bc31ee49c937f0ce7/spring-web-4.3.13.RELEASE.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../gradleDirectory/caches/modules-2/files-2.1/org.springframework/spring-context/4.3.13.RELEASE/6ab1c189a13182fa3256f6bbc68fafdaf8f5a19e/spring-context-4.3.13.RELEASE.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../gradleDirectory/caches/modules-2/files-2.1/org.springframework/spring-aop/4.3.13.RELEASE/61f427b55951f59b50f3c2bd0de3c48960e2a342/spring-aop-4.3.13.RELEASE.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../gradleDirectory/caches/modules-2/files-2.1/org.springframework/spring-jdbc/4.3.13.RELEASE/68e95c2a065641559c7dab7b605bc5847ab026ad/spring-jdbc-4.3.13.RELEASE.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../gradleDirectory/caches/modules-2/files-2.1/org.springframework/spring-tx/4.3.13.RELEASE/6ebf7b3f2099fa884038d9d7bd44817ebd9c5b4a/spring-tx-4.3.13.RELEASE.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../gradleDirectory/caches/modules-2/files-2.1/org.springframework/spring-beans/4.3.13.RELEASE/8613a7077722f1d97f8cb3fea4b0b40bfadf4496/spring-beans-4.3.13.RELEASE.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../gradleDirectory/caches/modules-2/files-2.1/org.springframework/spring-expression/4.3.13.RELEASE/da22bf7df1262e429b49653be6cd5b89b6affe5e/spring-expression-4.3.13.RELEASE.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../gradleDirectory/caches/modules-2/files-2.1/org.springframework/spring-core/4.3.13.RELEASE/eea18d7f4d01f1baa1b6728b678b5a6fe23c61f6/spring-core-4.3.13.RELEASE.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../gradleDirectory/caches/modules-2/files-2.1/org.yaml/snakeyaml/1.17/7a27ea250c5130b2922b86dea63cbb1cc10a660c/snakeyaml-1.17.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../gradleDirectory/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-tomcat/1.5.9.RELEASE/4615056f8a2bcad03ba8cdf410419ee3d101c5bb/spring-boot-starter-tomcat-1.5.9.RELEASE.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../gradleDirectory/caches/modules-2/files-2.1/org.hibernate.validator/hibernate-validator/6.0.11.Final/36f9d10a11e4768f55e8fb91ebe4338a5c43954e/hibernate-validator-6.0.11.Final.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../gradleDirectory/caches/modules-2/files-2.1/javax.validation/validation-api/1.1.0.Final/8613ae82954779d518631e05daa73a6a954817d5/validation-api-1.1.0.Final.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../gradleDirectory/caches/modules-2/files-2.1/org.jboss.logging/jboss-logging/3.3.1.Final/c46217ab74b532568c0ed31dc599db3048bd1b67/jboss-logging-3.3.1.Final.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../gradleDirectory/caches/modules-2/files-2.1/com.fasterxml/classmate/1.3.4/3d5f48f10bbe4eb7bd862f10c0583be2e0053c6/classmate-1.3.4.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../gradleDirectory/caches/modules-2/files-2.1/org.mybatis/mybatis/3.4.6/a77a546f679533837f6c6a75c034b669f3ce6a2f/mybatis-3.4.6.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../gradleDirectory/caches/modules-2/files-2.1/org.mybatis/mybatis-spring/1.3.2/fd9961cd026b1f6998be27c516973dd5366b14ec/mybatis-spring-1.3.2.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../gradleDirectory/caches/modules-2/files-2.1/ch.qos.logback/logback-classic/1.1.11/ccedfbacef4a6515d2983e3f89ed753d5d4fb665/logback-classic-1.1.11.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../gradleDirectory/caches/modules-2/files-2.1/org.slf4j/jcl-over-slf4j/1.7.25/f8c32b13ff142a513eeb5b6330b1588dcb2c0461/jcl-over-slf4j-1.7.25.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../gradleDirectory/caches/modules-2/files-2.1/org.slf4j/jul-to-slf4j/1.7.25/af5364cd6679bfffb114f0dec8a157aaa283b76/jul-to-slf4j-1.7.25.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../gradleDirectory/caches/modules-2/files-2.1/org.slf4j/log4j-over-slf4j/1.7.25/a87bb47468f47ee7aabbd54f93e133d4215769c3/log4j-over-slf4j-1.7.25.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../gradleDirectory/caches/modules-2/files-2.1/com.fasterxml.jackson.datatype/jackson-datatype-jdk8/2.8.10/6ab4b29da1dcc8599b706cb92dabe37a049f0259/jackson-datatype-jdk8-2.8.10.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../gradleDirectory/caches/modules-2/files-2.1/com.fasterxml.jackson.datatype/jackson-datatype-jsr310/2.8.10/c7e69a2619d22f067e96ac1fec95b4157604167f/jackson-datatype-jsr310-2.8.10.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../gradleDirectory/caches/modules-2/files-2.1/com.fasterxml.jackson.module/jackson-module-parameter-names/2.8.10/25e1b4ea5fe1d0a0d954e27a077c0550d9192b3/jackson-module-parameter-names-2.8.10.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../gradleDirectory/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-databind/2.8.10/f7b83cb2bc4b88d53961e749e1ad32f49ef017b7/jackson-databind-2.8.10.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../gradleDirectory/caches/modules-2/files-2.1/org.apache.tomcat.embed/tomcat-embed-websocket/8.5.23/52f07abcae10dc7e1764304b0877def175c2c833/tomcat-embed-websocket-8.5.23.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../gradleDirectory/caches/modules-2/files-2.1/org.apache.tomcat.embed/tomcat-embed-core/8.5.23/79261793a47f507890ee08f749b9d81774e4f7f0/tomcat-embed-core-8.5.23.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../gradleDirectory/caches/modules-2/files-2.1/org.apache.tomcat.embed/tomcat-embed-el/8.5.23/98d979cde444dffa6d434c8377d0123b2dfa614c/tomcat-embed-el-8.5.23.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../gradleDirectory/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-jdbc/8.5.23/6036400a8f2d90dd3ae3a4d09e5136c56002887b/tomcat-jdbc-8.5.23.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../gradleDirectory/caches/modules-2/files-2.1/ch.qos.logback/logback-core/1.1.11/88b8df40340eed549fb07e2613879bf6b006704d/logback-core-1.1.11.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../gradleDirectory/caches/modules-2/files-2.1/org.slf4j/slf4j-api/1.7.25/da76ca59f6a57ee3102f8f9bd9cee742973efa8a/slf4j-api-1.7.25.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../gradleDirectory/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-annotations/2.8.0/45b426f7796b741035581a176744d91090e2e6fb/jackson-annotations-2.8.0.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../gradleDirectory/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-core/2.8.10/eb21a035c66ad307e66ec8fce37f5d50fd62d039/jackson-core-2.8.10.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../gradleDirectory/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-annotations-api/8.5.23/aaf17df9fe0240e9e9d5375d24d5f177174b73d9/tomcat-annotations-api-8.5.23.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../gradleDirectory/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-juli/8.5.23/98e7f0610b7b2fb8303f11be0210e3f5a56a7d55/tomcat-juli-8.5.23.jar" />
+          <element id="library" level="project" name="Gradle: org.springframework.boot:spring-boot-starter-web:2.0.4.RELEASE" />
+          <element id="library" level="project" name="Gradle: org.mybatis.spring.boot:mybatis-spring-boot-starter:1.3.2" />
+          <element id="library" level="project" name="Gradle: org.springframework.boot:spring-boot-starter-json:2.0.4.RELEASE" />
+          <element id="library" level="project" name="Gradle: org.springframework.boot:spring-boot-starter-jdbc:1.5.9.RELEASE" />
+          <element id="library" level="project" name="Gradle: org.springframework.boot:spring-boot-starter:1.5.9.RELEASE" />
+          <element id="library" level="project" name="Gradle: org.projectlombok:lombok:1.16.16" />
+          <element id="library" level="project" name="Gradle: org.hibernate:hibernate-validator:5.3.6.Final" />
+          <element id="library" level="project" name="Gradle: mysql:mysql-connector-java:5.1.47" />
+          <element id="library" level="project" name="Gradle: org.mybatis.spring.boot:mybatis-spring-boot-autoconfigure:1.3.2" />
+          <element id="library" level="project" name="Gradle: org.springframework.boot:spring-boot-autoconfigure:1.5.9.RELEASE" />
+          <element id="library" level="project" name="Gradle: org.springframework.boot:spring-boot:1.5.9.RELEASE" />
+          <element id="library" level="project" name="Gradle: org.springframework.boot:spring-boot-starter-logging:1.5.9.RELEASE" />
+          <element id="library" level="project" name="Gradle: org.springframework:spring-webmvc:4.3.13.RELEASE" />
+          <element id="library" level="project" name="Gradle: org.springframework:spring-web:4.3.13.RELEASE" />
+          <element id="library" level="project" name="Gradle: org.springframework:spring-context:4.3.13.RELEASE" />
+          <element id="library" level="project" name="Gradle: org.springframework:spring-aop:4.3.13.RELEASE" />
+          <element id="library" level="project" name="Gradle: org.springframework:spring-jdbc:4.3.13.RELEASE" />
+          <element id="library" level="project" name="Gradle: org.springframework:spring-tx:4.3.13.RELEASE" />
+          <element id="library" level="project" name="Gradle: org.springframework:spring-beans:4.3.13.RELEASE" />
+          <element id="library" level="project" name="Gradle: org.springframework:spring-expression:4.3.13.RELEASE" />
+          <element id="library" level="project" name="Gradle: org.springframework:spring-core:4.3.13.RELEASE" />
+          <element id="library" level="project" name="Gradle: org.yaml:snakeyaml:1.17" />
+          <element id="library" level="project" name="Gradle: org.springframework.boot:spring-boot-starter-tomcat:1.5.9.RELEASE" />
+          <element id="library" level="project" name="Gradle: org.hibernate.validator:hibernate-validator:6.0.11.Final" />
+          <element id="library" level="project" name="Gradle: javax.validation:validation-api:1.1.0.Final" />
+          <element id="library" level="project" name="Gradle: org.jboss.logging:jboss-logging:3.3.1.Final" />
+          <element id="library" level="project" name="Gradle: com.fasterxml:classmate:1.3.4" />
+          <element id="library" level="project" name="Gradle: org.mybatis:mybatis:3.4.6" />
+          <element id="library" level="project" name="Gradle: org.mybatis:mybatis-spring:1.3.2" />
+          <element id="library" level="project" name="Gradle: ch.qos.logback:logback-classic:1.1.11" />
+          <element id="library" level="project" name="Gradle: org.slf4j:jcl-over-slf4j:1.7.25" />
+          <element id="library" level="project" name="Gradle: org.slf4j:jul-to-slf4j:1.7.25" />
+          <element id="library" level="project" name="Gradle: org.slf4j:log4j-over-slf4j:1.7.25" />
+          <element id="library" level="project" name="Gradle: com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.8.10" />
+          <element id="library" level="project" name="Gradle: com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.8.10" />
+          <element id="library" level="project" name="Gradle: com.fasterxml.jackson.module:jackson-module-parameter-names:2.8.10" />
+          <element id="library" level="project" name="Gradle: com.fasterxml.jackson.core:jackson-databind:2.8.10" />
+          <element id="library" level="project" name="Gradle: org.apache.tomcat.embed:tomcat-embed-websocket:8.5.23" />
+          <element id="library" level="project" name="Gradle: org.apache.tomcat.embed:tomcat-embed-core:8.5.23" />
+          <element id="library" level="project" name="Gradle: org.apache.tomcat.embed:tomcat-embed-el:8.5.23" />
+          <element id="library" level="project" name="Gradle: org.apache.tomcat:tomcat-jdbc:8.5.23" />
+          <element id="library" level="project" name="Gradle: ch.qos.logback:logback-core:1.1.11" />
+          <element id="library" level="project" name="Gradle: org.slf4j:slf4j-api:1.7.25" />
+          <element id="library" level="project" name="Gradle: com.fasterxml.jackson.core:jackson-annotations:2.8.0" />
+          <element id="library" level="project" name="Gradle: com.fasterxml.jackson.core:jackson-core:2.8.10" />
+          <element id="library" level="project" name="Gradle: org.apache.tomcat:tomcat-annotations-api:8.5.23" />
+          <element id="library" level="project" name="Gradle: org.apache.tomcat:tomcat-juli:8.5.23" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../gradleDirectory/caches/modules-2/files-2.1/org.mybatis.generator/mybatis-generator-core/1.3.2/629a9852837433ba602101bae455673f44665871/mybatis-generator-core-1.3.2.jar" />
         </element>
       </element>
     </root>
