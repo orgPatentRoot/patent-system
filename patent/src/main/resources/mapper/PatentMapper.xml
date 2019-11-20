@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.suixingpay.patent.mapper.PatentMapper" >
-  <resultMap id="BaseResultMap" type="com.suixingpay.patent.pojo.Patent" >
+  <resultMap id="PatentResultMap" type="com.suixingpay.patent.pojo.Patent" >
     <id column="patent_id" property="patentId" jdbcType="INTEGER" />
     <result column="patent_batch" property="patentBatch" jdbcType="VARCHAR" />
     <result column="patent_case_num" property="patentCaseNum" jdbcType="VARCHAR" />
@@ -71,7 +71,5 @@
     patent_sign = 2
     where patent_sign = 1 and patent_id = #{arg0}
   </update>
-
-
 
 </mapper>

@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.suixingpay.patent.mapper.IndexMapper" >
-  <resultMap id="BaseResultMap" type="com.suixingpay.patent.pojo.Index" >
+  <resultMap id="IndexResultMap" type="com.suixingpay.patent.pojo.Index" >
     <id column="index_id" property="indexId" jdbcType="INTEGER" />
     <result column="index_patent_id" property="indexPatentId" jdbcType="INTEGER" />
     <result column="index_content" property="indexContent" jdbcType="VARCHAR" />
     <result column="index_create_time" property="indexCreateTime" jdbcType="TIMESTAMP" />
   </resultMap>
+
+  <sql id="Base_Column_List" >
+    index_id, index_patent_id, index_content, index_create_time
+  </sql>
 
 </mapper>

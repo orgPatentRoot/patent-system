@@ -8,6 +8,7 @@ import java.util.List;
 
 
 public interface PatentService {
+
     Patent getById(Integer id);
 
     List<Patent> selectAll();
@@ -17,4 +18,7 @@ public interface PatentService {
     int auditPass(Integer id);
 
     int auditFailed(Integer id);
+
+    public int insertPatentSevice(Patent patent);
+
 }

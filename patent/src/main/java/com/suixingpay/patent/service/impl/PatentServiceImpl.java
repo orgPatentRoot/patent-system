@@ -6,6 +6,7 @@ import com.suixingpay.patent.service.PatentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 import java.util.List;
 
 @Service
@@ -31,6 +32,12 @@ public class PatentServiceImpl implements PatentService {
     @Override
     public int auditPass(Integer id) {
         return patentMapper.auditPass(id);
+    }
+
+    @Override
+    public int insertPatentSevice(Patent patent) {
+//        return patentMapper.insert(patent);
+        return 0;
     }
 
     @Override

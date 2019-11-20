@@ -14,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/patent")
 public class PatentController {
+
     @Autowired
     private PatentService patentService;
     //根据Id查找所有专利信息

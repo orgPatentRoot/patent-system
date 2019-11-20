@@ -1,5 +1,6 @@
 package com.suixingpay.patent.mapper;
 
+
 import com.suixingpay.patent.pojo.Patent;
 import org.springframework.web.bind.annotation.PathVariable;
 

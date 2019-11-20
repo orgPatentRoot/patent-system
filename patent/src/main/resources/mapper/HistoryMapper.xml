@@ -1,17 +1,17 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.suixingpay.patent.mapper.HistoryMapper">
-  <resultMap id="BaseResultMap" type="com.suixingpay.patent.pojo.History">
-    <result column="hid" jdbcType="INTEGER" property="hid" />
-    <result column="aid" jdbcType="INTEGER" property="aid" />
-    <result column="bid" jdbcType="INTEGER" property="bid" />
-    <result column="card" jdbcType="CHAR" property="card" />
-    <result column="bookname" jdbcType="CHAR" property="bookname" />
-    <result column="adminname" jdbcType="CHAR" property="adminname" />
-    <result column="username" jdbcType="CHAR" property="username" />
-    <result column="begintime" jdbcType="CHAR" property="begintime" />
-    <result column="endtime" jdbcType="CHAR" property="endtime" />
-    <result column="status" jdbcType="INTEGER" property="status" />
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.suixingpay.patent.mapper.HistoryMapper" >
+  <resultMap id="HistoryResultMap" type="com.suixingpay.patent.pojo.History" >
+    <id column="history_id" property="historyId" jdbcType="INTEGER" />
+    <result column="history_patent" property="historyPatent" jdbcType="VARCHAR" />
+    <result column="history_modification" property="historyModification" jdbcType="VARCHAR" />
+    <result column="history_user" property="historyUser" jdbcType="VARCHAR" />
+    <result column="history_create_time" property="historyCreateTime" jdbcType="TIMESTAMP" />
   </resultMap>
+
+
+  <sql id="Base_Column_List" >
+    history_id, history_patent, history_modification, history_user, history_create_time
+  </sql>
 
 </mapper>
