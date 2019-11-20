@@ -6,12 +6,35 @@ import com.suixingpay.patent.service.PatentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PatentServiceImpl implements PatentService {
-//    @Autowired(required = false)
-//    private PatentMapper patentMapper;
-//    @Override
-//    public Patent getById(Integer id) {
-//        return patentMapper.selectByPrimaryKey(id);
-//    }
+    @Autowired(required = false)
+    private PatentMapper patentMapper;
+    @Override
+    public Patent getById(Integer id) {
+        return patentMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public List<Patent> selectAll() {
+        return patentMapper.selectAll();
+    }
+
+
+    @Override
+    public List<Patent> selectExamine() {
+        return patentMapper.selectExamine();
+    }
+
+    @Override
+    public int auditPass(Integer id) {
+        return patentMapper.auditPass(id);
+    }
+
+    @Override
+    public int auditFailed(Integer id) {
+        return patentMapper.auditFailed(id);
+    }
 }

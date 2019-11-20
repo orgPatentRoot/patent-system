@@ -1,19 +1,19 @@
 package com.suixingpay.patent.mapper;
 
 import com.suixingpay.patent.pojo.Patent;
+import org.springframework.web.bind.annotation.PathVariable;
+
+import java.util.List;
 
 public interface PatentMapper {
-    int deleteByPrimaryKey(Integer patentId);
-
-    int insert(Patent record);
-
-    int insertSelective(Patent record);
 
     Patent selectByPrimaryKey(Integer patentId);
 
-    int updateByPrimaryKeySelective(Patent record);
+    List<Patent> selectAll();
 
-    int updateByPrimaryKeyWithBLOBs(Patent record);
+    List<Patent> selectExamine();
 
-    int updateByPrimaryKey(Patent record);
+    int auditPass(Integer id);
+
+    int auditFailed(Integer id);
 }
