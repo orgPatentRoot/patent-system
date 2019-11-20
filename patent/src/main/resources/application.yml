@@ -12,3 +12,8 @@ spring:
 logging:
   #配置日志文件路径
   file: log\manager.log
+
+#配置mybatis
+mybatis:
+  typeAliasesPackage: com.suixingpay.patent.pojo
+  mapperLocations: classpath:mapper/*.xml
