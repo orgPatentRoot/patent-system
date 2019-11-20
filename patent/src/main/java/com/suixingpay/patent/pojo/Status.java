@@ -1,5 +1,6 @@
 package com.suixingpay.patent.pojo;
 
+
 public class Status {
     private Integer statusId;
 

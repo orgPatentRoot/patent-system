@@ -1,103 +1,56 @@
 package com.suixingpay.patent.pojo;
 
+import java.util.Date;
+
 public class History {
-    private Integer hid;
+    private Integer historyId;
 
-    private Integer aid;
+    private String historyPatent;
 
-    private Integer bid;
+    private String historyModification;
 
-    private String card;
+    private String historyUser;
 
-    private String bookname;
+    private Date historyCreateTime;
 
-    private String adminname;
 
-    private String username;
-
-    private String begintime;
-
-    private String endtime;
-
-    private Integer status;
-
-    public Integer getHid() {
-        return hid;
+    public Integer getHistoryId() {
+        return historyId;
     }
 
-    public void setHid(Integer hid) {
-        this.hid = hid;
+    public void setHistoryId(Integer historyId) {
+        this.historyId = historyId;
     }
 
-    public Integer getAid() {
-        return aid;
+    public String getHistoryPatent() {
+        return historyPatent;
     }
 
-    public void setAid(Integer aid) {
-        this.aid = aid;
+    public void setHistoryPatent(String historyPatent) {
+        this.historyPatent = historyPatent == null ? null : historyPatent.trim();
     }
 
-    public Integer getBid() {
-        return bid;
+    public String getHistoryModification() {
+        return historyModification;
     }
 
-    public void setBid(Integer bid) {
-        this.bid = bid;
+    public void setHistoryModification(String historyModification) {
+        this.historyModification = historyModification == null ? null : historyModification.trim();
     }
 
-    public String getCard() {
-        return card;
+    public String getHistoryUser() {
+        return historyUser;
     }
 
-    public void setCard(String card) {
-        this.card = card == null ? null : card.trim();
+    public void setHistoryUser(String historyUser) {
+        this.historyUser = historyUser == null ? null : historyUser.trim();
     }
 
-    public String getBookname() {
-        return bookname;
+    public Date getHistoryCreateTime() {
+        return historyCreateTime;
     }
 
-    public void setBookname(String bookname) {
-        this.bookname = bookname == null ? null : bookname.trim();
-    }
-
-    public String getAdminname() {
-        return adminname;
-    }
-
-    public void setAdminname(String adminname) {
-        this.adminname = adminname == null ? null : adminname.trim();
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username == null ? null : username.trim();
-    }
-
-    public String getBegintime() {
-        return begintime;
-    }
-
-    public void setBegintime(String begintime) {
-        this.begintime = begintime == null ? null : begintime.trim();
-    }
-
-    public String getEndtime() {
-        return endtime;
-    }
-
-    public void setEndtime(String endtime) {
-        this.endtime = endtime == null ? null : endtime.trim();
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
+    public void setHistoryCreateTime(Date historyCreateTime) {
+        this.historyCreateTime = historyCreateTime;
     }
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.suixingpay.patent.mapper.FileMapper" >
-  <resultMap id="BaseResultMap" type="com.suixingpay.patent.pojo.File" >
+  <resultMap id="FileResultMap" type="com.suixingpay.patent.pojo.File" >
     <id column="file_id" property="fileId" jdbcType="INTEGER" />
     <result column="file_patent_id" property="filePatentId" jdbcType="INTEGER" />
     <result column="file_path" property="filePath" jdbcType="VARCHAR" />
@@ -12,95 +12,5 @@
   <sql id="Base_Column_List" >
     file_id, file_patent_id, file_path, file_name, file_status, file_create_time
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="Integer" >
-    select 
-    <include refid="Base_Column_List" />
-    from file
-    where file_id = #{fileId,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="Integer" >
-    delete from file
-    where file_id = #{fileId,jdbcType=INTEGER}
-  </delete>
-  <insert id="insert" parameterType="com.suixingpay.patent.pojo.File" >
-    insert into file (file_id, file_patent_id, file_path, 
-      file_name, file_status, file_create_time
-      )
-    values (#{fileId,jdbcType=INTEGER}, #{filePatentId,jdbcType=INTEGER}, #{filePath,jdbcType=VARCHAR}, 
-      #{fileName,jdbcType=VARCHAR}, #{fileStatus,jdbcType=INTEGER}, #{fileCreateTime,jdbcType=TIMESTAMP}
-      )
-  </insert>
-  <insert id="insertSelective" parameterType="com.suixingpay.patent.pojo.File" >
-    insert into file
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="fileId != null" >
-        file_id,
-      </if>
-      <if test="filePatentId != null" >
-        file_patent_id,
-      </if>
-      <if test="filePath != null" >
-        file_path,
-      </if>
-      <if test="fileName != null" >
-        file_name,
-      </if>
-      <if test="fileStatus != null" >
-        file_status,
-      </if>
-      <if test="fileCreateTime != null" >
-        file_create_time,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="fileId != null" >
-        #{fileId,jdbcType=INTEGER},
-      </if>
-      <if test="filePatentId != null" >
-        #{filePatentId,jdbcType=INTEGER},
-      </if>
-      <if test="filePath != null" >
-        #{filePath,jdbcType=VARCHAR},
-      </if>
-      <if test="fileName != null" >
-        #{fileName,jdbcType=VARCHAR},
-      </if>
-      <if test="fileStatus != null" >
-        #{fileStatus,jdbcType=INTEGER},
-      </if>
-      <if test="fileCreateTime != null" >
-        #{fileCreateTime,jdbcType=TIMESTAMP},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.suixingpay.patent.pojo.File" >
-    update file
-    <set >
-      <if test="filePatentId != null" >
-        file_patent_id = #{filePatentId,jdbcType=INTEGER},
-      </if>
-      <if test="filePath != null" >
-        file_path = #{filePath,jdbcType=VARCHAR},
-      </if>
-      <if test="fileName != null" >
-        file_name = #{fileName,jdbcType=VARCHAR},
-      </if>
-      <if test="fileStatus != null" >
-        file_status = #{fileStatus,jdbcType=INTEGER},
-      </if>
-      <if test="fileCreateTime != null" >
-        file_create_time = #{fileCreateTime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where file_id = #{fileId,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.suixingpay.patent.pojo.File" >
-    update file
-    set file_patent_id = #{filePatentId,jdbcType=INTEGER},
-      file_path = #{filePath,jdbcType=VARCHAR},
-      file_name = #{fileName,jdbcType=VARCHAR},
-      file_status = #{fileStatus,jdbcType=INTEGER},
-      file_create_time = #{fileCreateTime,jdbcType=TIMESTAMP}
-    where file_id = #{fileId,jdbcType=INTEGER}
-  </update>
+
 </mapper>

@@ -2,6 +2,7 @@ package com.suixingpay.patent.pojo;
 
 import java.util.Date;
 
+
 public class File {
     private Integer fileId;
 
