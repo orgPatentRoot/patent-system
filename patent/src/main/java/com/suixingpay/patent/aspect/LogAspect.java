@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 public class LogAspect {
 
     @Pointcut("execution(* com.suixingpay.patent.controller.*.*(..))")
-    public void pointcut() {}
+    public void pointcut() {
+
+    }
 
 }
