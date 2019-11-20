@@ -6,7 +6,6 @@ import org.apache.ibatis.annotations.Select;
 
 @Mapper
 public interface PatentDao {
-    @Select("SELECT * FROM patent")
-    public Patent findAll();
-    
+
+
 }
