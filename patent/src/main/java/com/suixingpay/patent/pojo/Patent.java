@@ -152,4 +152,25 @@ public class Patent {
     public void setPatentRemarks(String patentRemarks) {
         this.patentRemarks = patentRemarks == null ? null : patentRemarks.trim();
     }
+
+    @Override
+    public String toString() {
+        return "Patent{" +
+                "patentId=" + patentId +
+                ", patentBatch='" + patentBatch + '\'' +
+                ", patentCaseNum='" + patentCaseNum + '\'' +
+                ", patentApplyNum='" + patentApplyNum + '\'' +
+                ", patentApplyTime=" + patentApplyTime +
+                ", patentTechnicalContact='" + patentTechnicalContact + '\'' +
+                ", patentApplyPerson='" + patentApplyPerson + '\'' +
+                ", patentCreatePerson=" + patentCreatePerson +
+                ", patentName='" + patentName + '\'' +
+                ", patentSign=" + patentSign +
+                ", patentStatusId=" + patentStatusId +
+                ", patentType='" + patentType + '\'' +
+                ", patentInventor='" + patentInventor + '\'' +
+                ", patentWriter=" + patentWriter +
+                ", patentRemarks='" + patentRemarks + '\'' +
+                '}';
+    }
 }
