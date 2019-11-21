@@ -5,7 +5,6 @@ build/
 .classpath
 .project
 .svn*
-.settings/
 catalina*
 /logs/
 .idea/
