@@ -10,6 +10,6 @@ catalina*
 .idea/
 *.log
 out/
-*.cachegit push -u origin master
+*.cache
 *.iml
 *.bak
