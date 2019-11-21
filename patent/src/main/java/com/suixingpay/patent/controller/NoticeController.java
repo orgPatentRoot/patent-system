@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/file")
 @Slf4j
-public class FileController {
+public class NoticeController {
 
     
 }
