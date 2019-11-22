@@ -8,7 +8,7 @@
     <result column="index_create_time" property="indexCreateTime" jdbcType="TIMESTAMP" />
   </resultMap>
 
-  <sql id="Base_Column_List" >
+  <sql id="Index_Column_List" >
     index_id, index_patent_id, index_content, index_create_time
   </sql>
 

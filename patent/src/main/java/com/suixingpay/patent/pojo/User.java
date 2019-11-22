@@ -1,6 +1,10 @@
 package com.suixingpay.patent.pojo;
 
+import org.springframework.stereotype.Component;
+
 import java.util.Date;
+
+@Component
 public class User {
     private Integer userId;
 
