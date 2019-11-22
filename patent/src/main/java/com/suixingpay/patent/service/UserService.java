@@ -1,11 +1,12 @@
 package com.suixingpay.patent.service;
 
+import com.suixingpay.patent.pojo.Message;
 import com.suixingpay.patent.pojo.User;
 
 import java.util.List;
 
 public interface UserService {
-    User selectUserByUserAccountAndUserPassword(String userAccount, String userPassword);
+    Message selectUserByUserAccountAndUserPassword(String userAccount, String userPassword);
 
     void insertUser(User user);
 
