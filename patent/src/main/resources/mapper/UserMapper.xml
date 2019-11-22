@@ -1,13 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.suixingpay.patent.mapper.UserMapper">
-  <resultMap id="UserResultMap" type="com.suixingpay.patent.pojo.User">
-    <result column="user_id" jdbcType="INTEGER" property="userId" />
-    <result column="user_name" jdbcType="VARCHAR" property="userName" />
-    <result column="user_account" jdbcType="VARCHAR" property="userAccount" />
-    <result column="user_password" jdbcType="VARCHAR" property="userPassword" />
-    <result column="user_status" jdbcType="INTEGER" property="userStatus" />
-    <result column="user_create_time" jdbcType="TIMESTAMP" property="userCreateTime" />
-  </resultMap>
+    <insert id="insertUser">
+  insert into user (user_name, user_account, user_password,user_status,user_create_time) values (#{userName},#{userAccount},#{userPassword},#{userStatus},#{userCreateTime})
+  </insert>
+
+    <update id="updateUserByUserId">
+    update user set user_status = 0 where user_Id=#{userId}
+  </update>
+
+  <update id="updateLocalUserByUserId">
+    update user set user_name=${userName} ,user_password=#{userPassword} where user_id =#{userId}
+  </update>
+
+  <select id="selectUserByUserAccountAndUserPassword" resultType="com.suixingpay.patent.pojo.User">
+  select user_id, user_name, user_account, user_password, user_status, user_create_time from user where
+  user_account=#{userAccount} and user_password=#{userPassword}
+  </select>
+
+    <select id="selectAllUser" resultType="com.suixingpay.patent.pojo.User">
+  select user_id, user_name, user_account, user_password, user_status, user_create_time from user
+  </select>
+
+    <select id="selectUserByUserId" resultType="com.suixingpay.patent.pojo.User">
+    select user_id, user_name, user_account, user_password, user_status, user_create_time from user where
+    user_id=#{UserId}
+  </select>
+
+
 
 </mapper>

@@ -4,6 +4,7 @@ build/
 .gradle/
 .classpath
 .project
+.git/
 .svn*
 catalina*
 /logs/
