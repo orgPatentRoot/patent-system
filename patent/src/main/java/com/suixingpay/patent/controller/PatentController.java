@@ -1,6 +1,8 @@
 package com.suixingpay.patent.controller;
 
+import com.suixingpay.patent.annotation.UserLog;
 import com.suixingpay.patent.pojo.Patent;
+import com.suixingpay.patent.pojo.User;
 import com.suixingpay.patent.service.PatentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -8,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,10 +50,6 @@ public class PatentController {
         return "审核通过";
     }
 
-    //审核不通过
-    @RequestMapping("/auditFailed/{id}")
-    public String auditFailed(@PathVariable("id")Integer id){
-        patentService.auditFailed(id);
-        return "审核不通过";
-    }
+
+
 }

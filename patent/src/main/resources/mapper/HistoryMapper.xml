@@ -3,15 +3,21 @@
 <mapper namespace="com.suixingpay.patent.mapper.HistoryMapper" >
   <resultMap id="HistoryResultMap" type="com.suixingpay.patent.pojo.History" >
     <id column="history_id" property="historyId" jdbcType="INTEGER" />
-    <result column="history_patent" property="historyPatent" jdbcType="VARCHAR" />
+    <result column="history_patent" property="historyPatent" jdbcType="INTEGER" />
     <result column="history_modification" property="historyModification" jdbcType="VARCHAR" />
     <result column="history_user" property="historyUser" jdbcType="VARCHAR" />
     <result column="history_create_time" property="historyCreateTime" jdbcType="TIMESTAMP" />
   </resultMap>
 
 
-  <sql id="Base_Column_List" >
+  <sql id="History_Column_List" >
     history_id, history_patent, history_modification, history_user, history_create_time
   </sql>
+  <insert id="insertHistory" parameterType="com.suixingpay.patent.pojo.History">
+    INSERT INTO history
+    ( history_patent, history_modification, history_user, history_create_time )
+    VALUES
+	(#{historyPatent},#{historyModification},#{historyUser},#{historyCreateTime} )
+  </insert>
 
 </mapper>
