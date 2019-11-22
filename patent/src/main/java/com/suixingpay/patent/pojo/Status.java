@@ -1,6 +1,8 @@
 package com.suixingpay.patent.pojo;
 
+import org.springframework.stereotype.Component;
 
+@Component
 public class Status {
     private Integer statusId;
 

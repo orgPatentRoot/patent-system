@@ -6,7 +6,7 @@
     <result column="status_name" property="statusName" jdbcType="VARCHAR" />
   </resultMap>
 
-  <sql id="Base_Column_List" >
+  <sql id="Status_Column_List" >
     status_id, status_name
   </sql>
 </mapper>

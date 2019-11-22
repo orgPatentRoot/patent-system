@@ -16,41 +16,32 @@
     <result column="patent_type" property="patentType" jdbcType="VARCHAR" />
     <result column="patent_inventor" property="patentInventor" jdbcType="VARCHAR" />
     <result column="patent_writer" property="patentWriter" jdbcType="INTEGER" />
-  </resultMap>
-  <resultMap id="ResultMapWithBLOBs" type="com.suixingpay.patent.pojo.Patent" extends="BaseResultMap" >
     <result column="patent_remarks" property="patentRemarks" jdbcType="LONGVARCHAR" />
   </resultMap>
-  <sql id="Base_Column_List" >
+
+  <sql id="Patent_Column_List" >
     patent_id, patent_batch, patent_case_num, patent_apply_num, patent_apply_time, patent_technical_contact,
     patent_apply_person, patent_create_person, patent_name, patent_sign, patent_status_id,
-    patent_type, patent_inventor, patent_writer
+    patent_type, patent_inventor, patent_writer, patent_remarks
   </sql>
-  <sql id="Blob_Column_List" >
-    patent_remarks
-  </sql>
-  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="Integer" >
+
+  <select id="selectByPrimaryKey" resultMap="PatentResultMap" parameterType="Integer" >
     select
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
+    <include refid="Patent_Column_List" />
     from patent
     where patent_id = #{patentId,jdbcType=INTEGER}
   </select>
 
-  <select id="selectAll" resultMap="ResultMapWithBLOBs" >
+  <select id="selectAll" resultMap="PatentResultMap" >
     select
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
+    <include refid="Patent_Column_List" />
     from patent
   </select>
 
   
-  <select id="selectExamine" resultMap="ResultMapWithBLOBs" >
+  <select id="selectExamine" resultMap="PatentResultMap" >
     select
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
+      <include refid="Patent_Column_List" />
     from patent
     where patent_sign = 1 AND patent_status_id IN (0,2,3,4,5)
   </select>

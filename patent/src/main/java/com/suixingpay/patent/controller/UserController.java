@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.suixingpay.patent.util.ParamCheck.paramCheck;
 
 @RestController
 @RequestMapping("/user")

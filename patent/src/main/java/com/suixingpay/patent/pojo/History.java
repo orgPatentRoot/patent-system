@@ -1,11 +1,14 @@
 package com.suixingpay.patent.pojo;
 
+import org.springframework.stereotype.Component;
+
 import java.util.Date;
 
+@Component
 public class History {
     private Integer historyId;
 
-    private String historyPatent;
+    private int historyPatent;
 
     private String historyModification;
 
@@ -22,12 +25,12 @@ public class History {
         this.historyId = historyId;
     }
 
-    public String getHistoryPatent() {
+    public int getHistoryPatent() {
         return historyPatent;
     }
 
-    public void setHistoryPatent(String historyPatent) {
-        this.historyPatent = historyPatent == null ? null : historyPatent.trim();
+    public void setHistoryPatent(int historyPatent) {
+        this.historyPatent = historyPatent;
     }
 
     public String getHistoryModification() {
