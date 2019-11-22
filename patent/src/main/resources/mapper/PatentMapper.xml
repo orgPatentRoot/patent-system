@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.suixingpay.patent.mapper.PatentMapper" >
+  <resultMap id="PatentResultMap" type="com.suixingpay.patent.pojo.Patent" >
+    <id column="patent_id" property="patentId" jdbcType="INTEGER" />
+    <result column="patent_batch" property="patentBatch" jdbcType="VARCHAR" />
+    <result column="patent_case_num" property="patentCaseNum" jdbcType="VARCHAR" />
+    <result column="patent_apply_num" property="patentApplyNum" jdbcType="VARCHAR" />
+    <result column="patent_apply_time" property="patentApplyTime" jdbcType="TIMESTAMP" />
+    <result column="patent_technical_contact" property="patentTechnicalContact" jdbcType="VARCHAR" />
+    <result column="patent_apply_person" property="patentApplyPerson" jdbcType="VARCHAR" />
+    <result column="patent_create_person" property="patentCreatePerson" jdbcType="INTEGER" />
+    <result column="patent_name" property="patentName" jdbcType="VARCHAR" />
+    <result column="patent_sign" property="patentSign" jdbcType="INTEGER" />
+    <result column="patent_status_id" property="patentStatusId" jdbcType="INTEGER" />
+    <result column="patent_type" property="patentType" jdbcType="VARCHAR" />
+    <result column="patent_inventor" property="patentInventor" jdbcType="VARCHAR" />
+    <result column="patent_writer" property="patentWriter" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.suixingpay.patent.pojo.Patent" extends="BaseResultMap" >
+    <result column="patent_remarks" property="patentRemarks" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    patent_id, patent_batch, patent_case_num, patent_apply_num, patent_apply_time, patent_technical_contact,
+    patent_apply_person, patent_create_person, patent_name, patent_sign, patent_status_id,
+    patent_type, patent_inventor, patent_writer
+  </sql>
+  <sql id="Blob_Column_List" >
+    patent_remarks
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="Integer" >
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from patent
+    where patent_id = #{patentId,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectAll" resultMap="ResultMapWithBLOBs" >
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from patent
+  </select>
+
+  
+  <select id="selectExamine" resultMap="ResultMapWithBLOBs" >
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from patent
+    where patent_sign = 1 AND patent_status_id IN (0,2,3,4,5)
+  </select>
+
+
+  <update id="auditPass" parameterType = "com.suixingpay.patent.pojo.Patent">
+    UPDATE patent
+    set
+    patent_sign = 0,
+    patent_status_id = patent_status_id+1
+    where patent_sign = 1 and patent_id = #{arg0}
+  </update>
+
+
+  <update id="auditFailed" parameterType = "com.suixingpay.patent.pojo.Patent">
+    UPDATE patent
+    set
+    patent_sign = 2
+    where patent_sign = 1 and patent_id = #{arg0}
+  </update>
+
+</mapper>
