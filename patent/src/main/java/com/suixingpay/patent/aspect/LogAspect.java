@@ -20,7 +20,7 @@ import java.lang.reflect.Method;
 @Component
 public class LogAspect {
 
-    @Pointcut("execution(* com.suixingpay.patent.controller.*.*(..))")
+    @Pointcut("execution(* com.suixingpay.patent.controller.*.*(..))&&!execution(* com.suixingpay.patent.controller.UserController.userLogin(..))")
     public void pointcut() {
     }
 

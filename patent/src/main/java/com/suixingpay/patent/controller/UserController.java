@@ -32,7 +32,7 @@ public class UserController {
      */
     @RequestMapping("/login")
     public String userLogin(String userAccount, String userPassword, HttpSession httpSession) {
-        Message message = userService.selectUserByUserAccountAndUserPassword(userAccount, userPassword);
+        Message message = userService.selectUserByUserAccountAndUserPassword(userAccount, userPassword,httpSession);
         return JSON.toJSONString(message);
     }
 

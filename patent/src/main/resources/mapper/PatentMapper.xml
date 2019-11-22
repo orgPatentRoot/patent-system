@@ -17,7 +17,7 @@
     <result column="patent_inventor" property="patentInventor" jdbcType="VARCHAR" />
     <result column="patent_writer" property="patentWriter" jdbcType="INTEGER" />
   </resultMap>
-  <resultMap id="ResultMapWithBLOBs" type="com.suixingpay.patent.pojo.Patent" extends="BaseResultMap" >
+  <resultMap id="ResultMapWithBLOBs" type="com.suixingpay.patent.pojo.Patent" extends="PatentResultMap" >
     <result column="patent_remarks" property="patentRemarks" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
@@ -45,7 +45,7 @@
     from patent
   </select>
 
-  
+
   <select id="selectExamine" resultMap="ResultMapWithBLOBs" >
     select
     <include refid="Base_Column_List" />

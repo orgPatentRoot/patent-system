@@ -7,6 +7,8 @@ import com.suixingpay.patent.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -17,9 +19,10 @@ public class UserServiceImpl implements UserService {
     UserMapper userMapper;
 
     @Override
-    public Message selectUserByUserAccountAndUserPassword(String userAccount, String userPassword) {
+    public Message selectUserByUserAccountAndUserPassword(String userAccount, String userPassword,HttpSession httpSession) {
         Message message = new Message();
         User user = userMapper.selectUserByUserAccountAndUserPassword(userAccount, userPassword);
+         httpSession.setAttribute("user",user);
         if (user == null) {
             //状态2代表账号或密码不正确
             message.setState(-1);

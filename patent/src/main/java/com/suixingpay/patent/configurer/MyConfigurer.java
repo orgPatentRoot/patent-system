@@ -11,8 +11,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 public class MyConfigurer extends WebMvcConfigurationSupport {
 
     @Autowired BaseInterceptor baseInterceptor;
+
+
+    final String[] notLoginInterceptPaths = {"/user/login"};
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(baseInterceptor).addPathPatterns("/**");
+        registry.addInterceptor(baseInterceptor).addPathPatterns("/**").excludePathPatterns(notLoginInterceptPaths);
     }
 }
