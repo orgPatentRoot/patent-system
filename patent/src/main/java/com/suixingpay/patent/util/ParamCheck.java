@@ -9,4 +9,14 @@ public class ParamCheck {
         }
         return true;
     }
+
+    /**
+     * 页数检查
+     * @param page
+     * @return
+     */
+    public static void pageParamCheck(Integer page) {
+        if(page == null || page < 1)
+            throw new RuntimeException("页数不合法");
+    }
 }

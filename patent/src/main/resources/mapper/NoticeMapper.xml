@@ -14,7 +14,7 @@
   </sql>
   <select id="selectByPrimaryKey" resultMap="NoticeResultMap" parameterType="Integer" >
     select 
-    <include refid="Base_Column_List" />
+    <include refid="Notice_Column_List" />
     from notice
     where notice_id = #{noticeId,jdbcType=INTEGER}
   </select>

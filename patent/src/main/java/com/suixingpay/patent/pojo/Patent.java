@@ -1,179 +1,65 @@
 package com.suixingpay.patent.pojo;
 
+import lombok.Getter;
+import lombok.Setter;
 
-import org.springframework.stereotype.Component;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
-@Component
+@Getter
+@Setter
 public class Patent {
-    private Integer patentId;
 
-    private String patentBatch;
+    @NotNull(message = "专利ID不能为空！")
+    private Integer patentId;//专利Id
 
-    private String patentCaseNum;
+    @NotNull(message = "批数不能为空！")
+    private String patentBatch;//批数
 
-    private String patentApplyNum;
+    @NotNull(message = "案例文号不能为空")
+    private String patentCaseNum;//案例文号
 
-    private Date patentApplyTime;
+    @NotNull(message = "申请号不能为空")
+    private String patentApplyNum;//申请号
 
-    private String patentTechnicalContact;
+    @NotNull(message = "申请时间不能为空")
+    private Date patentApplyTime;//申请时间
 
-    private String patentApplyPerson;
+    @NotNull(message = "技术联系人不能为空")
+    private String patentTechnicalContact;//技术联系人中文名称
 
-    private Integer patentCreatePerson;
+    @NotNull(message = "申请人不能为空")
+    private String patentApplyPerson;//申请人中文名称
 
-    private String patentName;
+    private Integer patentCreatePerson;//创建人Id
 
-    private Integer patentSign;
+    @NotNull(message = "专利名称不能为空")
+    private String patentName;//专利中文名称
 
-    private Integer patentStatusId;
+    private Integer patentSign;//专利审核状态
 
-    private String patentType;
+    private Integer patentStatusId;//专利进度状态
 
-    private String patentInventor;
+    @NotNull(message = "发明类型不能为空")
+    private String patentType;//发明类型
 
-    private Integer patentWriter;
+    @NotNull(message = "发明人不能为空")
+    private String patentInventor;//发明人中文名称
 
+    private Integer patentWriter;//撰写人Id
+
+    @NotNull(message = "备注不能为空")
     private String patentRemarks;
 
-    public Integer getPatentId() {
-        return patentId;
-    }
+    private String statusName;//进度名称
 
-    public void setPatentId(Integer patentId) {
-        this.patentId = patentId;
-    }
+    private String createPersonName;//创建人名字
 
-    public String getPatentBatch() {
-        return patentBatch;
-    }
+    private String writerName;//撰写人名字
 
-    public void setPatentBatch(String patentBatch) {
-        this.patentBatch = patentBatch == null ? null : patentBatch.trim();
-    }
+    private Integer currentPage;//当前页数
 
-    public String getPatentCaseNum() {
-        return patentCaseNum;
-    }
+    private Integer pageCount;//总页数
 
-    public void setPatentCaseNum(String patentCaseNum) {
-        this.patentCaseNum = patentCaseNum == null ? null : patentCaseNum.trim();
-    }
-
-    public String getPatentApplyNum() {
-        return patentApplyNum;
-    }
-
-    public void setPatentApplyNum(String patentApplyNum) {
-        this.patentApplyNum = patentApplyNum == null ? null : patentApplyNum.trim();
-    }
-
-    public Date getPatentApplyTime() {
-        return patentApplyTime;
-    }
-
-    public void setPatentApplyTime(Date patentApplyTime) {
-        this.patentApplyTime = patentApplyTime;
-    }
-
-    public String getPatentTechnicalContact() {
-        return patentTechnicalContact;
-    }
-
-    public void setPatentTechnicalContact(String patentTechnicalContact) {
-        this.patentTechnicalContact = patentTechnicalContact == null ? null : patentTechnicalContact.trim();
-    }
-
-    public String getPatentApplyPerson() {
-        return patentApplyPerson;
-    }
-
-    public void setPatentApplyPerson(String patentApplyPerson) {
-        this.patentApplyPerson = patentApplyPerson == null ? null : patentApplyPerson.trim();
-    }
-
-    public Integer getPatentCreatePerson() {
-        return patentCreatePerson;
-    }
-
-    public void setPatentCreatePerson(Integer patentCreatePerson) {
-        this.patentCreatePerson = patentCreatePerson;
-    }
-
-    public String getPatentName() {
-        return patentName;
-    }
-
-    public void setPatentName(String patentName) {
-        this.patentName = patentName == null ? null : patentName.trim();
-    }
-
-    public Integer getPatentSign() {
-        return patentSign;
-    }
-
-    public void setPatentSign(Integer patentSign) {
-        this.patentSign = patentSign;
-    }
-
-    public Integer getPatentStatusId() {
-        return patentStatusId;
-    }
-
-    public void setPatentStatusId(Integer patentStatusId) {
-        this.patentStatusId = patentStatusId;
-    }
-
-    public String getPatentType() {
-        return patentType;
-    }
-
-    public void setPatentType(String patentType) {
-        this.patentType = patentType == null ? null : patentType.trim();
-    }
-
-    public String getPatentInventor() {
-        return patentInventor;
-    }
-
-    public void setPatentInventor(String patentInventor) {
-        this.patentInventor = patentInventor == null ? null : patentInventor.trim();
-    }
-
-    public Integer getPatentWriter() {
-        return patentWriter;
-    }
-
-    public void setPatentWriter(Integer patentWriter) {
-        this.patentWriter = patentWriter;
-    }
-
-    public String getPatentRemarks() {
-        return patentRemarks;
-    }
-
-    public void setPatentRemarks(String patentRemarks) {
-        this.patentRemarks = patentRemarks == null ? null : patentRemarks.trim();
-    }
-
-    @Override
-    public String toString() {
-        return "Patent{" +
-                "patentId=" + patentId +
-                ", patentBatch='" + patentBatch + '\'' +
-                ", patentCaseNum='" + patentCaseNum + '\'' +
-                ", patentApplyNum='" + patentApplyNum + '\'' +
-                ", patentApplyTime=" + patentApplyTime +
-                ", patentTechnicalContact='" + patentTechnicalContact + '\'' +
-                ", patentApplyPerson='" + patentApplyPerson + '\'' +
-                ", patentCreatePerson=" + patentCreatePerson +
-                ", patentName='" + patentName + '\'' +
-                ", patentSign=" + patentSign +
-                ", patentStatusId=" + patentStatusId +
-                ", patentType='" + patentType + '\'' +
-                ", patentInventor='" + patentInventor + '\'' +
-                ", patentWriter=" + patentWriter +
-                ", patentRemarks='" + patentRemarks + '\'' +
-                '}';
-    }
+    private String specialCondition;//该类用于查询条件时，字段可作为查询条件
 }

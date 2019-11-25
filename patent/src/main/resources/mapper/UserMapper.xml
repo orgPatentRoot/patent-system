@@ -5,7 +5,7 @@
   insert into user (user_name, user_account, user_password,user_status,user_create_time) values (#{userName},#{userAccount},#{userPassword},#{userStatus},#{userCreateTime})
   </insert>
 
-    <update id="updateUserByUserId">
+  <update id="updateUserByUserId">
     update user set user_status = 0 where user_Id=#{userId}
   </update>
 

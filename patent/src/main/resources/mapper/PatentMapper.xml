@@ -16,53 +16,119 @@
     <result column="patent_type" property="patentType" jdbcType="VARCHAR" />
     <result column="patent_inventor" property="patentInventor" jdbcType="VARCHAR" />
     <result column="patent_writer" property="patentWriter" jdbcType="INTEGER" />
-  </resultMap>
-  <resultMap id="ResultMapWithBLOBs" type="com.suixingpay.patent.pojo.Patent" extends="BaseResultMap" >
     <result column="patent_remarks" property="patentRemarks" jdbcType="LONGVARCHAR" />
+    <result column="status_name" property="statusName" jdbcType="VARCHAR" />
+    <result column="user_name" property="createPersonName" jdbcType="VARCHAR" />
+    <result column="user_name1" property="writerName" jdbcType="VARCHAR" />
+      <result column="user_name1" property="writerName" jdbcType="VARCHAR" />
   </resultMap>
 
   <sql id="Patent_Column_List" >
     patent_id, patent_batch, patent_case_num, patent_apply_num, patent_apply_time, patent_technical_contact,
     patent_apply_person, patent_create_person, patent_name, patent_sign, patent_status_id,
-    patent_type, patent_inventor, patent_writer, patent_remarks
+    patent_type, patent_inventor, patent_writer,patent_remarks
   </sql>
 
-  <select id="selectByPrimaryKey" resultMap="PatentResultMap" parameterType="Integer" >
+<!--  查询专利信息 通过专利id查询、案件文号查询、申请号查询、申请日期查询、进度查询、发明人姓名查询、创建人id查询、撰写人id查询-->
+  <select id="selectPatent" resultMap="PatentResultMap" parameterType="com.suixingpay.patent.pojo.Patent">
     select
-    <include refid="Patent_Column_List" />
-    from patent
-    where patent_id = #{patentId,jdbcType=INTEGER}
+    <include refid="Patent_Column_List" />,status_name,u1.user_name,u2.user_name user_name1
+     from (select <include refid="Patent_Column_List" /> from patent
+    <trim prefix="WHERE (" suffix=")" prefixOverrides="AND |OR ">
+      <if test="patentId!=null">patent_id=#{patentId,jdbcType=INTEGER}</if>
+      <if test="patentCaseNum!=null"> and patent_case_num=#{patentCaseNum,jdbcType=VARCHAR}</if>
+      <if test="patentApplyNum!=null"> and patent_apply_num=#{patentApplyNum,jdbcType=VARCHAR} </if>
+      <if test="patentApplyTime!=null"> and patent_apply_time=#{patentApplyTime,jdbcType=TIMESTAMP}</if>
+      <if test="patentStatusId!=null"> and patent_status_id=#{patentStatusId,jdbcType=INTEGER}</if>
+      <if test="patentSign!=null"> and patent_sign=#{patentSign,jdbcType=INTEGER}</if>
+      <if test="patentInventor!=null"> and patent_inventor like concat('%',#{patentInventor,jdbcType=VARCHAR},'%') </if>
+      <if test="patentName!=null"> and patent_name like concat('%',#{patentName,jdbcType=VARCHAR},'%') </if>
+      <if test="patentCreatePerson!=null"> and patent_create_person=#{patentCreatePerson,jdbcType=INTEGER}</if>
+      <if test="patentWriter!=null"> and patent_writer=#{patentWriter,jdbcType=INTEGER}</if>
+      <if test="specialCondition!=null"> and ${specialCondition}</if>
+    </trim>
+    limit #{currentPage,jdbcType=INTEGER},15
+    ) p
+     left join status s on p.patent_status_id=s.status_id
+     left join user u1 on p. patent_create_person=u1.user_id
+     left join user u2 on p.patent_writer=u2.user_id
   </select>
+<!--  查询专利总数 通过专利id查询、案件文号查询、申请号查询、申请日期查询、进度查询、发明人姓名查询、创建人id查询、撰写人id查询-->
+<select id="selectPatentCount" resultType="com.suixingpay.patent.pojo.Patent" parameterType="com.suixingpay.patent.pojo.Patent">
+    select count(patent_id) pageCount from patent
+    <trim prefix="WHERE (" suffix=")" prefixOverrides="AND |OR ">
+        <if test="patentId!=null">patent_id=#{patentId,jdbcType=INTEGER}</if>
+        <if test="patentCaseNum!=null"> and patent_case_num=#{patentCaseNum,jdbcType=VARCHAR}</if>
+        <if test="patentApplyNum!=null"> and patent_apply_num=#{patentApplyNum,jdbcType=VARCHAR} </if>
+        <if test="patentApplyTime!=null"> and patent_apply_time=#{patentApplyTime,jdbcType=TIMESTAMP}</if>
+        <if test="patentStatusId!=null"> and patent_status_id=#{patentStatusId,jdbcType=INTEGER}</if>
+        <if test="patentSign!=null"> and patent_sign=#{patentSign,jdbcType=INTEGER}</if>
+        <if test="patentInventor!=null"> and patent_inventor like concat('%',#{patentInventor,jdbcType=VARCHAR},'%') </if>
+        <if test="patentName!=null"> and patent_name like concat('%',#{patentName,jdbcType=VARCHAR},'%') </if>
+        <if test="patentCreatePerson!=null"> and patent_create_person=#{patentCreatePerson,jdbcType=INTEGER}</if>
+        <if test="patentWriter!=null"> and patent_writer=#{patentWriter,jdbcType=INTEGER}</if>
+        <if test="specialCondition!=null"> and ${specialCondition}</if>
+    </trim>
+</select>
 
-  <select id="selectAll" resultMap="PatentResultMap" >
-    select
-    <include refid="Patent_Column_List" />
-    from patent
-  </select>
+<!--  插入专利信息-->
+  <insert id="insertPatent" parameterType="com.suixingpay.patent.pojo.Patent" >
+    insert into patent (patent_batch, patent_case_num,
+      patent_apply_num, patent_apply_time, patent_technical_contact,
+      patent_apply_person, patent_create_person,
+      patent_name, patent_sign, patent_status_id,
+      patent_type, patent_inventor, patent_writer,
+      patent_remarks)
+    values (#{patentBatch,jdbcType=VARCHAR}, #{patentCaseNum,jdbcType=VARCHAR},
+      #{patentApplyNum,jdbcType=VARCHAR}, #{patentApplyTime,jdbcType=TIMESTAMP}, #{patentTechnicalContact,jdbcType=VARCHAR},
+      #{patentApplyPerson,jdbcType=VARCHAR}, #{patentCreatePerson,jdbcType=INTEGER},
+      #{patentName,jdbcType=VARCHAR}, #{patentSign,jdbcType=INTEGER}, #{patentStatusId,jdbcType=INTEGER},
+      #{patentType,jdbcType=VARCHAR}, #{patentInventor,jdbcType=VARCHAR}, #{patentWriter,jdbcType=INTEGER},
+      #{patentRemarks,jdbcType=LONGVARCHAR})
+  </insert>
 
-  
-  <select id="selectExamine" resultMap="ResultMapWithBLOBs" >
-    select
-      <include refid="Patent_Column_List" />
-    from patent
-    where patent_sign = 1 AND patent_status_id IN (0,2,3,4,5)
-  </select>
-
-
-  <update id="auditPass" parameterType = "com.suixingpay.patent.pojo.Patent">
-    UPDATE patent
-    set
-    patent_sign = 0,
-    patent_status_id = patent_status_id+1
-    where patent_sign = 1 and patent_id = #{arg0}
+<!--  通过专利ID和（创建人或撰写人）修改专利信息-->
+  <update id="updatePatent" parameterType="com.suixingpay.patent.pojo.Patent">
+    update patent set
+    patent_batch=#{patentBatch,jdbcType=VARCHAR},patent_case_num=#{patentCaseNum,jdbcType=VARCHAR},
+    patent_apply_num=#{patentApplyNum,jdbcType=VARCHAR},patent_apply_time=#{patentApplyTime,jdbcType=TIMESTAMP},
+    patent_technical_contact=#{patentTechnicalContact,jdbcType=VARCHAR},patent_apply_person=#{patentApplyPerson,jdbcType=VARCHAR},
+    patent_name=#{patentName,jdbcType=VARCHAR},patent_type=#{patentType,jdbcType=VARCHAR},
+    patent_inventor=#{patentInventor,jdbcType=VARCHAR},patent_remarks=#{patentRemarks,jdbcType=LONGVARCHAR}
+    <trim prefix="WHERE (" suffix=")" prefixOverrides="AND |OR ">
+      <if test="patentId!=null">patent_id=#{patentId,jdbcType=INTEGER}</if>
+      <if test="patentCreatePerson!=null"> and patent_create_person=#{patentCreatePerson,jdbcType=INTEGER}</if>
+      <if test="patentWriter!=null"> and patent_writer=#{patentWriter,jdbcType=INTEGER}</if>
+    </trim>
   </update>
 
+<!--  通过专利ID修改撰写人-->
+  <update id="updatePatentWriterByID" parameterType="com.suixingpay.patent.pojo.Patent">
+    update patent set
+    patent_writer=#{patentWriter,jdbcType=VARCHAR}
+    where patent_id=#{patentId,jdbcType=INTEGER}
+  </update>
 
-  <update id="auditFailed" parameterType = "com.suixingpay.patent.pojo.Patent">
+  <!--修改审核状态-->
+  <update id="updatePatentDudit" parameterType = "com.suixingpay.patent.pojo.Patent">
     UPDATE patent
     set
-    patent_sign = 2
-    where patent_sign = 1 and patent_id = #{arg0}
+    patent_sign=#{patentSign,jdbcType=INTEGER}
+    <trim prefix="WHERE (" suffix=")" prefixOverrides="AND |OR ">
+      <if test="patentId!=null">patent_id=#{patentId,jdbcType=INTEGER}</if>
+      <if test="specialCondition!=null"> and ${specialCondition}</if>
+    </trim>
+  </update>
+
+<!--  修改进度状态-->
+  <update id="updateStatusId" parameterType="com.suixingpay.patent.pojo.Patent">
+    UPDATE  patent
+    set
+    patent_status_id=#{patentStatusId,jdbcType=INTEGER}
+    <trim prefix="WHERE (" suffix=")" prefixOverrides="AND |OR ">
+      <if test="patentId!=null">patent_id=#{patentId,jdbcType=INTEGER}</if>
+      <if test="specialCondition!=null"> and ${specialCondition}</if>
+    </trim>
   </update>
 
 </mapper>

@@ -42,6 +42,6 @@ public class LogAspect {
         //获取请求的方法名
         String methodName = method.getName();
 
-        log.info("用户{}对专利{}进行了{}",user.getUserName(),patentCaseNum,methodName);
+//        log.info("用户{}对专利{}进行了{}",user.getUserName(),patentCaseNum,methodName);
     }
 }
