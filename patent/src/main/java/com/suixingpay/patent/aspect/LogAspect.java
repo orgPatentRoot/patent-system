@@ -57,6 +57,6 @@ public class LogAspect {
 //            log.info("用户{}进行了{}", user.getUserName(), methodName);
 //        } else {
 //            log.info("用户{}对专利{}进行了{}", user.getUserName(), patentId, methodName);
-//        }
+//        } 
     }
 }
