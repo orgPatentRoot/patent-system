@@ -57,7 +57,7 @@ public class IndexController {
      * @param index
      * @return
      */
-//    @UserLog("插入指标！")
+    @UserLog("插入指标！")
     @PostMapping(value = "/insertIndexContent")
     @ResponseBody
     public Message insertIndexContent(@RequestBody @Valid Index index, HttpServletResponse response) {
