@@ -1,5 +1,6 @@
 package com.suixingpay.patent.controller;
 
+import com.suixingpay.patent.annotation.UserLog;
 import com.suixingpay.patent.pojo.Index;
 import com.suixingpay.patent.pojo.Message;
 import com.suixingpay.patent.service.IndexService;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @Controller
@@ -56,10 +58,11 @@ public class IndexController {
      * @param index
      * @return
      */
+    @UserLog("插入指标！")
     @PostMapping(value = "/insertIndexContent")
     @ResponseBody
-    public Message insertIndexContent(@RequestBody @Valid Index index, HttpServletResponse response) {
-        System.out.println(111);
+    public Message insertIndexContent(@RequestBody @Valid Index index, HttpServletResponse response, HttpSession httpSession) {
+        httpSession.setAttribute("patentId",index.getIndexPatentId().toString());
         Message message = indexService.insertIndexContent(index);
         response.setStatus(message.getStatus());
         return message;
@@ -70,6 +73,7 @@ public class IndexController {
      * @param indexId
      * @return
      */
+    @UserLog("删除指标！")
     @RequestMapping("/deleteIndex")
     @ResponseBody
     public Message deleteIndex(Integer indexId, HttpServletResponse response) {
@@ -79,9 +83,9 @@ public class IndexController {
             response.setStatus(message.getStatus());
             return message;
         }
-        Message message1 = indexService.deleteIndex(indexId);
-        response.setStatus(message1.getStatus());
-        return message1;
+        message = indexService.deleteIndex(indexId);
+        response.setStatus(message.getStatus());
+        return message;
     }
 
     /**
@@ -92,16 +96,17 @@ public class IndexController {
      */
     @PostMapping("/updateIndexContent")
     @ResponseBody
-    public Message updateIndexContent(@RequestBody Index index, HttpServletResponse response) {
+    public Message updateIndexContent(@RequestBody Index index, HttpServletResponse response,HttpSession httpSession) {
+        httpSession.setAttribute("patentId",index.getIndexPatentId().toString());
         Message message = new Message();
         if (index.getIndexContent() == null  || index.getIndexContent().equals("") || index.getIndexId() == null) {
             message.setMessage(null, 400, "请输入被删除指标的ID并且内容不能为空", true);
             response.setStatus(message.getStatus());
             return message;
         }
-        Message message1 = indexService.updateIndexContent(index);
-        response.setStatus(message1.getStatus());
-        return message1;
+        message = indexService.updateIndexContent(index);
+        response.setStatus(message.getStatus());
+        return message;
     }
 
 }

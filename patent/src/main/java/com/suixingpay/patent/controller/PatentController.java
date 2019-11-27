@@ -29,7 +29,8 @@ public class PatentController {
      * @return
      */
     @RequestMapping("/insertPatent")
-    public ResponseEntity<Message> insertPatentController(@Valid @RequestBody Patent patent, HttpServletRequest request) {
+    public ResponseEntity<Message> insertPatentController(@Valid @RequestBody Patent patent,
+                                                          HttpServletRequest request) {
         Message message = new Message();
         //从session获取用户信息
         User user = (User) request.getSession().getAttribute("user");
@@ -52,7 +53,9 @@ public class PatentController {
      * @return
      */
     @RequestMapping("/updatePatent")
-    public ResponseEntity<Message> updatePatentByCreatePersonController(@Valid @RequestBody Patent patent, HttpServletRequest request) {
+    public ResponseEntity<Message> updatePatentByCreatePersonController(@Valid @RequestBody Patent patent,
+                                                                        HttpServletRequest request) {
+        request.getSession().setAttribute("patentId",patent.getPatentId().toString());
         Patent patentCondition = new Patent();
         patentCondition.setPatentId(patent.getPatentId());
         patentCondition.setPatentBatch(patent.getPatentBatch());
@@ -74,7 +77,9 @@ public class PatentController {
      * @return
      */
     @RequestMapping("/updatePatentById")
-    public ResponseEntity<Message> updatePatentWriterByIDController(@RequestBody Patent patent, HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<Message> updatePatentWriterByIDController(@RequestBody Patent patent,
+                                                                    HttpServletRequest request) {
+        request.getSession().setAttribute("patentId",patent.getPatentId().toString());
         Message message = new Message();
         Patent patentCondition  = new Patent();
         if (patent.getPatentId() == null) {
@@ -155,7 +160,8 @@ public class PatentController {
      * @return
      */
     @RequestMapping("/selectPatentByCreatePerson")
-    public ResponseEntity<Message> selectPatentByCreatePersonController(@RequestBody Patent patent, HttpServletRequest request) {
+    public ResponseEntity<Message> selectPatentByCreatePersonController(@RequestBody Patent patent,
+                                                                        HttpServletRequest request) {
         Message message = new Message();
         //从session获取用户信息
         User user = (User) request.getSession().getAttribute("user");
@@ -183,7 +189,8 @@ public class PatentController {
      * @return
      */
     @RequestMapping("/selectPatentByWriterNeekCheck")
-    public ResponseEntity<Message> selectPatentByWriterController(@RequestBody Patent patent, HttpServletRequest request) {
+    public ResponseEntity<Message> selectPatentByWriterController(@RequestBody Patent patent,
+                                                                  HttpServletRequest request) {
         Message message = new Message();
         //从session获取用户信息
         User user = (User) request.getSession().getAttribute("user");
@@ -212,7 +219,8 @@ public class PatentController {
      * @return
      */
     @RequestMapping("/selectPatentByWriterNoCheck")
-    public ResponseEntity<Message> selectPatentByConditionController(@RequestBody Patent patent, HttpServletRequest request) {
+    public ResponseEntity<Message> selectPatentByConditionController(@RequestBody Patent patent,
+                                                                     HttpServletRequest request) {
         Message message = new Message();
         //从session获取用户信息
         User user = (User) request.getSession().getAttribute("user");
@@ -235,7 +243,7 @@ public class PatentController {
     }
 
     /**
-     *
+     *通过专利Id查询专利信息
      * @param patent
      * @return
      */
@@ -366,7 +374,8 @@ public class PatentController {
      * @throws IOException
      */
     @RequestMapping("/excelDownloads")
-    public ResponseEntity<Message> downloadAllClassmate(HttpServletResponse response, @RequestBody Patent patent) throws IOException {
+    public ResponseEntity<Message> downloadAllClassmate(HttpServletResponse response,
+                                                        @RequestBody Patent patent) throws IOException {
         return patentService.downloadPatent(response, patent);
     }
 }

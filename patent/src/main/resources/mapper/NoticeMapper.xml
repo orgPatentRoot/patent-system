@@ -21,12 +21,12 @@
   </update>
 
   <select id="selectNoticeByPatentId" resultMap="NoticeResultMap">
-    select notice_patent_id, notice_path,
+    select notice_id,notice_patent_id, notice_path,
       notice_status, notice_create_time,notice_name from notice where notice_id=#{noticeId}
   </select>
 
   <select id="selectByPatentId" resultMap="NoticeResultMap">
-    select notice_patent_id, notice_path,
+    select notice_id,notice_patent_id, notice_path,
       notice_status, notice_create_time,notice_name from notice where notice_patent_id=#{noticePatentId}
   </select>
 

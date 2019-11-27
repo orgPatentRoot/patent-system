@@ -13,12 +13,4 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/history")
 public class HistoryController {
 
-    @RequestMapping("test")
-    @UserLog(value = "测试")
-    public String test(@RequestBody Patent patent, HttpSession httpSession){
-        User user = new User();
-        user.setUserName("zhangsan");
-        httpSession.setAttribute("user",user);
-        return "test";
-    }
 }
