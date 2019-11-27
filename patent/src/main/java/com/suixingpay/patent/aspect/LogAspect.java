@@ -38,7 +38,7 @@ public class LogAspect {
         //从切面织入点处通过反射机制获取织入点处的方法
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         //通过json传数据
-        if(patentId==null){
+        /*if(patentId==null){
             //获取前台传的参数名
             String[] parameterNames = signature.getParameterNames();
             //获取前台传的值
@@ -48,12 +48,16 @@ public class LogAspect {
                     patentId = parameterValues[i];
                 }
             }
-        }
+        }*/
         //获取切入点所在的方法
         Method method = signature.getMethod();
         //获取请求的方法名
         String methodName = method.getName();
+        if (patentId == null){
+            log.info("用户{}进行了{}",user.getUserName(),methodName);
+        }else {
+            log.info("用户{}对专利{}进行了{}",user.getUserName(),patentId,methodName);
+        }
 
-       log.info("用户{}对专利{}进行了{}",user.getUserName(),patentId,methodName);
     }
 }

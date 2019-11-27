@@ -130,8 +130,7 @@ public class UserController {
      * @param user
      * @return
      */
-    @GetMapping("/find")
-    public ResponseEntity<Message> findUser(@RequestBody User user) {
-        return userService.findUser(user);
+    @PostMapping("/find")
+    public ResponseEntity<Message> findUser(@RequestBody User user) { return userService.findUser(user);
     }
 }

@@ -30,7 +30,15 @@
 
   <select id="findUser" resultType="com.suixingpay.patent.pojo.User" parameterType="com.suixingpay.patent.pojo.User">
   select user_id, user_name, user_account, user_password, user_status, user_create_time from user
-  where user_name like concat('%',#{userName,jdbcType=VARCHAR},'%') or user_account like concat('%',#{userAccount,jdbcType=VARCHAR},'%')
+  <where>
+      <if test="#{userName}!=null and #{userName}!=''">
+          user_name like concat('%',#{userName,jdbcType=VARCHAR},'%')
+      </if>
+
+      <if test="#{userAccount}!=null and #{userAccount}!=''">
+          and user_account like concat('%',#{userAccount,jdbcType=VARCHAR},'%')
+      </if>
+  </where>
   </select>
 
   <select id="selectUserByUserAccount" resultType="com.suixingpay.patent.pojo.User">

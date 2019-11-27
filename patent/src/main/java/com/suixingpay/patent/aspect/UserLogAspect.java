@@ -1,12 +1,11 @@
 package com.suixingpay.patent.aspect;
 
-import com.alibaba.fastjson.JSON;
+
 import com.suixingpay.patent.annotation.UserLog;
 import com.suixingpay.patent.pojo.History;
 import com.suixingpay.patent.pojo.User;
 import com.suixingpay.patent.service.HistoryService;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
