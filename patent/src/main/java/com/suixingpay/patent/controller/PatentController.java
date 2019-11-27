@@ -29,7 +29,8 @@ public class PatentController {
      * @return
      */
     @RequestMapping("/insertPatent")
-    public ResponseEntity<Message> insertPatentController(@Valid @RequestBody Patent patent, HttpServletRequest request) {
+    public ResponseEntity<Message> insertPatentController(@Valid @RequestBody Patent patent,
+                                                          HttpServletRequest request) {
         Message message = new Message();
         //从session获取用户信息
         User user = (User) request.getSession().getAttribute("user");
@@ -235,7 +236,7 @@ public class PatentController {
     }
 
     /**
-     *
+     *通过专利Id查询专利信息
      * @param patent
      * @return
      */

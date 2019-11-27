@@ -1,5 +1,6 @@
 package com.suixingpay.patent.controller;
 
+import com.suixingpay.patent.annotation.UserLog;
 import com.suixingpay.patent.pojo.Index;
 import com.suixingpay.patent.pojo.Message;
 import com.suixingpay.patent.service.IndexService;
@@ -56,6 +57,7 @@ public class IndexController {
      * @param index
      * @return
      */
+//    @UserLog("插入指标！")
     @PostMapping(value = "/insertIndexContent")
     @ResponseBody
     public Message insertIndexContent(@RequestBody @Valid Index index, HttpServletResponse response) {
@@ -70,6 +72,7 @@ public class IndexController {
      * @param indexId
      * @return
      */
+    @UserLog("删除指标！")
     @RequestMapping("/deleteIndex")
     @ResponseBody
     public Message deleteIndex(Integer indexId, HttpServletResponse response) {

@@ -127,12 +127,14 @@ public class NoticeController {
                                HttpServletResponse response) throws UnsupportedEncodingException {
 
         Notice notice = noticeService.selectNoticeByPatentId(noticeId);
-        if ( notice == null ) {
+
+        if(notice ==null){
             message.setMessage(null, 400, "文件ID不存在", false);
             return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
         }
         //获取文件地址
         String noticePath = notice.getNoticePath();
+        System.out.println(noticePath);
         //获取文件名称
         String noticeName = notice.getNoticeName();
 
@@ -202,12 +204,9 @@ public class NoticeController {
      */
     @RequestMapping("/select")
     public ResponseEntity<Message>  selectByPatentId(int noticePatentId) {
+        System.out.println(noticePatentId);
         return  noticeService.selectByPatentId(noticePatentId);
-
     }
-
-
-
 
     /**
      * 管理员查看
