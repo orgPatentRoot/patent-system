@@ -44,8 +44,15 @@ public class NoticeController {
 
     @RequestMapping("/upload")
     @ResponseBody
-    public ResponseEntity<Message> upload(@RequestParam("id") int patentId,
+    public ResponseEntity<Message> upload(@RequestParam("patentId") Integer patentId,
                                           @RequestParam("file") MultipartFile file) {
+
+
+        if (patentId == null || file == null) {
+            message.setMessage(null, 400,   "没有文件ID或者文件上传", false);
+            return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
+        }
+
 
         if  (file.isEmpty()) {
             message.setMessage(null, 400, "没有选择上传文件", false);
@@ -60,7 +67,6 @@ public class NoticeController {
         int filePaentId = patentId;
         //获取文件的名字
         String fileName = file.getOriginalFilename();
-
         //获取当前项目根路径
         File rootPath = new File("");
         String filePath = "";
@@ -88,7 +94,7 @@ public class NoticeController {
             files.setNoticeStatus(1);
             noticeService.insert(files);
             message.setMessage(null, 200, "上传成功", true);
-            return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Message>(message, HttpStatus.OK);
         } catch (IOException e) {
             LOGGER.error(e.toString(), e);
         }
@@ -107,7 +113,11 @@ public class NoticeController {
      * @return
      */
     @RequestMapping("/delete")
-    public ResponseEntity<Message> delete(int noticeId) {
+    public ResponseEntity<Message> delete(Integer noticeId) {
+        if (noticeId == null) {
+            message.setMessage(null, 400,   "没有文件ID", false);
+            return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
+        }
         return noticeService.delete(noticeId);
     }
 
@@ -123,9 +133,12 @@ public class NoticeController {
      * @throws UnsupportedEncodingException
      */
     @RequestMapping("/download")
-    public ResponseEntity<Message>  downloadFile(@Param("noticeId") int noticeId,
+    public ResponseEntity<Message>  downloadFile(@Param("noticeId") Integer noticeId,
                                HttpServletResponse response) throws UnsupportedEncodingException {
-
+        if (noticeId == null) {
+            message.setMessage(null, 400,   "没有需要下载文件ID", false);
+            return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
+        }
         Notice notice = noticeService.selectNoticeByPatentId(noticeId);
 
         if(notice ==null){
@@ -203,7 +216,11 @@ public class NoticeController {
      * @return
      */
     @RequestMapping("/select")
-    public ResponseEntity<Message>  selectByPatentId(int noticePatentId) {
+    public ResponseEntity<Message>  selectByPatentId(Integer noticePatentId) {
+        if (noticePatentId == null) {
+            message.setMessage(null, 400,   "没有文件ID", false);
+            return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
+        }
         System.out.println(noticePatentId);
         return  noticeService.selectByPatentId(noticePatentId);
     }
@@ -214,7 +231,11 @@ public class NoticeController {
      * @return
      */
     @RequestMapping("/searchManager")
-    public ResponseEntity<Message>  searchmanagerId(int noticePatenId) {
+    public ResponseEntity<Message>  searchmanagerId(Integer noticePatenId) {
+        if ( noticePatenId == null) {
+            message.setMessage(null, 400,   "没有文件ID", false);
+            return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
+        }
         return  noticeService.searchmanagerId(noticePatenId);
 
     }

@@ -30,7 +30,7 @@ public class LogAspect {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
         //获取用户名
-        //String userName = (String) request.getSession(true).getAttribute("userName");
+        String userName = (String) request.getSession(true).getAttribute("userName");
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
         //获取专利名

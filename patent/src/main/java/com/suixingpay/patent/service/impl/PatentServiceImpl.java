@@ -179,8 +179,8 @@ public class PatentServiceImpl implements PatentService {
     @Override
     public ResponseEntity<Message> userRollBack(Patent patent) {
         Message message = new Message();
+        //设置条件:审核进度为待审核0,专利进度为审核不通过阶段2
         patent.setPatentSign(0);
-        //设置条件:审核进度为审核中2,专利进度为需要审核的阶段
         patent.setSpecialCondition("patent_sign = 2 and patent_status_id IN (0,2,3,4,5)");
         if (patentMapper.updatePatent(patent) != 0) {
             message.setMessage(null, 200, "回滚成功！", true);

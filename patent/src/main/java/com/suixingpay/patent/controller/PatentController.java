@@ -95,6 +95,8 @@ public class PatentController {
         patentCondition.setPatentId(patent.getPatentId());
         patentCondition.setPatentStatusId(2); //认领成功将进度变为方案讨论
         patentCondition.setPatentWriter(user.getUserId()); //通过session设置撰写人id
+//        patentCondition.setPatentWriter(patent.getPatentWriter()); //通过session设置撰写人id，测试用
+        patentCondition.setSpecialCondition("patent_status_id = 1"); //设置需要的审核进度为认领阶段
         return patentService.updatePatentWriterByIdService(patentCondition);
     }
 
@@ -193,11 +195,11 @@ public class PatentController {
                                                                   HttpServletRequest request) {
         Message message = new Message();
         //从session获取用户信息
-        User user = (User) request.getSession().getAttribute("user");
-        if (user == null || user.getUserId() == null) {
-            message.setMessage(null, 400, "用户没有登录", false);
-            return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
-        }
+//        User user = (User) request.getSession().getAttribute("user");
+//        if (user == null || user.getUserId() == null) {
+//            message.setMessage(null, 400, "用户没有登录", false);
+//            return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
+//        }
         //设置筛选条件
         Patent patentCondition = new Patent();
         patentCondition.setPatentCaseNum(patent.getPatentCaseNum()); //设置案例文号筛选条件
@@ -206,8 +208,8 @@ public class PatentController {
         patentCondition.setPatentName(patent.getPatentName()); //设置发明名称筛选条件
         patentCondition.setPatentInventor(patent.getPatentInventor()); //设置发明人筛选条件
         patentCondition.setPatentStatusId(patent.getPatentStatusId()); //设置专利进度筛选条件
-        patentCondition.setPatentWriter(user.getUserId()); //设置撰写人筛选条件
-//        patentCondition.setPatentWriter(patent.getPatentWriter());//测试用这行，将上一行注释即可
+//        patentCondition.setPatentWriter(user.getUserId()); //设置撰写人筛选条件
+        patentCondition.setPatentWriter(patent.getPatentWriter());//测试用这行，将上一行注释即可
         patentCondition.setSpecialCondition("patent_status_id IN (0,2,3,4,5)"); //设置需要的审核进度
         return patentService.selectPatentService(patentCondition);
     }

@@ -69,7 +69,11 @@ public class UserController {
      * @return return "删除用户成功";
      */
     @GetMapping("/admDelete")
-    public ResponseEntity<Message> updateUser(int userId) {
+    public ResponseEntity<Message> updateUser(Integer userId) {
+        if (userId == null || "".equals(userId)) {
+            message.setMessage(null, 400, "不能输入空数据", false);
+            return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
+        }
         return userService.updateUserByUserId(userId);
     }
 
@@ -91,7 +95,11 @@ public class UserController {
      * @return
      */
     @GetMapping("/admSelectOne")
-    public ResponseEntity<Message> selectUserByUserId(int userId) {
+    public ResponseEntity<Message> selectUserByUserId(Integer userId) {
+        if (userId == null || "".equals(userId)) {
+            message.setMessage(null, 400, "不能输入空数据", false);
+            return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
+        }
         return userService.selectUserByUserId(userId);
     }
 
@@ -106,6 +114,9 @@ public class UserController {
     @GetMapping("/userSelect")
     public ResponseEntity<Message> selectMyInformation(HttpSession httpSession) {
         User userLogin = (User) httpSession.getAttribute("user");
+        if (userLogin.getUserId()==null || "".equals(userLogin.getUserId())){
+            message.setMessage(null, 400, "请先登录", false);
+        }
         return userService.selectUserByUserId(userLogin.getUserId());
     }
 
@@ -131,5 +142,7 @@ public class UserController {
      * @return
      */
     @PostMapping("/find")
-    public ResponseEntity<Message> findUser(@RequestBody User user) { return userService.findUser(user); }
+    public ResponseEntity<Message> findUser(@RequestBody User user) {
+        return userService.findUser(user);
+    }
 }
