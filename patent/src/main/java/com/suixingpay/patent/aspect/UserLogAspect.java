@@ -25,10 +25,10 @@ import java.util.Date;
 @Component
 public class UserLogAspect {
     @Autowired
-    HistoryService historyService;
+    private HistoryService historyService;
 
     @Autowired
-    History history;
+    private History history;
 
     @Pointcut("@annotation(com.suixingpay.patent.annotation.UserLog)")
     public void logPointCut() {
@@ -42,7 +42,7 @@ public class UserLogAspect {
         //String userName = (String) request.getSession(true).getAttribute("userName");
         HttpSession session = request.getSession();
         //获取用户
-        User user = (User)session.getAttribute("user");
+        User user = (User) session.getAttribute("user");
 
         //从切面织入点处通过反射机制获取织入点处的方法
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
@@ -50,13 +50,13 @@ public class UserLogAspect {
         //获取专利名
         String patentIds = request.getParameter("patentId");
         int patentId = Integer.valueOf(patentIds);
-        if(patentIds==null){
+        if (patentIds == null) {
             //获取前台传的参数名
             String[] parameterNames = signature.getParameterNames();
             //获取前台传的值
-            String[] parameterValues = (String[])joinPoint.getArgs();
-            for (int i=0;i<parameterValues.length;i++) {
-                if(parameterNames[i]=="patentId"){
+            String[] parameterValues = (String[]) joinPoint.getArgs();
+            for (int i = 0; i < parameterValues.length; i++) {
+                if (parameterNames[i].equals("patentId")) {
                     patentId = Integer.valueOf(parameterValues[i]);
                 }
             }

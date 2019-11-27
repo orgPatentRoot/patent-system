@@ -20,7 +20,8 @@ import java.lang.reflect.Method;
 @Component
 public class LogAspect {
 
-    @Pointcut("execution(* com.suixingpay.patent.controller.*.*(..))&&!execution(* com.suixingpay.patent.controller.UserController.userLogin(..))")
+    @Pointcut("execution(* com.suixingpay.patent.controller.*.*(..))"
+            + "&&!execution(* com.suixingpay.patent.controller.UserController.userLogin(..))")
     public void pointcut() {
     }
 
@@ -57,6 +58,6 @@ public class LogAspect {
 //            log.info("用户{}进行了{}", user.getUserName(), methodName);
 //        } else {
 //            log.info("用户{}对专利{}进行了{}", user.getUserName(), patentId, methodName);
-//        } 
+//        }
     }
 }
