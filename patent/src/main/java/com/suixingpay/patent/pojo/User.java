@@ -1,10 +1,17 @@
 package com.suixingpay.patent.pojo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
 @Component
+@Getter
+@Setter
+@ToString
 public class User {
     private Integer userId;
 
@@ -16,6 +23,7 @@ public class User {
 
     private Integer userStatus;
 
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
     private Date userCreateTime;
 
     public Integer getUserId() {

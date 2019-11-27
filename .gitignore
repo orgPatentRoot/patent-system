@@ -10,7 +10,9 @@ catalina*
 /logs/
 .idea/
 *.log
+log/
 out/
 *.cache
 *.iml
 *.bak
+

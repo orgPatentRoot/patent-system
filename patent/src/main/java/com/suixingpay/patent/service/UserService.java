@@ -4,21 +4,26 @@ import com.suixingpay.patent.pojo.Message;
 import com.suixingpay.patent.pojo.User;
 
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
 public interface UserService {
-    Message selectUserByUserAccountAndUserPassword(String userAccount, String userPassword, HttpSession httpSession);
+    ResponseEntity<Message> selectUserByUserAccountAndUserPassword(String userAccount, String userPassword, HttpSession httpSession);
 
-    void insertUser(User user);
+    ResponseEntity<Message> insertUser(User user);
 
-    void updateUserByUserId(int userId);
+    ResponseEntity<Message> updateUserByUserId(int userId);
 
-    List<User> selectAllUser();
+    ResponseEntity<Message> selectAllUser();
 
-    User selectUserByUserId(int userId);
+    ResponseEntity<Message> selectUserByUserId(int userId);
 
-    void updateLocalUserByUserId(int userId,String userName,String userPassword);
+    ResponseEntity<Message> updateLocalUserByUserId(int userId, String userName, String userPassword);
+
+    ResponseEntity<Message> findUser(User user);
+
+    User selectUserByUserAccount(String userAccount);
 }

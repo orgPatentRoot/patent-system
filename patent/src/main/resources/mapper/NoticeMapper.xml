@@ -8,99 +8,26 @@
     <result column="notice_name" property="noticeName" jdbcType="VARCHAR" />
     <result column="notice_status" property="noticeStatus" jdbcType="INTEGER" />
     <result column="notice_create_time" property="noticeCreateTime" jdbcType="TIMESTAMP" />
-</resultMap>
-  <sql id="Notice_Column_List" >
-    notice_id, notice_patent_id, notice_path, notice_name, notice_status, notice_create_time
-  </sql>
-  <select id="selectByPrimaryKey" resultMap="NoticeResultMap" parameterType="Integer" >
-    select 
-    <include refid="Notice_Column_List" />
-    from notice
-    where notice_id = #{noticeId,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="Integer" >
-    delete from notice
-    where notice_id = #{noticeId,jdbcType=INTEGER}
-  </delete>
+  </resultMap>
   <insert id="insert" parameterType="com.suixingpay.patent.pojo.Notice" >
-    insert into notice (notice_id, notice_patent_id, notice_path, 
-      notice_name, notice_status, notice_create_time
-      )
-    values (#{noticeId,jdbcType=INTEGER}, #{noticePatentId,jdbcType=INTEGER}, #{noticePath,jdbcType=VARCHAR}, 
-      #{noticeName,jdbcType=VARCHAR}, #{noticeStatus,jdbcType=INTEGER}, #{noticeCreateTime,jdbcType=TIMESTAMP}
+    insert into notice (notice_patent_id, notice_path,
+      notice_status, notice_create_time,notice_name
+      )  values (#{noticePatentId,jdbcType=INTEGER}, #{noticePath,jdbcType=VARCHAR},
+       #{noticeStatus,jdbcType=INTEGER}, #{noticeCreateTime,jdbcType=TIMESTAMP},#{noticeName,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.suixingpay.patent.pojo.Notice" >
-    insert into notice
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="noticeId != null" >
-        notice_id,
-      </if>
-      <if test="noticePatentId != null" >
-        notice_patent_id,
-      </if>
-      <if test="noticePath != null" >
-        notice_path,
-      </if>
-      <if test="noticeName != null" >
-        notice_name,
-      </if>
-      <if test="noticeStatus != null" >
-        notice_status,
-      </if>
-      <if test="noticeCreateTime != null" >
-        notice_create_time,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="noticeId != null" >
-        #{noticeId,jdbcType=INTEGER},
-      </if>
-      <if test="noticePatentId != null" >
-        #{noticePatentId,jdbcType=INTEGER},
-      </if>
-      <if test="noticePath != null" >
-        #{noticePath,jdbcType=VARCHAR},
-      </if>
-      <if test="noticeName != null" >
-        #{noticeName,jdbcType=VARCHAR},
-      </if>
-      <if test="noticeStatus != null" >
-        #{noticeStatus,jdbcType=INTEGER},
-      </if>
-      <if test="noticeCreateTime != null" >
-        #{noticeCreateTime,jdbcType=TIMESTAMP},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.suixingpay.patent.pojo.Notice" >
-    update notice
-    <set >
-      <if test="noticePatentId != null" >
-        notice_patent_id = #{noticePatentId,jdbcType=INTEGER},
-      </if>
-      <if test="noticePath != null" >
-        notice_path = #{noticePath,jdbcType=VARCHAR},
-      </if>
-      <if test="noticeName != null" >
-        notice_name = #{noticeName,jdbcType=VARCHAR},
-      </if>
-      <if test="noticeStatus != null" >
-        notice_status = #{noticeStatus,jdbcType=INTEGER},
-      </if>
-      <if test="noticeCreateTime != null" >
-        notice_create_time = #{noticeCreateTime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where notice_id = #{noticeId,jdbcType=INTEGER}
+  <update id="delete">
+    update notice set notice_status =0 where notice_id =#{noticeId};
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.suixingpay.patent.pojo.Notice" >
-    update notice
-    set notice_patent_id = #{noticePatentId,jdbcType=INTEGER},
-      notice_path = #{noticePath,jdbcType=VARCHAR},
-      notice_name = #{noticeName,jdbcType=VARCHAR},
-      notice_status = #{noticeStatus,jdbcType=INTEGER},
-      notice_create_time = #{noticeCreateTime,jdbcType=TIMESTAMP}
-    where notice_id = #{noticeId,jdbcType=INTEGER}
-  </update>
+
+  <select id="selectNoticeByPatentId" resultMap="NoticeResultMap">
+    select notice_patent_id, notice_path,
+      notice_status, notice_create_time,notice_name from notice where notice_id=#{noticeId}
+  </select>
+
+  <select id="selectByPatentId" resultMap="NoticeResultMap">
+    select notice_patent_id, notice_path,
+      notice_status, notice_create_time,notice_name from notice where notice_patent_id=#{noticePatentId}
+  </select>
+
 </mapper>

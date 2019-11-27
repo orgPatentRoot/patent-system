@@ -8,8 +8,103 @@
     <result column="index_create_time" property="indexCreateTime" jdbcType="TIMESTAMP" />
   </resultMap>
 
-  <sql id="Index_Column_List" >
-    index_id, index_patent_id, index_content, index_create_time
+   <sql id="Index_Column_List" >
+     index_id,index_patent_id, index_content, index_create_time
   </sql>
+
+  <!--管理员查询所有的指标-->
+
+  <select id="queryAllIndex" resultMap="IndexResultMap" >
+    select
+    <include refid="Index_Column_List" />
+    from `index`
+    <!--   from `index` i, patent p
+     WHERE i.index_patent_id = p.patent_id-->
+  </select>
+
+  <!--根据专利id，查询此专利的指标（管理员、用户都可以调用）-->
+
+  <select id="selectIndexByPatentId" parameterType="Integer" resultMap="IndexResultMap">
+    select <include refid="Index_Column_List" />
+    from `index`
+    Where index_patent_Id = #{patentId}
+  </select>
+
+<!--  用户修改指标内容（只能修改内容）-->
+
+  <update id="updateIndexContent" parameterType="com.suixingpay.patent.pojo.Index" >
+    update `index` set index_content = #{indexContent,jdbcType=VARCHAR} where index_id = #{indexId,jdbcType=INTEGER}
+  </update>
+
+<!--  用户插入一条指标-->
+
+  <insert id="insertIndexContent" parameterType="com.suixingpay.patent.pojo.Index" >
+    insert into `index` ( index_patent_id, index_content, index_create_time)
+    values ( #{indexPatentId,jdbcType=INTEGER}, #{indexContent,jdbcType=VARCHAR},
+    #{indexCreateTime,jdbcType=TIMESTAMP})
+  </insert>
+
+  <!--用户删除一条指标-->
+
+  <delete id="deleteIndex" parameterType="Integer" >
+    delete from `index`
+    where index_id = #{indexId,jdbcType=INTEGER}
+  </delete>
+
+  <!--
+  <select id="selectByPrimaryKey" resultMap="IndexResultMap" parameterType="" >
+
+    <include refid="Base_Column_List" />
+    SELECT index_id,index_patent_id,index_content,index_create_time
+    from `index` i, patent p
+    WHERE i.index_patent_id = p.patent_id
+  </select>
+
+  <insert id="insertSelective" parameterType="com.suixingpay.patent.pojo.Index" >
+    insert into index
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="indexId != null" >
+        index_id,
+      </if>
+      <if test="indexPatentId != null" >
+        index_patent_id,
+      </if>
+      <if test="indexContent != null" >
+        index_content,
+      </if>
+      <if test="indexCreateTime != null" >
+        index_create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="indexId != null" >
+        #{indexId,jdbcType=INTEGER},
+      </if>
+      <if test="indexPatentId != null" >
+        #{indexPatentId,jdbcType=INTEGER},
+      </if>
+      <if test="indexContent != null" >
+        #{indexContent,jdbcType=VARCHAR},
+      </if>
+      <if test="indexCreateTime != null" >
+        #{indexCreateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.suixingpay.patent.pojo.Index" >
+    update index
+    <set >
+      <if test="indexPatentId != null" >
+        index_patent_id = #{indexPatentId,jdbcType=INTEGER},
+      </if>
+      <if test="indexContent != null" >
+        index_content = #{indexContent,jdbcType=VARCHAR},
+      </if>
+      <if test="indexCreateTime != null" >
+        index_create_time = #{indexCreateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where index_id = #{indexId,jdbcType=INTEGER}
+  </update>-->
 
 </mapper>

@@ -1,5 +1,6 @@
 package com.suixingpay.patent.mapper;
 
+import com.suixingpay.patent.pojo.Message;
 import com.suixingpay.patent.pojo.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -10,19 +11,21 @@ import java.util.List;
 @Mapper
 @Component
 public interface UserMapper {
-//    int insert(User record);
-//
-//    int insertSelective(User record);
 
-    User selectUserByUserAccountAndUserPassword(@Param("userAccount") String userAccount,@Param("userPassword")  String userPassword);
 
-    void insertUser(User user);
+    User selectUserByUserAccountAndUserPassword(@Param("userAccount") String userAccount, @Param("userPassword") String userPassword);
 
-    void updateUserByUserId(int userId);
+    int insertUser(User user);
+
+    int updateUserByUserId(int userId);
 
     List<User> selectAllUser();
 
     User selectUserByUserId(int userId);
 
-    void updateLocalUserByUserId(int userId, String userName, String userPassword);
+    int updateLocalUserByUserId(int userId, String userName, String userPassword);
+
+    List<User> findUser(User user);
+
+    User selectUserByUserAccount(String userAccount);
 }

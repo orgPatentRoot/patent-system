@@ -33,15 +33,27 @@ public class LogAspect {
         HttpSession session = request.getSession();
         User user = (User)session.getAttribute("user");
         //获取专利名
-        String patentCaseNum = request.getParameter("patentCaseNum");
+        String patentId = request.getParameter("patentId");
 
         //从切面织入点处通过反射机制获取织入点处的方法
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+        //通过json传数据
+        if(patentId==null){
+            //获取前台传的参数名
+            String[] parameterNames = signature.getParameterNames();
+            //获取前台传的值
+            String[] parameterValues = (String[])joinPoint.getArgs();
+            for (int i=0;i<parameterValues.length;i++) {
+                if(parameterNames[i]=="patentId"){
+                    patentId = parameterValues[i];
+                }
+            }
+        }
         //获取切入点所在的方法
         Method method = signature.getMethod();
         //获取请求的方法名
         String methodName = method.getName();
 
-//        log.info("用户{}对专利{}进行了{}",user.getUserName(),patentCaseNum,methodName);
+       log.info("用户{}对专利{}进行了{}",user.getUserName(),patentId,methodName);
     }
 }

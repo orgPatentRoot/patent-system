@@ -6,7 +6,20 @@
     <result column="status_name" property="statusName" jdbcType="VARCHAR" />
   </resultMap>
 
-  <sql id="Status_Column_List" >
-    status_id, status_name
-  </sql>
+  <select id="queryAllStatus" resultMap="StatusResultMap">
+   select status_name,status_id from status where status_id between -1 and 12
+  </select>
+
+  <select id="selectStatusNameById" resultMap="StatusResultMap">
+     select status_name from status where status_id = #{statusId}
+  </select>
+
+  <select id="selectStatusIdByName" resultMap="StatusResultMap">
+  select status_id from status where status_name = #{statusName}
+</select>
+
+  <select id="queryAllStatusAfter" resultMap="StatusResultMap">
+    select status_id,status_name from status where status_id between 6 and 12
+  </select>
+
 </mapper>

@@ -1,40 +1,29 @@
 package com.suixingpay.patent.pojo;
 
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.servlet.http.HttpServletResponse;
+
+@Getter
+@Setter
 public class Message {
-    private Object object;
-    private int state;
-    private String message;
-    private boolean flag;
+    private Object object; //返回数据，没有设置为null
+    private Integer status; //状态码:200 400 500等
+    private String message; //提示信息
+    private boolean flag; //执行结果是否通过，通过 true 不通过 false
 
-    public Object getObject() {
-        return object;
-    }
-
-    public void setObject(Object object) {
+    /**
+     * 设置返回信息
+     * @param object 数据
+     * @param status 状态码
+     * @param message 提示信息
+     * @param flag 执行结果
+     */
+    public void setMessage(Object object, Integer status, String message, boolean flag) {
         this.object = object;
-    }
-
-    public int getState() {
-        return state;
-    }
-
-    public void setState(int state) {
-        this.state = state;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
+        this.status = status;
         this.message = message;
-    }
-
-    public boolean isFlag() {
-        return flag;
-    }
-
-    public void setFlag(boolean flag) {
         this.flag = flag;
     }
 }
