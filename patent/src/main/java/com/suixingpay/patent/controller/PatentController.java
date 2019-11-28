@@ -52,6 +52,7 @@ public class PatentController {
      * @param request
      * @return
      */
+    @UserLog("编辑专利基本信息")
     @RequestMapping("/updatePatent")
     public ResponseEntity<Message> updatePatentByCreatePersonController(@Valid @RequestBody Patent patent,
                                                                         HttpServletRequest request) {
@@ -76,6 +77,7 @@ public class PatentController {
      * @param patent
      * @return
      */
+    @UserLog("认领了专利")
     @RequestMapping("/updatePatentById")
     public ResponseEntity<Message> updatePatentWriterByIDController(@RequestBody Patent patent,
                                                                     HttpServletRequest request) {

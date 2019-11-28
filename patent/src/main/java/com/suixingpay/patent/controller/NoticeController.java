@@ -1,6 +1,7 @@
 package com.suixingpay.patent.controller;
 
 
+import com.suixingpay.patent.annotation.UserLog;
 import com.suixingpay.patent.pojo.Message;
 import com.suixingpay.patent.service.NoticeService;
 import lombok.extern.slf4j.Slf4j;
@@ -42,11 +43,12 @@ public class NoticeController {
     private Message message = new Message();
 
 
+//    @UserLog("上传文件")
     @RequestMapping("/upload")
     @ResponseBody
-    public ResponseEntity<Message> upload(@RequestParam("id") int patentId,
+    public ResponseEntity<Message> upload(@RequestParam("patentId") int patentId,
                                           @RequestParam("file") MultipartFile file) {
-
+        System.out.println("进来");
         if  (file.isEmpty()) {
             message.setMessage(null, 400, "没有选择上传文件", false);
             return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
@@ -88,17 +90,13 @@ public class NoticeController {
             files.setNoticeStatus(1);
             noticeService.insert(files);
             message.setMessage(null, 200, "上传成功", true);
-            return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Message>(message, HttpStatus.OK);
         } catch (IOException e) {
             LOGGER.error(e.toString(), e);
         }
         message.setMessage(null, 400, "文件上传失败", false);
         return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
     }
-
-
-
-
 
     /**
      * 文件进行逻辑删除，修改数据库的状态
@@ -110,10 +108,6 @@ public class NoticeController {
     public ResponseEntity<Message> delete(int noticeId) {
         return noticeService.delete(noticeId);
     }
-
-
-
-
 
     /**
      *
@@ -128,7 +122,7 @@ public class NoticeController {
 
         Notice notice = noticeService.selectNoticeByPatentId(noticeId);
 
-        if(notice ==null){
+        if (notice == null) {
             message.setMessage(null, 400, "文件ID不存在", false);
             return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
         }

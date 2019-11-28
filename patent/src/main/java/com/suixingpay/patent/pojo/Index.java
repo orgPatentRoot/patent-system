@@ -1,6 +1,7 @@
 package com.suixingpay.patent.pojo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -10,7 +11,7 @@ public class Index {
     private Integer indexId;
     @NotNull(message = "专利ID不能为空")
     private Integer indexPatentId;
-    @NotNull(message = "指标内容不能为空")
+    @NotEmpty(message = "指标内容不能为空")
     private String indexContent;
 
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")

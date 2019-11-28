@@ -94,6 +94,7 @@ public class IndexController {
      * @param index
      * @return
      */
+    @UserLog("修改了指标")
     @PostMapping("/updateIndexContent")
     @ResponseBody
     public Message updateIndexContent(@RequestBody Index index, HttpServletResponse response,HttpSession httpSession) {
