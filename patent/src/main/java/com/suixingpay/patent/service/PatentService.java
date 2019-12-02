@@ -39,7 +39,7 @@ public interface PatentService {
      * @param patent
      * @return
      */
-    ResponseEntity<Message> selectPatentService(Patent patent);
+    List<Patent> selectPatentService(Patent patent);
 
     /**
      * 指标维度查询
@@ -47,7 +47,7 @@ public interface PatentService {
      * @param patent
      * @return
      */
-    ResponseEntity<Message> selectPatentWithIndexService(Patent patent);
+    List<Patent> selectPatentWithIndexService(Patent patent);
 
     /**
      * 审核通过功能
@@ -84,5 +84,13 @@ public interface PatentService {
      */
     ResponseEntity<Message> updateStatusId(Patent patent);
 
-    ResponseEntity<Message> downloadPatent(HttpServletResponse response, Patent patent1) throws IOException;
+    /**
+     * 导出文件
+     * @param response
+     * @param content
+     * @param list
+     * @throws IOException
+     */
+    void exportDeviceModelMsg(HttpServletResponse response, String content, List<Patent> list)throws  IOException;
+
 }

@@ -38,7 +38,7 @@ public class StatusController {
     @ResponseBody
     public Message selectStatusNameById(Integer statusId, HttpServletResponse response) {
         Message message = new Message();
-        if (statusId == null || statusId > 12 || statusId < -1 ) {
+        if (statusId == null || statusId > 12 || statusId < -1) {
             message.setMessage(null, 400, "状态ID不合法", false);
             response.setStatus(message.getStatus());
             return message;

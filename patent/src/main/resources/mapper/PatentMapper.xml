@@ -38,8 +38,8 @@
      from (select <include refid="Patent_Column_List" /> from patent
     <trim prefix="WHERE (" suffix=")" prefixOverrides="AND |OR ">
       <if test="patentId!=null">patent_id=#{patentId,jdbcType=INTEGER}</if>
-      <if test="patentCaseNum!=null"> and patent_case_num=#{patentCaseNum,jdbcType=VARCHAR}</if>
-      <if test="patentApplyNum!=null"> and patent_apply_num=#{patentApplyNum,jdbcType=VARCHAR} </if>
+      <if test="patentCaseNum!=null"> and patent_case_num like concat('%',#{patentCaseNum,jdbcType=VARCHAR},'%') </if>
+      <if test="patentApplyNum!=null"> and patent_apply_num like concat('%',#{patentApplyNum,jdbcType=VARCHAR},'%') </if>
       <if test="patentApplyTime!=null"> and patent_apply_time=#{patentApplyTime,jdbcType=TIMESTAMP}</if>
       <if test="patentStatusId!=null"> and patent_status_id=#{patentStatusId,jdbcType=INTEGER}</if>
       <if test="patentSign!=null"> and patent_sign=#{patentSign,jdbcType=INTEGER}</if>
@@ -58,10 +58,11 @@
   <!--  指标维度查询 通过指标内容、专利名称、案件文号查询、申请号查询、申请日期查询、进度查询、发明人姓名查询-->
   <select id="selectPatentWithIndex" resultMap="PatentResultMap" parameterType="com.suixingpay.patent.pojo.Patent">
     select
-    <include refid="Patent_Column_List" />,status_name,u2.user_name user_name1,index_id,index_content
-    from (select index_id,index_patent_id,index_content from `index`
+    <include refid="Patent_Column_List" />,status_name,u2.user_name user_name1,index_id,index_content,index_create_time
+    from (select index_id,index_patent_id,index_content,index_create_time from `index`
     <trim prefix="WHERE (" suffix=")" prefixOverrides="AND |OR ">
-      <if test="indexContent!=null"> index_content like concat('%',#{indexContent,jdbcType=VARCHAR},'%') </if>
+      <if test="indexId!=null"> index_id=#{indexId,jdbcType=INTEGER}</if>
+      <if test="indexContent!=null"> and index_content like concat('%',#{indexContent,jdbcType=VARCHAR},'%') </if>
     </trim>
     ) i
     left join patent p on i.index_patent_id=p.patent_id
@@ -69,9 +70,9 @@
     left join user u2 on p.patent_writer=u2.user_id
     <trim prefix="WHERE (" suffix=")" prefixOverrides="AND |OR ">
       <if test="patentName!=null"> and patent_name like concat('%',#{patentName,jdbcType=VARCHAR},'%') </if>
-      <if test="patentCaseNum!=null"> and patent_case_num=#{patentCaseNum,jdbcType=VARCHAR}</if>
-      <if test="patentApplyNum!=null"> and patent_apply_num=#{patentApplyNum,jdbcType=VARCHAR} </if>
-      <if test="patentApplyTime!=null"> and patent_apply_time=#{patentApplyTime,jdbcType=TIMESTAMP}</if>
+      <if test="patentCaseNum!=null"> and patent_case_num like concat('%',#{patentCaseNum,jdbcType=VARCHAR},'%') </if>
+      <if test="patentApplyNum!=null"> and patent_apply_num like concat('%',#{patentApplyNum,jdbcType=VARCHAR},'%') </if>
+      <if test="patentApplyTime!=null"> and patent_apply_time =#{patentApplyTime,jdbcType=TIMESTAMP}</if>
       <if test="patentStatusId!=null"> and patent_status_id=#{patentStatusId,jdbcType=INTEGER}</if>
       <if test="patentInventor!=null"> and patent_inventor like concat('%',#{patentInventor,jdbcType=VARCHAR},'%') </if>
     </trim>
@@ -101,6 +102,7 @@
       <if test="patentCaseNum!=null">,patent_case_num=#{patentCaseNum,jdbcType=VARCHAR}</if>
       <if test="patentApplyNum!=null">,patent_apply_num=#{patentApplyNum,jdbcType=VARCHAR}</if>
       <if test="patentApplyTime!=null">,patent_apply_time=#{patentApplyTime,jdbcType=TIMESTAMP}</if>
+      <if test="patentName!=null">,patent_name=#{patentName,jdbcType=VARCHAR}</if>
       <if test="patentTechnicalContact!=null">,patent_technical_contact=#{patentTechnicalContact,jdbcType=VARCHAR}</if>
       <if test="patentApplyPerson!=null">,patent_apply_person=#{patentApplyPerson,jdbcType=VARCHAR}</if>
       <if test="patentType!=null">,patent_type=#{patentType,jdbcType=VARCHAR}</if>
