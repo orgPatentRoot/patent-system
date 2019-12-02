@@ -1,6 +1,7 @@
 package com.suixingpay.patent.controller;
 
 
+import com.suixingpay.patent.annotation.UserLog;
 import com.suixingpay.patent.pojo.Message;
 import com.suixingpay.patent.service.NoticeService;
 import lombok.extern.slf4j.Slf4j;
@@ -20,13 +21,10 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.net.InetAddress;
-import java.net.URLEncoder;
 import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.UUID;
 import com.suixingpay.patent.pojo.Notice;
 
 @RestController
@@ -46,80 +44,84 @@ public class NoticeController {
     @Value("${visualpath}")
     private String visualPath;
 
+    @UserLog("上传交底书！")
     @RequestMapping("/upload")
     @ResponseBody
     public ResponseEntity<Message> upload(@RequestParam("patentId") Integer patentId,
-                                          @RequestParam("file") MultipartFile file, HttpServletRequest request)
-            throws UnknownHostException {
+                                          @RequestParam("file") MultipartFile file, HttpServletRequest request) {
 
         if (patentId == null || file == null) {
             message.setMessage(null, 400,   "没有文件ID或者文件上传", false);
-            return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Message>(message, HttpStatus.OK);
         }
 
         if  (file.isEmpty()) {
             message.setMessage(null, 400, "没有选择上传文件", false);
-            return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Message>(message, HttpStatus.OK);
         }
         if  (file.getSize() > 1024 * 1024 * 5) {
             message.setMessage(null, 400, "文档不能超过5M", false);
-            return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Message>(message, HttpStatus.OK);
         }
-        InetAddress addr = InetAddress.getLocalHost();
-        System.out.println(addr.getHostAddress());
+
 
         //获取文件的专利Id
         int filePaentId = patentId;
         //获取文件的名字
         String fileName = file.getOriginalFilename();
-        String fileName1 = fileName.substring(fileName.lastIndexOf("."));
+        //文件类型仅限txt、doc、docx、ppt、pdf、rar、zip、xls、xlsx、png、jpg类型
+        if(fileName.endsWith(".txt") || fileName.endsWith(".doc") || fileName.endsWith(".docx") || fileName.endsWith(".ppt")
+                || fileName.endsWith(".rar") || fileName.endsWith(".zip") || fileName.endsWith(".xls")|| fileName.endsWith(".xlsx")
+                || fileName.endsWith(".xls") || fileName.endsWith(".xlsx") || fileName.endsWith(".png") || fileName.endsWith(".jpg")
+                || fileName.endsWith(".pdf")) {
+            System.out.println(fileName);
+            String fileName1 = fileName.substring(fileName.lastIndexOf("."));
+            Date date = new Date();
 
-        Date date = new Date();
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
 
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-
-        String str  =  format.format(date);
-        fileName = fileName.substring(0,fileName.lastIndexOf(".")) + "-" + str + fileName1;
+            String str  =  format.format(date);
+            fileName = fileName.substring(0, fileName.lastIndexOf(".")) + "-" + str + fileName1;
 
 //        //把上传的文件拼接并且放在项目的路径下
-        String projectUrl = request.getSession().getServletContext().getRealPath("/");
-        System.out.println(projectUrl);
-        String path = projectUrl  + fileName;
-        System.out.println(path);
-        String url = visualPath + fileName;
-        System.out.println(url);
-        File dest = new File(path);
-        if (!dest.getParentFile().exists()) { //判断文件父目录是否存在
-            dest.getParentFile().mkdir();
-        }
-
-        //开始上传到项目路径下，并且上传到数据库
-        try {
-            BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(dest));
-            out.write(file.getBytes());
-            out.flush();
-            out.close();
-            //成功后打印到控制台
-            LOGGER.info("上传成功");
-            //上传到数据库
-            Notice files = new Notice();
-            files.setNoticeCreateTime(new Date());
-            files.setNoticeName(file.getOriginalFilename());
-            files.setNoticePatentId(filePaentId);
-            files.setNoticePath(url);
-            files.setNoticeStatus(1);
-            noticeService.insert(files);
-            message.setMessage(null, 200, "上传成功", true);
+            String projectUrl = request.getSession().getServletContext().getRealPath("/");
+            System.out.println(projectUrl);
+            String path = projectUrl  + fileName;
+            System.out.println(path);
+            String url = visualPath + fileName;
+            System.out.println(url);
+            File dest = new File(path);
+            if (!dest.getParentFile().exists()) { //判断文件父目录是否存在
+                dest.getParentFile().mkdir();
+            }
+            //开始上传到项目路径下，并且上传到数据库
+            try {
+                BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(dest));
+                out.write(file.getBytes());
+                out.flush();
+                out.close();
+                //成功后打印到控制台
+                LOGGER.info("上传成功");
+                //上传到数据库
+                Notice files = new Notice();
+                files.setNoticeCreateTime(new Date());
+                files.setNoticeName(file.getOriginalFilename());
+                files.setNoticePatentId(filePaentId);
+                files.setNoticePath(url);
+                files.setNoticeStatus(1);
+                noticeService.insert(files);
+                message.setMessage(null, 200, "上传成功", true);
+                return new ResponseEntity<Message>(message, HttpStatus.OK);
+            } catch (IOException e) {
+                LOGGER.error(e.toString(), e);
+            }
+        }else {
+            message.setMessage(null, 400, "文件类型仅限txt、doc、docx、ppt、pdf、rar、zip、xls、xlsx、png、jpg类型！", false);
             return new ResponseEntity<Message>(message, HttpStatus.OK);
-        } catch (IOException e) {
-            LOGGER.error(e.toString(), e);
         }
         message.setMessage(null, 400, "文件上传失败", false);
-        return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<Message>(message, HttpStatus.OK);
     }
-
-
-
 
     /**
      *
@@ -130,80 +132,22 @@ public class NoticeController {
      */
     @RequestMapping("/download")
     public ResponseEntity<Message>  downloadFile(@Param("noticeId") Integer noticeId,
-                               HttpServletResponse response) throws UnsupportedEncodingException, UnknownHostException {
+            HttpServletResponse response) throws UnsupportedEncodingException, UnknownHostException {
         if (noticeId == null) {
             message.setMessage(null, 400,   "没有需要下载文件ID", false);
             return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
         }
         Notice notice = noticeService.selectNoticeByPatentId(noticeId);
-        if(notice ==null){
+        if (notice == null) {
             message.setMessage(null, 400, "文件ID不存在", false);
             return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
         }
         //获取文件地址
         String noticePath = notice.getNoticePath();
-        System.out.println(noticePath);
-//        InetAddress inetAddress = InetAddress.getLocalHost();
-//        String Ip       = inetAddress+noticePath;
-//        System.out.println(Ip);
-//        //获取文件名称
-        String noticeName = notice.getNoticeName();
-
-        // 如果文件名不为空，则进行下载
-        if (noticeName != null) {
-            //设置文件路径
-            File file = new File(noticePath);
-            // 如果文件名存在，则进行下载
-            if (file.exists()) {
-                // 配置文件下载
-                response.setHeader("content-type", "application/octet-stream");
-                response.setContentType("application/octet-stream");
-                // 下载文件能正常显示中文
-                response.setHeader("Content-Disposition", "attachment;filename="
-                        + URLEncoder.encode(noticeName,
-                        "UTF-8"));
-                // 实现文件下载
-                byte[] buffer = new byte[1024];
-                //输入流
-                FileInputStream fileInputStream = null;
-                //安全的输入流
-                BufferedInputStream bufferedInputStream = null;
-                try {
-                    fileInputStream = new FileInputStream(file);
-                    bufferedInputStream = new BufferedInputStream(fileInputStream);
-                    OutputStream outputStream = response.getOutputStream();
-                    int i = bufferedInputStream.read(buffer);
-                    while (i != -1) {
-                        outputStream.write(buffer, 0, i);
-                        i = bufferedInputStream.read(buffer);
-                    }
-                    System.out.println("Download the song successfully!");
-                }
-                catch (Exception e) {
-                    System.out.println("Download the song failed!");
-                }
-                finally {
-                    //关流
-                    if (bufferedInputStream != null) {
-                        try {
-                            bufferedInputStream.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    if (fileInputStream != null) {
-                        try {
-                            fileInputStream.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }
-        }
-        message.setMessage(null, 200, "文件下载成功", true);
+        message.setMessage(noticePath, 200, "文件下载成功", true);
         return new ResponseEntity<Message>(message, HttpStatus.OK);
     }
+
 
     /**
      * 文件进行逻辑删除，修改数据库的状态
@@ -211,6 +155,7 @@ public class NoticeController {
      * @param noticeId 文件的id主键自增长
      * @return
      */
+    @UserLog("删除交底书！")
     @RequestMapping("/delete")
     public ResponseEntity<Message> delete(Integer noticeId) {
         if (noticeId == null) {
@@ -240,16 +185,16 @@ public class NoticeController {
     }
     /**
      * 管理员查看
-     * @param noticePatenId
+     * @param noticePatentId
      * @return
      */
     @RequestMapping("/searchManager")
-    public ResponseEntity<Message>  searchmanagerId(Integer noticePatenId) {
-        if ( noticePatenId == null) {
+    public ResponseEntity<Message>  searchmanagerId(Integer noticePatentId) {
+        if (noticePatentId == null) {
             message.setMessage(null, 400,   "没有文件ID", false);
             return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
         }
-        return  noticeService.searchmanagerId(noticePatenId);
+        return  noticeService.searchmanagerId(noticePatentId);
 
     }
 

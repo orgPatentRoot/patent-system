@@ -19,7 +19,7 @@
   </update>
   <update id="updateLocalUserByUserId">
 
-    update user set user_name=${userName} ,user_password=#{userPassword} where user_id =#{userId}
+    update user set user_name=#{userName} ,user_password=#{userPassword} where user_id =#{userId}
   </update>
 
     <select id="selectUserByUserAccountAndUserPassword" resultType="com.suixingpay.patent.pojo.User">
@@ -38,15 +38,15 @@
 
   <select id="findUser" resultMap="UserResultMap" parameterType="com.suixingpay.patent.pojo.User">
   select user_id, user_name, user_account, user_password, user_status, user_create_time from user
-  <where>
-      <if test="userName!= null != ''">
-          user_name like concat('%',#{userName,jdbcType=VARCHAR},'%')
-      </if>
+  where
+  user_id != 1
+  <if test="userName!= null">
+      and user_name like concat('%',#{userName,jdbcType=VARCHAR},'%')
+  </if>
 
-      <if test="userAccount != null != ''">
-          and user_account like concat('%',#{userAccount,jdbcType=VARCHAR},'%')
-      </if>
-  </where>
+  <if test="userAccount != null">
+      and user_account like concat('%',#{userAccount,jdbcType=VARCHAR},'%')
+  </if>
   </select>
 
   <select id="selectUserByUserAccount" resultType="com.suixingpay.patent.pojo.User">
@@ -55,4 +55,8 @@
   </select>
 
 
+
+    <update id="removeUserByUserId">
+    update user set user_status = 1 where user_Id=#{userId}
+    </update>
 </mapper>

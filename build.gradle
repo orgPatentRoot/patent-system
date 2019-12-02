@@ -74,11 +74,8 @@ subprojects {
         compile 'mysql:mysql-connector-java:8.0.18'
         
         compile 'org.apache.poi:poi:3.17'
-        compile 'org.apache.poi:poi-ooxml:3.17'
-        compile 'org.apache.poi:poi-ooxml-schemas:3.17'
-        compile 'org.apache.xmlbeans:xmlbeans:2.6.0'
-        compile 'commons-collections:commons-collections:3.2.2'
-        compile 'dom4j:dom4j:1.6.1'
+        compile 'org.jxls:jxls:2.4.6'
+        compile 'org.jxls:jxls-poi:1.0.15'
     
     }
 

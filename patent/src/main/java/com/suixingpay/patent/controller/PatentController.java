@@ -5,6 +5,7 @@ import com.suixingpay.patent.pojo.Message;
 import com.suixingpay.patent.pojo.Patent;
 import com.suixingpay.patent.pojo.User;
 import com.suixingpay.patent.service.PatentService;
+import com.suixingpay.patent.util.ParamCheck;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/patent", produces = "application/json; charset=utf-8")
@@ -35,11 +38,12 @@ public class PatentController {
         //从session获取用户信息
         User user = (User) request.getSession().getAttribute("user");
         if (user == null || user.getUserId() == null) {
-            message.setMessage(null, 400, "用户没有登录", false);
-            return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
+            message.setMessage(null, 401, "用户没有登录", false);
+            return new ResponseEntity<Message>(message, HttpStatus.UNAUTHORIZED);
         }
-        patent.setPatentWriter(user.getUserId()); //通过session设置创建人id
-//        patent.setPatentCreatePerson(patent.getPatentCreatePerson()); //设置创建人id，测试用这行，可以自行修改数值，将上一行注释即可
+        //安全参数替换
+        ParamCheck.patentParamReplace(patent);
+        patent.setPatentCreatePerson(user.getUserId()); //通过session设置创建人id
         patent.setPatentSign(0); //设置审核状态为未审核
         patent.setPatentStatusId(0); //设置专利进度状态为新建专利
         patent.setPatentWriter(0);  //设置撰写人为待认领
@@ -52,10 +56,13 @@ public class PatentController {
      * @param request
      * @return
      */
+    @UserLog("编辑专利基本信息")
     @RequestMapping("/updatePatent")
     public ResponseEntity<Message> updatePatentByCreatePersonController(@Valid @RequestBody Patent patent,
                                                                         HttpServletRequest request) {
-        request.getSession().setAttribute("patentId",patent.getPatentId().toString());
+        //安全参数替换
+        ParamCheck.patentParamReplace(patent);
+        request.getSession().setAttribute("patentId", patent.getPatentId().toString());
         Patent patentCondition = new Patent();
         patentCondition.setPatentId(patent.getPatentId());
         patentCondition.setPatentBatch(patent.getPatentBatch());
@@ -68,7 +75,8 @@ public class PatentController {
         patentCondition.setPatentType(patent.getPatentType());
         patentCondition.setPatentInventor(patent.getPatentInventor());
         patentCondition.setPatentRemarks(patent.getPatentRemarks());
-        return patentService.updatePatentServiceByIdService(patent);
+        patentCondition.setSpecialCondition("patent_sign = 0");
+        return patentService.updatePatentServiceByIdService(patentCondition);
     }
 
     /**
@@ -76,10 +84,13 @@ public class PatentController {
      * @param patent
      * @return
      */
+    @UserLog("认领了专利")
     @RequestMapping("/updatePatentById")
     public ResponseEntity<Message> updatePatentWriterByIDController(@RequestBody Patent patent,
                                                                     HttpServletRequest request) {
-        request.getSession().setAttribute("patentId",patent.getPatentId().toString());
+        //安全参数替换
+        ParamCheck.patentParamReplace(patent);
+        request.getSession().setAttribute("patentId", patent.getPatentId().toString());
         Message message = new Message();
         Patent patentCondition  = new Patent();
         if (patent.getPatentId() == null) {
@@ -105,15 +116,21 @@ public class PatentController {
      */
     @RequestMapping("/selectAllPatent")
     public ResponseEntity<Message> selectAllPatentController(@RequestBody Patent patent) {
+        //安全参数替换
+        ParamCheck.patentParamReplace(patent);
         //设置筛选条件
         Patent patentCondition = new Patent();
+        patentCondition.setIndexId(patent.getIndexId()); //设置案例文号筛选条件
         patentCondition.setPatentCaseNum(patent.getPatentCaseNum()); //设置案例文号筛选条件
         patentCondition.setPatentApplyNum(patent.getPatentApplyNum()); //设置申请号筛选条件
         patentCondition.setPatentApplyTime(patent.getPatentApplyTime()); //设置申请时间筛选条件
         patentCondition.setPatentName(patent.getPatentName()); //设置发明名称筛选条件
         patentCondition.setPatentInventor(patent.getPatentInventor()); //设置发明人筛选条件
         patentCondition.setPatentStatusId(patent.getPatentStatusId()); //设置专利进度筛选条件
-        return patentService.selectPatentService(patentCondition);
+        Message message = new Message();
+        List<Patent> list = patentService.selectPatentService(patentCondition);
+        message.setMessage(list, 200, "查询成功！", true);
+        return new ResponseEntity<Message>(message, HttpStatus.OK);
     }
 
     /**
@@ -123,8 +140,11 @@ public class PatentController {
      */
     @RequestMapping("/selectAllIndexWithPatent")
     public ResponseEntity<Message> selectAllIndexWithPatentController(@RequestBody Patent patent) {
+        //安全参数替换
+        ParamCheck.patentParamReplace(patent);
         //设置筛选条件
         Patent patentCondition = new Patent();
+        patentCondition.setIndexId(patent.getIndexId()); //设置指标Id筛选条件
         patentCondition.setIndexContent(patent.getIndexContent()); //设置指标内容筛选条件
         patentCondition.setPatentName(patent.getPatentName()); //设置发明名称筛选条件
         patentCondition.setPatentCaseNum(patent.getPatentCaseNum()); //设置案例文号筛选条件
@@ -132,7 +152,10 @@ public class PatentController {
         patentCondition.setPatentApplyTime(patent.getPatentApplyTime()); //设置申请时间筛选条件
         patentCondition.setPatentInventor(patent.getPatentInventor()); //设置发明人筛选条件
         patentCondition.setPatentStatusId(patent.getPatentStatusId()); //设置专利进度筛选条件
-        return patentService.selectPatentWithIndexService(patentCondition);
+        Message message = new Message();
+        List<Patent> list = patentService.selectPatentWithIndexService(patentCondition);
+        message.setMessage(list, 200, "查询成功！", true);
+        return new ResponseEntity<Message>(message, HttpStatus.OK);
     }
     /**
      * 用户查看专利池查未认领的专利
@@ -141,6 +164,8 @@ public class PatentController {
      */
     @RequestMapping("/selectAllPatentByNoWriter")
     public ResponseEntity<Message> selectAllPatentNoWriterController(@RequestBody Patent patent) {
+        //安全参数替换
+        ParamCheck.patentParamReplace(patent);
         //设置筛选条件
         Patent patentCondition = new Patent();
         patentCondition.setPatentCaseNum(patent.getPatentCaseNum()); //设置案例文号筛选条件
@@ -150,7 +175,10 @@ public class PatentController {
         patentCondition.setPatentInventor(patent.getPatentInventor()); //设置发明人筛选条件
         patentCondition.setPatentStatusId(1); //设置专利进度筛选条件--1、发明初合
         patentCondition.setPatentWriter(0); //设置撰写人为0，未认领
-        return patentService.selectPatentService(patentCondition);
+        Message message = new Message();
+        List<Patent> list = patentService.selectPatentService(patentCondition);
+        message.setMessage(list, 200, "查询成功！", true);
+        return new ResponseEntity<Message>(message, HttpStatus.OK);
     }
 
     /**
@@ -162,6 +190,8 @@ public class PatentController {
     @RequestMapping("/selectPatentByCreatePerson")
     public ResponseEntity<Message> selectPatentByCreatePersonController(@RequestBody Patent patent,
                                                                         HttpServletRequest request) {
+        //安全参数替换
+        ParamCheck.patentParamReplace(patent);
         Message message = new Message();
         //从session获取用户信息
         User user = (User) request.getSession().getAttribute("user");
@@ -178,8 +208,9 @@ public class PatentController {
         patentCondition.setPatentInventor(patent.getPatentInventor()); //设置发明人筛选条件
         patentCondition.setPatentStatusId(0); //设置专利进度筛选条件--新建专利进度
         patentCondition.setPatentCreatePerson(user.getUserId()); //设置创建人筛选条件
-//        patentCondition.setPatentCreatePerson(patent.getPatentCreatePerson());//测试用这行，可以自行修改数值，将上一行注释即可
-        return patentService.selectPatentService(patentCondition);
+        List<Patent> list = patentService.selectPatentService(patentCondition);
+        message.setMessage(list, 200, "查询成功！", true);
+        return new ResponseEntity<Message>(message, HttpStatus.OK);
     }
 
     /**
@@ -191,6 +222,8 @@ public class PatentController {
     @RequestMapping("/selectPatentByWriterNeekCheck")
     public ResponseEntity<Message> selectPatentByWriterController(@RequestBody Patent patent,
                                                                   HttpServletRequest request) {
+        //安全参数替换
+        ParamCheck.patentParamReplace(patent);
         Message message = new Message();
         //从session获取用户信息
         User user = (User) request.getSession().getAttribute("user");
@@ -209,7 +242,9 @@ public class PatentController {
         patentCondition.setPatentWriter(user.getUserId()); //设置撰写人筛选条件
 //        patentCondition.setPatentWriter(patent.getPatentWriter());//测试用这行，将上一行注释即可
         patentCondition.setSpecialCondition("patent_status_id IN (0,2,3,4,5)"); //设置需要的审核进度
-        return patentService.selectPatentService(patentCondition);
+        List<Patent> list = patentService.selectPatentService(patentCondition);
+        message.setMessage(list, 200, "查询成功！", true);
+        return new ResponseEntity<Message>(message, HttpStatus.OK);
     }
 
     /**
@@ -221,6 +256,8 @@ public class PatentController {
     @RequestMapping("/selectPatentByWriterNoCheck")
     public ResponseEntity<Message> selectPatentByConditionController(@RequestBody Patent patent,
                                                                      HttpServletRequest request) {
+        //安全参数替换
+        ParamCheck.patentParamReplace(patent);
         Message message = new Message();
         //从session获取用户信息
         User user = (User) request.getSession().getAttribute("user");
@@ -239,7 +276,9 @@ public class PatentController {
         patentCondition.setPatentWriter(user.getUserId()); //设置撰写人筛选条件
 //        patentCondition.setPatentWriter(patent.getPatentWriter());//测试用这行，将上一行注释即可
         patentCondition.setSpecialCondition("patent_status_id IN (6,7,8,9,10,11,12)"); //设置数据维护的进度
-        return patentService.selectPatentService(patentCondition);
+        List<Patent> list = patentService.selectPatentService(patentCondition);
+        message.setMessage(list, 200, "查询成功！", true);
+        return new ResponseEntity<Message>(message, HttpStatus.OK);
     }
 
     /**
@@ -247,8 +286,10 @@ public class PatentController {
      * @param patent
      * @return
      */
-    @RequestMapping("/selectPatentByPatentID")
+    @RequestMapping("/selectPatentByPatentId")
     public ResponseEntity<Message> selectPatentByIDController(@RequestBody Patent patent) {
+        //安全参数替换
+        ParamCheck.patentParamReplace(patent);
         Message message = new Message();
         if (patent.getPatentId() == null) {
             message.setMessage(null, 400, "专利Id不能为空", false);
@@ -256,7 +297,9 @@ public class PatentController {
         }
         Patent patentCondition = new Patent(); //重置筛选条件
         patentCondition.setPatentId(patent.getPatentId()); //设置专利ID筛选条件
-        return patentService.selectPatentService(patentCondition);
+        List<Patent> list = patentService.selectPatentService(patentCondition);
+        message.setMessage(list, 200, "查询成功！", true);
+        return new ResponseEntity<Message>(message, HttpStatus.OK);
     }
 
     /**
@@ -266,6 +309,8 @@ public class PatentController {
      */
     @RequestMapping("/selectExamine")
     public ResponseEntity<Message> selectExamine(@RequestBody Patent patent) {
+        //安全参数替换
+        ParamCheck.patentParamReplace(patent);
         //设置筛选条件
         Patent patentCondition = new Patent();
         patentCondition.setPatentCaseNum(patent.getPatentCaseNum()); //设置案例文号筛选条件
@@ -276,11 +321,14 @@ public class PatentController {
         patentCondition.setPatentSign(1); //设置审核状态为审核中
         patentCondition.setPatentStatusId(patent.getPatentStatusId()); //设置专利进度筛选条件
         patentCondition.setSpecialCondition("patent_status_id IN (0,2,3,4,5)"); //设置需要的审核进度
-        return patentService.selectPatentService(patentCondition);
+        Message message = new Message();
+        List<Patent> list = patentService.selectPatentService(patentCondition);
+        message.setMessage(list, 200, "查询成功！", true);
+        return new ResponseEntity<Message>(message, HttpStatus.OK);
     }
 
     /**
-     * 通过审核功能
+     * 通过审核通过功能
      * @param patent
      * @return
      */
@@ -298,7 +346,7 @@ public class PatentController {
     }
 
     /**
-     * 审核不通过
+     * 驳回
      * @param patent
      * @return
      */
@@ -368,7 +416,7 @@ public class PatentController {
     }
 
     /**
-     * 导出数据
+     * 专利导出数据
      * @param response
      * @param patent
      * @throws IOException
@@ -376,6 +424,30 @@ public class PatentController {
     @RequestMapping("/excelDownloads")
     public ResponseEntity<Message> downloadAllClassmate(HttpServletResponse response,
                                                         @RequestBody Patent patent) throws IOException {
-        return patentService.downloadPatent(response, patent);
+        //安全参数替换
+        ParamCheck.patentParamReplace(patent);
+        Message message = new Message();
+        message.setMessage("http://172.16.43.117:8080/patentExcel.xls", 200, "导出成功！", true);
+        List<Patent> list = patentService.selectPatentService(patent);
+        patentService.exportDeviceModelMsg(response,"patentExcel", list);
+        return new ResponseEntity(message, HttpStatus.OK);
+    }
+
+    /**
+     * 指标维度导出数据
+     * @param response
+     * @param patent
+     * @throws IOException
+     */
+    @RequestMapping("/indexDownloads")
+    public ResponseEntity<Message> indexdownloadAllClassmate(HttpServletResponse response,
+                                                        @RequestBody Patent patent) throws IOException {
+        //安全参数替换
+        ParamCheck.patentParamReplace(patent);
+        Message message = new Message();
+        List<Patent> list = patentService.selectPatentWithIndexService(patent);
+        patentService.exportDeviceModelMsg(response, "patentWithIndexExcel", list);
+        message.setMessage("http://172.16.43.117:8080/patentWithIndexExcel.xls", 200, "导出成功！", true);
+        return new ResponseEntity(message, HttpStatus.OK);
     }
 }

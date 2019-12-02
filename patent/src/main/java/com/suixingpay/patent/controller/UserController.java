@@ -32,7 +32,7 @@ public class UserController {
      *
      * @param userAccount  用户账号
      * @param userPassword 用户密码
-     * @param httpSession
+     * @param request
      * @return
      */
     @PostMapping("/login")
@@ -57,12 +57,12 @@ public class UserController {
         User exitUser = userService.selectUserByUserAccount(user.getUserAccount());
         if (exitUser != null) {
             message.setMessage(null, 400, "用户已存在", false);
-            return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Message>(message, HttpStatus.OK);
         }
 
         if (!paramCheck(user.getUserName(), user.getUserAccount(), user.getUserPassword())) {
             message.setMessage(null, 400, "不能输入空数据", false);
-            return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Message>(message, HttpStatus.OK);
         }
         return userService.insertUser(user);
 
@@ -75,10 +75,28 @@ public class UserController {
      * @return return "删除用户成功";
      */
     @GetMapping("/admDelete")
-    public ResponseEntity<Message> updateUser(int userId) {
+    public ResponseEntity<Message> updateUser(Integer userId) {
+        if (userId == null || "".equals(userId)) {
+            message.setMessage(null, 400, "不能输入空数据", false);
+            return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
+        }
         return userService.updateUserByUserId(userId);
     }
 
+    /**
+     * 管理员解封账号
+     *
+     * @param userId 用户id
+     * @return
+     */
+    @GetMapping("/admRemoveUser")
+    public ResponseEntity<Message> removeUser(Integer userId) {
+        if (userId == null || "".equals(userId)) {
+            message.setMessage(null, 400, "不能输入空数据", false);
+            return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
+        }
+        return userService.removeUserByUserId(userId);
+    }
 
     /**
      * 管理员展示所有用户
@@ -97,7 +115,11 @@ public class UserController {
      * @return
      */
     @GetMapping("/admSelectOne")
-    public ResponseEntity<Message> selectUserByUserId(int userId) {
+    public ResponseEntity<Message> selectUserByUserId(Integer userId) {
+        if (userId == null || "".equals(userId)) {
+            message.setMessage(null, 400, "不能输入空数据", false);
+            return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
+        }
         return userService.selectUserByUserId(userId);
     }
 
@@ -112,6 +134,9 @@ public class UserController {
     @GetMapping("/userSelect")
     public ResponseEntity<Message> selectMyInformation(HttpSession httpSession) {
         User userLogin = (User) httpSession.getAttribute("user");
+        if (userLogin.getUserId() == null || "".equals(userLogin.getUserId())) {
+            message.setMessage(null, 400, "请先登录", false);
+        }
         return userService.selectUserByUserId(userLogin.getUserId());
     }
 
@@ -123,7 +148,7 @@ public class UserController {
      * @return
      */
     @PostMapping("/userUpdate")
-    public ResponseEntity<Message> userUpdatePassword(User user) {
+    public ResponseEntity<Message> userUpdatePassword(@RequestBody User user) {
         if (!paramCheck(user.getUserName(), user.getUserPassword())) {
             message.setMessage(null, 400, "不能输入空数据", false);
             return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
@@ -131,11 +156,15 @@ public class UserController {
         return userService.updateLocalUserByUserId(user.getUserId(), user.getUserName(), user.getUserPassword());
     }
 
+
     /**
      * 管理员模糊查找
+     *
      * @param user
      * @return
      */
     @PostMapping("/find")
-    public ResponseEntity<Message> findUser(@RequestBody User user) { return userService.findUser(user); }
+    public ResponseEntity<Message> findUser(@RequestBody User user) {
+        return userService.findUser(user);
+    }
 }

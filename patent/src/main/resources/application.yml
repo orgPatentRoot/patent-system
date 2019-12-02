@@ -7,6 +7,10 @@ spring:
     username: root
     password: root
     driverClassName: com.mysql.jdbc.Driver
+  http:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 30MB
 
 #配置日志
 logging:
@@ -17,6 +21,6 @@ mybatis:
   mapperLocations: classpath:mapper/*.xml
   configuration:
     map-underscore-to-camel-case: true
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
-visualpath: http://127.0.0.1:8080/
+visualpath: http://172.16.43.117:8080/
