@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public ResponseEntity<Message> selectUserByUserAccountAndUserPassword(String userAccount, String userPassword,
-                                                                          HttpSession httpSession) {
+                                                                          HttpServletRequest request) {
         Message message = new Message();
         String password = DigestUtils.md5DigestAsHex(userPassword.getBytes());
         User user = userMapper.selectUserByUserAccountAndUserPassword(userAccount, password);
