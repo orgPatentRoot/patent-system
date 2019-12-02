@@ -1,20 +1,15 @@
 package com.suixingpay.patent.mapper;
 
-
 import com.suixingpay.patent.pojo.Patent;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
 public interface PatentMapper {
+    int insertPatent(Patent patent); //插入专利
 
-    Patent selectByPrimaryKey(Integer patentId);
+    int updatePatent(Patent patent); //修改专利信息
 
-    List<Patent> selectAll();
+    List<Patent> selectPatent(Patent patent); //查看专利
 
-    List<Patent> selectExamine();
-
-    int auditPass(Integer id);
-
-    int auditFailed(Integer id);
+    List<Patent> selectPatentWithIndex(Patent patent); //指标维度查询
 }

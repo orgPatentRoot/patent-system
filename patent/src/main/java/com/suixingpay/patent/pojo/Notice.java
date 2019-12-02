@@ -1,9 +1,7 @@
 package com.suixingpay.patent.pojo;
 
-import org.springframework.stereotype.Component;
-
 import java.util.Date;
-@Component
+
 public class Notice {
     private Integer noticeId;
 

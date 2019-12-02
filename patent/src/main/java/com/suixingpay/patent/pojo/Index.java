@@ -1,16 +1,20 @@
 package com.suixingpay.patent.pojo;
 
-import org.springframework.stereotype.Component;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
-@Component
+
 public class Index {
+    //@NotNull(message = "指标ID不能为空")
     private Integer indexId;
-
+    @NotNull(message = "专利ID不能为空")
     private Integer indexPatentId;
-
+    @NotEmpty(message = "指标内容不能为空")
     private String indexContent;
 
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date indexCreateTime;
 
     public Integer getIndexId() {

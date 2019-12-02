@@ -1,34 +1,33 @@
-package com.suixingpay.patent.mapper;
+package com.suixingpay.patent.service;
 
-import com.suixingpay.patent.pojo.Status;
-import org.apache.ibatis.annotations.Mapper;
-import java.util.List;
-@Mapper
-public interface StatusMapper {
+import com.suixingpay.patent.pojo.Message;
+
+
+public interface StatusService {
 
     /**
      * 查询所有的进度状态
      * @return
      */
-    List<Status> queryAllStatus();
+    Message queryAllStatus();
 
     /**
      * 根据进度状态的id，查找对应状态的名称
      * @param statusId
      * @return
      */
-    Status selectStatusNameById(Integer statusId);
+    Message selectStatusNameById(Integer statusId);
 
     /**
      * 根据进度状态的名称，查找对应状态的id
      * @param statusName
      * @return
      */
-    Status selectStatusIdByName(String statusName);
+    Message selectStatusIdByName(String statusName);
 
     /**
      * 查询出数据维护阶段的进度状态
      * @return
      */
-    List<Status> queryAllStatusAfter();
+    Message queryAllStatusAfter();
 }

@@ -1,19 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.suixingpay.patent.mapper.UserMapper">
-    <insert id="insertUser">
+    <resultMap id="UserResultMap" type="com.suixingpay.patent.pojo.User">
+        <id column="user_id" property="userId" jdbcType="INTEGER" />
+        <result column="user_name" property="userName" jdbcType="VARCHAR" />
+        <result column="user_account" property="userAccount" jdbcType="VARCHAR" />
+        <result column="user_password" property="userPassword" jdbcType="VARCHAR" />
+        <result column="user_status" property="userStatus" jdbcType="INTEGER" />
+        <result column="user_create_time" property="userCreateTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <insert id="insertUser" parameterType="com.suixingpay.patent.pojo.User">
   insert into user (user_name, user_account, user_password,user_status,user_create_time) values (#{userName},#{userAccount},#{userPassword},#{userStatus},#{userCreateTime})
   </insert>
+
 
     <update id="updateUserByUserId">
     update user set user_status = 0 where user_Id=#{userId}
   </update>
-
   <update id="updateLocalUserByUserId">
-    update user set user_name=${userName} ,user_password=#{userPassword} where user_id =#{userId}
+
+    update user set user_name=#{userName} ,user_password=#{userPassword} where user_id =#{userId}
   </update>
 
-  <select id="selectUserByUserAccountAndUserPassword" resultType="com.suixingpay.patent.pojo.User">
+    <select id="selectUserByUserAccountAndUserPassword" resultType="com.suixingpay.patent.pojo.User">
   select user_id, user_name, user_account, user_password, user_status, user_create_time from user where
   user_account=#{userAccount} and user_password=#{userPassword}
   </select>
@@ -27,6 +36,27 @@
     user_id=#{UserId}
   </select>
 
+  <select id="findUser" resultMap="UserResultMap" parameterType="com.suixingpay.patent.pojo.User">
+  select user_id, user_name, user_account, user_password, user_status, user_create_time from user
+  where
+  user_id != 1
+  <if test="userName!= null">
+      and user_name like concat('%',#{userName,jdbcType=VARCHAR},'%')
+  </if>
+
+  <if test="userAccount != null">
+      and user_account like concat('%',#{userAccount,jdbcType=VARCHAR},'%')
+  </if>
+  </select>
+
+  <select id="selectUserByUserAccount" resultType="com.suixingpay.patent.pojo.User">
+        select user_id, user_name, user_account, user_password, user_status, user_create_time from user where
+    user_Account=#{userAccount}
+  </select>
 
 
+
+    <update id="removeUserByUserId">
+    update user set user_status = 1 where user_Id=#{userId}
+    </update>
 </mapper>
