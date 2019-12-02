@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import static com.suixingpay.patent.util.ParamCheck.paramCheck;
@@ -21,6 +22,11 @@ public class UserController {
 
     private Message message = new Message();
 
+    @GetMapping("/message")
+    public String login(){
+        return "当前尚未登录！请登录后重试！";
+    }
+
     /**
      * 登陆页面 （包括用户登录 管理员登录）
      *
@@ -30,12 +36,12 @@ public class UserController {
      * @return
      */
     @PostMapping("/login")
-    public ResponseEntity<Message> userLogin(String userAccount, String userPassword, HttpSession httpSession) {
+    public ResponseEntity<Message> userLogin(String userAccount, String userPassword, HttpServletRequest request) {
         if (!paramCheck(userAccount, userPassword)) {
             message.setMessage(null, 400, "不能输入空数据", false);
             return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
         }
-        return userService.selectUserByUserAccountAndUserPassword(userAccount, userPassword, httpSession);
+        return userService.selectUserByUserAccountAndUserPassword(userAccount, userPassword, request);
     }
 
     //管理员方法

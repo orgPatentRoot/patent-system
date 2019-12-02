@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<Message> selectUserByUserAccountAndUserPassword(String userAccount, String userPassword,
-                                                                          HttpSession httpSession) {
+                                                                          HttpServletRequest request) {
         Message message = new Message();
         String password = DigestUtils.md5DigestAsHex(userPassword.getBytes());
         User user = userMapper.selectUserByUserAccountAndUserPassword(userAccount, password);
@@ -38,12 +38,12 @@ public class UserServiceImpl implements UserService {
         }
         else if (user.getUserId() == 1) {
             message.setMessage(user, 200, "管理员登录成功", true);
-            httpSession.setAttribute("user", user);
+            request.getSession().setAttribute("user", user);
             return new ResponseEntity<Message>(message, HttpStatus.OK);
         }
         else {
             message.setMessage(user, 200, "用户登录成功", true);
-            httpSession.setAttribute("user", user);
+            request.getSession().setAttribute("user", user);
             return new ResponseEntity<Message>(message, HttpStatus.OK);
         }
     }

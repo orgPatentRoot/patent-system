@@ -3,15 +3,16 @@ package com.suixingpay.patent.service;
 import com.suixingpay.patent.pojo.Message;
 import com.suixingpay.patent.pojo.User;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-
+import org.springframework.http.HttpRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
 public interface UserService {
-    ResponseEntity<Message> selectUserByUserAccountAndUserPassword(String userAccount, String userPassword, HttpSession httpSession);
+    ResponseEntity<Message> selectUserByUserAccountAndUserPassword(String userAccount, String userPassword, HttpServletRequest request);
 
     ResponseEntity<Message> insertUser(User user);
 

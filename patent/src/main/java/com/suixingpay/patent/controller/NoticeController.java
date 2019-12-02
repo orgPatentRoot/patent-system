@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,14 +16,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedInputStream;
-import java.io.OutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
+import java.net.InetAddress;
 import java.net.URLEncoder;
+import java.net.UnknownHostException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 import com.suixingpay.patent.pojo.Notice;
@@ -41,11 +43,19 @@ public class NoticeController {
     private NoticeService noticeService;
     private Message message = new Message();
 
+    @Value("${visualpath}")
+    private String visualPath;
 
     @RequestMapping("/upload")
     @ResponseBody
-    public ResponseEntity<Message> upload(@RequestParam("id") int patentId,
-                                          @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<Message> upload(@RequestParam("patentId") Integer patentId,
+                                          @RequestParam("file") MultipartFile file, HttpServletRequest request)
+            throws UnknownHostException {
+
+        if (patentId == null || file == null) {
+            message.setMessage(null, 400,   "没有文件ID或者文件上传", false);
+            return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
+        }
 
         if  (file.isEmpty()) {
             message.setMessage(null, 400, "没有选择上传文件", false);
@@ -55,62 +65,58 @@ public class NoticeController {
             message.setMessage(null, 400, "文档不能超过5M", false);
             return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
         }
+        InetAddress addr = InetAddress.getLocalHost();
+        System.out.println(addr.getHostAddress());
 
         //获取文件的专利Id
         int filePaentId = patentId;
         //获取文件的名字
         String fileName = file.getOriginalFilename();
+        String fileName1 = fileName.substring(fileName.lastIndexOf("."));
 
-        //获取当前项目根路径
-        File rootPath = new File("");
-        String filePath = "";
-        try {
-            filePath = rootPath.getCanonicalPath();
-        } catch (IOException e) {
-            e.printStackTrace();
+        Date date = new Date();
+
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+
+        String str  =  format.format(date);
+        fileName = fileName.substring(0,fileName.lastIndexOf(".")) + "-" + str + fileName1;
+
+//        //把上传的文件拼接并且放在项目的路径下
+        String projectUrl = request.getSession().getServletContext().getRealPath("/");
+        System.out.println(projectUrl);
+        String path = projectUrl  + fileName;
+        System.out.println(path);
+        String url = visualPath + fileName;
+        System.out.println(url);
+        File dest = new File(path);
+        if (!dest.getParentFile().exists()) { //判断文件父目录是否存在
+            dest.getParentFile().mkdir();
         }
-
-        //把上传的文件拼接并且放在项目的路径下
-        filePath = filePath  +  "/patent/src/main/resources/notice/" + UUID.randomUUID() + fileName;
-        File dest = new File(filePath);
 
         //开始上传到项目路径下，并且上传到数据库
         try {
-            file.transferTo(dest);
+            BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(dest));
+            out.write(file.getBytes());
+            out.flush();
+            out.close();
             //成功后打印到控制台
             LOGGER.info("上传成功");
             //上传到数据库
             Notice files = new Notice();
             files.setNoticeCreateTime(new Date());
-            files.setNoticeName(fileName);
+            files.setNoticeName(file.getOriginalFilename());
             files.setNoticePatentId(filePaentId);
-            files.setNoticePath(filePath);
+            files.setNoticePath(url);
             files.setNoticeStatus(1);
             noticeService.insert(files);
             message.setMessage(null, 200, "上传成功", true);
-            return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Message>(message, HttpStatus.OK);
         } catch (IOException e) {
             LOGGER.error(e.toString(), e);
         }
         message.setMessage(null, 400, "文件上传失败", false);
         return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
     }
-
-
-
-
-
-    /**
-     * 文件进行逻辑删除，修改数据库的状态
-     *
-     * @param noticeId 文件的id主键自增长
-     * @return
-     */
-    @RequestMapping("/delete")
-    public ResponseEntity<Message> delete(int noticeId) {
-        return noticeService.delete(noticeId);
-    }
-
 
 
 
@@ -123,11 +129,13 @@ public class NoticeController {
      * @throws UnsupportedEncodingException
      */
     @RequestMapping("/download")
-    public ResponseEntity<Message>  downloadFile(@Param("noticeId") int noticeId,
-                               HttpServletResponse response) throws UnsupportedEncodingException {
-
+    public ResponseEntity<Message>  downloadFile(@Param("noticeId") Integer noticeId,
+                               HttpServletResponse response) throws UnsupportedEncodingException, UnknownHostException {
+        if (noticeId == null) {
+            message.setMessage(null, 400,   "没有需要下载文件ID", false);
+            return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
+        }
         Notice notice = noticeService.selectNoticeByPatentId(noticeId);
-
         if(notice ==null){
             message.setMessage(null, 400, "文件ID不存在", false);
             return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
@@ -135,7 +143,10 @@ public class NoticeController {
         //获取文件地址
         String noticePath = notice.getNoticePath();
         System.out.println(noticePath);
-        //获取文件名称
+//        InetAddress inetAddress = InetAddress.getLocalHost();
+//        String Ip       = inetAddress+noticePath;
+//        System.out.println(Ip);
+//        //获取文件名称
         String noticeName = notice.getNoticeName();
 
         // 如果文件名不为空，则进行下载
@@ -194,6 +205,22 @@ public class NoticeController {
         return new ResponseEntity<Message>(message, HttpStatus.OK);
     }
 
+    /**
+     * 文件进行逻辑删除，修改数据库的状态
+     *
+     * @param noticeId 文件的id主键自增长
+     * @return
+     */
+    @RequestMapping("/delete")
+    public ResponseEntity<Message> delete(Integer noticeId) {
+        if (noticeId == null) {
+            message.setMessage(null, 400,   "没有文件ID", false);
+            return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
+        }
+        return noticeService.delete(noticeId);
+    }
+
+
 
 
 
@@ -203,18 +230,25 @@ public class NoticeController {
      * @return
      */
     @RequestMapping("/select")
-    public ResponseEntity<Message>  selectByPatentId(int noticePatentId) {
+    public ResponseEntity<Message>  selectByPatentId(Integer noticePatentId) {
+        if (noticePatentId == null) {
+            message.setMessage(null, 400,   "没有文件ID", false);
+            return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
+        }
         System.out.println(noticePatentId);
         return  noticeService.selectByPatentId(noticePatentId);
     }
-
     /**
      * 管理员查看
      * @param noticePatenId
      * @return
      */
     @RequestMapping("/searchManager")
-    public ResponseEntity<Message>  searchmanagerId(int noticePatenId) {
+    public ResponseEntity<Message>  searchmanagerId(Integer noticePatenId) {
+        if ( noticePatenId == null) {
+            message.setMessage(null, 400,   "没有文件ID", false);
+            return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
+        }
         return  noticeService.searchmanagerId(noticePatenId);
 
     }
