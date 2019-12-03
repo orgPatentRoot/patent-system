@@ -20,4 +20,13 @@
 	(#{historyPatent},#{historyModification},#{historyUser},#{historyCreateTime} )
   </insert>
 
+  <select id="queryHistory" parameterType="com.suixingpay.patent.pojo.History" resultMap="HistoryResultMap">
+    select <include refid="History_Column_List" /> from history
+  </select>
+
+  <select id="selectHistoryByPatent" parameterType="com.suixingpay.patent.pojo.History" resultMap="HistoryResultMap">
+    select <include refid="History_Column_List" /> from history h left join patent p on h.history_patent = p.patent_id
+    where h.history_patent = #{historyPatent}
+  </select>
+
 </mapper>

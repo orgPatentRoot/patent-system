@@ -1,3 +1,4 @@
+/*
 package com.suixingpay.patent.aspect;
 
 import com.suixingpay.patent.pojo.User;
@@ -54,3 +55,4 @@ public class LogAspect {
 
     }
 }
+*/

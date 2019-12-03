@@ -62,5 +62,7 @@ public class Patent {
 
     private  String indexContent; //指标内容
 
+    private  Date indexCreateTime; //创建时间
+
     private String specialCondition; //该类用于查询条件时，字段可作为查询条件
 }

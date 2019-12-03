@@ -1,6 +1,7 @@
 package com.suixingpay.patent.service;
 
 import com.suixingpay.patent.pojo.Message;
+import lombok.Value;
 
 
 public interface StatusService {
@@ -30,4 +31,17 @@ public interface StatusService {
      * @return
      */
     Message queryAllStatusAfter();
+
+    /**
+     * 根据配置文件读出审核前 除了新建专利（0）、发明初合（1）的所有状态
+     * @return
+     */
+
+    Message selectBeforeByYml(Integer patentStatusId);
+
+    /**
+     * 根据配置文件读出审核后 所有的状态
+     * @return
+     */
+    Message selectAfterByYml(Integer patentStatusId);
 }

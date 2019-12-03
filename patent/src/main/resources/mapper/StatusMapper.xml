@@ -16,10 +16,18 @@
 
   <select id="selectStatusIdByName" resultMap="StatusResultMap">
   select status_id from status where status_name = #{statusName}
-</select>
+  </select>
 
   <select id="queryAllStatusAfter" resultMap="StatusResultMap">
     select status_id,status_name from status where status_id between 6 and 12
+  </select>
+
+  <select id="selectAfterByYml" resultMap="StatusResultMap">
+    select status_id,status_name from status where status_id &gt; #{patentStatusId}
+  </select>
+<!--&gt; #{patentNeedCheckStatus}-->
+  <select id="selectBeforeByYml" resultMap="StatusResultMap">
+    select status_id,status_name from status where status_id between 2 and #{patentStatusId}
   </select>
 
 </mapper>

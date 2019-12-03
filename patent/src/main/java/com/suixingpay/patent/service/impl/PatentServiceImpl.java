@@ -5,6 +5,7 @@ import com.suixingpay.patent.pojo.Message;
 import com.suixingpay.patent.pojo.Patent;
 import com.suixingpay.patent.service.PatentService;
 import org.apache.poi.hssf.usermodel.*;
+import org.jxls.util.JxlsHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,8 +14,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URLEncoder;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -30,6 +35,12 @@ public class PatentServiceImpl implements PatentService {
      */
     @Override
     public ResponseEntity<Message> insertPatentSevice(Patent patent) {
+        //统一前端时间小时
+        if(patent.getPatentApplyTime() != null) {
+            Date date = patent.getPatentApplyTime();
+            date.setHours(8);
+            patent.setPatentApplyTime(date);
+        }
         Message message = new Message();
         if (patentMapper.insertPatent(patent) != 0) {
             message.setMessage(null, 200, "新建专利成功！", true);
@@ -46,13 +57,19 @@ public class PatentServiceImpl implements PatentService {
      */
     @Override
     public ResponseEntity<Message> updatePatentServiceByIdService(Patent patent) {
+        //统一前端时间小时
+        if(patent.getPatentApplyTime() != null) {
+            Date date = patent.getPatentApplyTime();
+            date.setHours(8);
+            patent.setPatentApplyTime(date);
+        }
         Message message = new Message();
         if (patentMapper.updatePatent(patent) != 0) {
             message.setMessage(null, 200, "修改信息成功！", true);
             return new ResponseEntity<Message>(message, HttpStatus.OK);
         }
-        message.setMessage(null, 400, "修改信息失败！", false);
-        return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
+        message.setMessage(null, 200, "非待审核状态，不允许修改！", false);
+        return new ResponseEntity<Message>(message, HttpStatus.OK);
     }
 
     /**
@@ -78,11 +95,14 @@ public class PatentServiceImpl implements PatentService {
      * @return
      */
     @Override
-    public ResponseEntity<Message> selectPatentService(Patent patent) {
-        Message message = new Message();
-        List<Patent> list = patentMapper.selectPatent(patent);
-        message.setMessage(list, 200, "查询成功！", true);
-        return new ResponseEntity<Message>(message, HttpStatus.OK);
+    public List<Patent> selectPatentService(Patent patent) {
+        //统一前端时间小时
+        if(patent.getPatentApplyTime()!=null) {
+            Date date = patent.getPatentApplyTime();
+            date.setHours(8);
+            patent.setPatentApplyTime(date);
+        }
+        return patentMapper.selectPatent(patent);
     }
 
     /**
@@ -92,11 +112,14 @@ public class PatentServiceImpl implements PatentService {
      * @return
      */
     @Override
-    public ResponseEntity<Message> selectPatentWithIndexService(Patent patent) {
-        Message message = new Message();
-        List<Patent> list = patentMapper.selectPatentWithIndex(patent);
-        message.setMessage(list, 200, "查询成功！", true);
-        return new ResponseEntity<Message>(message, HttpStatus.OK);
+    public List<Patent> selectPatentWithIndexService(Patent patent) {
+        //统一前端时间小时
+        if(patent.getPatentApplyTime()!=null) {
+            Date date = patent.getPatentApplyTime();
+            date.setHours(8);
+            patent.setPatentApplyTime(date);
+        }
+        return patentMapper.selectPatentWithIndex(patent);
     }
 
     /**
@@ -131,7 +154,7 @@ public class PatentServiceImpl implements PatentService {
     }
 
     /**
-     * 审核不通过
+     * 驳回
      * @param patent
      * @return
      */
@@ -144,10 +167,10 @@ public class PatentServiceImpl implements PatentService {
         //设置条件:审核进度为审核中2,专利进度为需要审核的阶段
         patent.setSpecialCondition("patent_sign = 1 and patent_status_id IN (0,2,3,4,5)");
         if (patentMapper.updatePatent(patent) != 0) {
-            message.setMessage(null, 200, "审核不通过成功！", true);
+            message.setMessage(null, 200, "驳回成功！", true);
             return new ResponseEntity<Message>(message, HttpStatus.OK);
         }
-        message.setMessage(null, 400, "审核通过失败！", false);
+        message.setMessage(null, 400, "驳回失败！", false);
         return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
     }
 
@@ -206,66 +229,32 @@ public class PatentServiceImpl implements PatentService {
         message.setMessage(null, 400, "修改进度失败！", false);
         return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
     }
+
+    /**
+     * 查询导出文件
+     * @param response
+     * @throws IOException
+     */
     @Override
-    public ResponseEntity<Message> downloadPatent(HttpServletResponse response, Patent patent1) throws IOException {
-        Message message = new Message();
-        HSSFWorkbook workbook = new HSSFWorkbook();
-        HSSFSheet sheet = workbook.createSheet("信息表");
-
-        //List<Patent> patentExcle = patentService.selectTest();
-        System.out.println(patent1.getPatentStatusId());
-        List<Patent> patentExcle = patentMapper.selectPatent(patent1);
-        if (patentExcle == null) {
-            message.setMessage(null, 400, "exccel导出失败！您要导出的信息不存在", true);
-            return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
-        } else {
-            message.setMessage(null, 200, "exccel导出成功！", true);
+    public void exportDeviceModelMsg(HttpServletResponse response,String fileName, List<Patent> list)
+            throws IOException {
+        try {
+            List<Patent> patentExcle = list; //获取列表数据
+            InputStream in = this.getClass().getClassLoader().getResourceAsStream("excel/" + fileName + ".xls"); //文档路径
+            //列表数据将存储到指定的excel文件路径，这个路径是在项目编译之后的target目录下
+            String temp = System.getProperty("user.dir");
+            String path = temp + "\\public\\" + fileName + ".xls";
+            System.out.println("++++++++++++++++++++++++++++++++++++");
+            System.out.println(path);
+            FileOutputStream out = new FileOutputStream(path);
+            //这里的context是jxls框架上的context内容
+            org.jxls.common.Context context = new org.jxls.common.Context();
+            //将列表参数放入context中
+            context.putVar("patentExcle", patentExcle);
+            //将List<Patent>列表数据按照模板文件中的格式生成到patent.xls文件中
+            JxlsHelper.getInstance().processTemplate(in, out, context);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        String fileName = "patentExcel"  + ".xls"; //设置要导出的文件的名字
-        //新增数据行，并且设置单元格数据
-
-        int rowNum = 1;
-
-        String[] headers = {"专利ID", "批次", "案例文号", "申请号", "申请时间", "技术联系人", "申请人", "创建人", "专利名", "审核状态", "专利状态", "发明类型", "发明人", "撰写人", "备注", "状态", "创建人名称", "撰写人名称"};
-        //headers表示excel表中第一行的表头
-        HSSFRow row = sheet.createRow(0);
-        //在excel表中添加表头
-        for (int i = 0; i < headers.length; i++) {
-            HSSFCell cell = row.createCell(i);
-            HSSFRichTextString text = new HSSFRichTextString(headers[i]);
-            cell.setCellValue(text);
-        }
-        //在表中存放查询到的数据放入对应的列
-        for (Patent patent : patentExcle) {
-            HSSFRow row1 = sheet.createRow(rowNum);
-            row1.createCell(0).setCellValue(patent.getPatentId());
-            row1.createCell(1).setCellValue(patent.getPatentBatch());
-            row1.createCell(2).setCellValue(patent.getPatentCaseNum());
-            row1.createCell(3).setCellValue(patent.getPatentApplyNum());
-            row1.createCell(4).setCellValue(patent.getPatentApplyTime());
-            row1.createCell(5).setCellValue(patent.getPatentTechnicalContact());
-            row1.createCell(6).setCellValue(patent.getPatentApplyPerson());
-            row1.createCell(7).setCellValue(patent.getPatentCreatePerson());
-            row1.createCell(8).setCellValue(patent.getPatentName());
-            row1.createCell(9).setCellValue(patent.getPatentSign());
-            row1.createCell(10).setCellValue(patent.getPatentStatusId());
-            row1.createCell(11).setCellValue(patent.getPatentType());
-            row1.createCell(12).setCellValue(patent.getPatentInventor());
-            row1.createCell(13).setCellValue(patent.getPatentWriter());
-            row1.createCell(14).setCellValue(patent.getPatentRemarks());
-            row1.createCell(15).setCellValue(patent.getStatusName());
-            row1.createCell(16).setCellValue(patent.getCreatePersonName());
-            row1.createCell(17).setCellValue(patent.getWriterName());
-            rowNum++;
-        }
-        response.setContentType("application/x-xls;charset=utf-8");
-        //response.setContentType("application/octet-stream");//设置发送到客户端的响应的内容类型，application/octet-stream（ 二进制流，不知道下载文件类型）
-        response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName, "utf-8")); //这样写文件名中文不会乱码
-        response.flushBuffer();
-        ServletOutputStream out = response.getOutputStream(); //输出流
-        workbook.write(out); //输出文件
-        out.close(); //关闭流，不关也能下载，不过会报错
-
-        return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
     }
 }
