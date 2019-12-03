@@ -113,8 +113,6 @@ public class NoticeController {
 
                 } catch (IOException e) {
                     LOGGER.error(e.toString(), e);
-                    message.setMessage(null, 400, "文件上传失败", false);
-                    return new ResponseEntity<Message>(message, HttpStatus.OK);
                 }
             }else {
                 message.setMessage(null, 400, "文件类型仅限txt、doc、docx、ppt、pdf、rar、zip、xls、xlsx、png、jpg类型！", false);
@@ -123,7 +121,6 @@ public class NoticeController {
         }
         message.setMessage(null, 200, "上传成功", true);
         return new ResponseEntity<Message>(message, HttpStatus.OK);
-
     }
 
     /**
@@ -198,10 +195,7 @@ public class NoticeController {
             return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
         }
         return  noticeService.searchmanagerId(noticePatentId);
-
     }
-
-
 }
 
 

@@ -1,24 +1,24 @@
 package com.suixingpay.patent.service.impl;
 
+import com.suixingpay.patent.mapper.IndexMapper;
 import com.suixingpay.patent.mapper.PatentMapper;
+import com.suixingpay.patent.pojo.Index;
 import com.suixingpay.patent.pojo.Message;
 import com.suixingpay.patent.pojo.Patent;
 import com.suixingpay.patent.service.PatentService;
-import org.apache.poi.hssf.usermodel.*;
+import com.suixingpay.patent.util.DateSetting;
+import com.suixingpay.patent.util.ParamCheck;
 import org.jxls.util.JxlsHelper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URLEncoder;
 import java.util.Date;
 import java.util.List;
 
@@ -28,26 +28,53 @@ public class PatentServiceImpl implements PatentService {
     @Autowired
     private PatentMapper patentMapper;
 
+    @Autowired
+    private IndexMapper indexMapper;
+
+    @Autowired
+    private Message message;
+
+    @Value("${patentNeedCheckStatus}")
+    private Integer patentStatusId;
+
     /**
      * 插入专利信息
      * @param patent
      * @return
      */
+    @Transactional
     @Override
-    public ResponseEntity<Message> insertPatentSevice(Patent patent) {
-        //统一前端时间小时
-        if(patent.getPatentApplyTime() != null) {
-            Date date = patent.getPatentApplyTime();
-            date.setHours(8);
-            patent.setPatentApplyTime(date);
-        }
-        Message message = new Message();
-        if (patentMapper.insertPatent(patent) != 0) {
+    public Message insertPatentService(Patent patent, String[] indexContent) {
+        //统一前端时间的小时
+        DateSetting.unifyDate(patent.getPatentApplyTime());
+        //安全参数替换，将特殊字符替换为空格
+        ParamCheck.patentParamReplace(patent);
+        //设置专利新建的基本信息
+        patent.setPatentSign(0); //设置审核状态为未审核
+        patent.setPatentStatusId(0); //设置专利进度状态为新建专利
+        patent.setPatentWriter(0);  //设置撰写人为待认领
+        try {
+            Integer patentId = patentMapper.insertPatent(patent); //返回插入的自增Id
+            if (patentId == null) {
+                message.setMessage(null, 200, "新建专利失败！", false);
+                throw new RuntimeException("新建专利异常");
+            }
+            for(String str : indexContent) {
+                Index index = new Index();
+                index.setIndexPatentId(patentId);
+                index.setIndexContent(str);
+                index.setIndexCreateTime(new Date());
+                if(indexMapper.insertIndexContent(index) == 0) {
+                    message.setMessage(null, 200, "新建专利失败！", false);
+                    throw new RuntimeException("新建专利插入指标异常");
+                }
+            }
             message.setMessage(null, 200, "新建专利成功！", true);
-            return new ResponseEntity<Message>(message, HttpStatus.OK);
+        }catch (Exception e) {
+            //异常事务回滚
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
         }
-        message.setMessage(null, 400, "新建专利失败！", false);
-        return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
+        return message;
     }
 
     /**
@@ -56,20 +83,19 @@ public class PatentServiceImpl implements PatentService {
      * @return
      */
     @Override
-    public ResponseEntity<Message> updatePatentServiceByIdService(Patent patent) {
-        //统一前端时间小时
-        if(patent.getPatentApplyTime() != null) {
-            Date date = patent.getPatentApplyTime();
-            date.setHours(8);
-            patent.setPatentApplyTime(date);
-        }
-        Message message = new Message();
+    public Message updatePatentServiceByIdService(Patent patent) {
+        //统一前端时间的小时
+        DateSetting.unifyDate(patent.getPatentApplyTime());
+        //安全参数替换，将特殊字符替换为空格
+        ParamCheck.patentParamReplace(patent);
+        //设置条件不允许修改审核中的数据
+        patent.setSpecialCondition("patent_sign != 1");
         if (patentMapper.updatePatent(patent) != 0) {
             message.setMessage(null, 200, "修改信息成功！", true);
-            return new ResponseEntity<Message>(message, HttpStatus.OK);
+            return message;
         }
-        message.setMessage(null, 200, "非待审核状态，不允许修改！", false);
-        return new ResponseEntity<Message>(message, HttpStatus.OK);
+        message.setMessage(null, 400, "非待审核状态，不允许修改！", false);
+        return message;
     }
 
     /**
@@ -78,14 +104,14 @@ public class PatentServiceImpl implements PatentService {
      * @return
      */
     @Override
-    public ResponseEntity<Message> updatePatentWriterByIdService(Patent patent) {
-        Message message = new Message();
+    public Message updatePatentWriterByIdService(Patent patent) {
+        patent.setPatentStatusId(2); //认领成功将进度变为方案讨论
         if (patentMapper.updatePatent(patent) != 0) {
             message.setMessage(null, 200, "认领成功！", true);
-            return new ResponseEntity<Message>(message, HttpStatus.OK);
+            return message;
         }
-        message.setMessage(null, 400, "认领失败！", false);
-        return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
+        message.setMessage(null, 400, "条件不符，认领失败！", false);
+        return message;
     }
 
     /**
@@ -96,12 +122,10 @@ public class PatentServiceImpl implements PatentService {
      */
     @Override
     public List<Patent> selectPatentService(Patent patent) {
-        //统一前端时间小时
-        if(patent.getPatentApplyTime()!=null) {
-            Date date = patent.getPatentApplyTime();
-            date.setHours(8);
-            patent.setPatentApplyTime(date);
-        }
+        //统一前端时间的小时
+        DateSetting.unifyDate(patent.getPatentApplyTime());
+        //安全参数替换，将特殊字符替换为空格
+        ParamCheck.patentParamReplace(patent);
         return patentMapper.selectPatent(patent);
     }
 
@@ -113,12 +137,10 @@ public class PatentServiceImpl implements PatentService {
      */
     @Override
     public List<Patent> selectPatentWithIndexService(Patent patent) {
-        //统一前端时间小时
-        if(patent.getPatentApplyTime()!=null) {
-            Date date = patent.getPatentApplyTime();
-            date.setHours(8);
-            patent.setPatentApplyTime(date);
-        }
+        //统一前端时间的小时
+        DateSetting.unifyDate(patent.getPatentApplyTime());
+        //安全参数替换，将特殊字符替换为空格
+        ParamCheck.patentParamReplace(patent);
         return patentMapper.selectPatentWithIndex(patent);
     }
 
@@ -129,28 +151,33 @@ public class PatentServiceImpl implements PatentService {
      */
     @Transactional(rollbackFor = {RuntimeException.class, Error.class})
     @Override
-    public ResponseEntity<Message> auditPass(Patent patent) {
+    public Message auditPass(Patent patent) {
         Message message = new Message();
         List<Patent> list = patentMapper.selectPatent(patent);
         if (list.size() < 1) {
-            message.setMessage(null, 400, "审核条件不符合！", false);
-            return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
+            message.setMessage(null, 400, "专利Id不存在！", false);
+            return message;
         }
-        patent.setPatentStatusId(list.get(0).getPatentStatusId());
-        if (list.get(0).getPatentSign() != 1) {
-            message.setMessage(null, 400, "审核条件不符合！", false);
-            return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
+        /**
+         * 审核通过
+         * 若为审核阶段 将审核状态设为待审核状态0，并且将专利进度+1
+         * 若下一阶段是数据维护阶段 ，将将审核状态设为数据维护状态3，并且将专利进度+1
+         */
+        if ((list.get(0).getPatentStatusId() + 1) > patentStatusId) {
+            patent.setPatentSign(3);
+        } else {
+            patent.setPatentSign(0);
         }
-        //审核通过将审核状态设为待审核状态0，并且将专利进度+1
+
         patent.setPatentSign(0);
-        patent.setPatentStatusId(patent.getPatentStatusId() + 1);
-        patent.setSpecialCondition("patent_sign = 1 and patent_status_id IN (0,2,3,4,5)");
+        patent.setPatentStatusId(list.get(0).getPatentStatusId() + 1);
+        patent.setSpecialCondition("patent_sign = 1 and patent_status_id <= " + patentStatusId);
         if (patentMapper.updatePatent(patent) != 0) {
             message.setMessage(null, 200, "审核通过成功！", true);
-            return new ResponseEntity<Message>(message, HttpStatus.OK);
+            return message;
         }
         message.setMessage(null, 400, "审核条件不符合！", false);
-        return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
+        return message;
     }
 
     /**
@@ -160,18 +187,18 @@ public class PatentServiceImpl implements PatentService {
      */
     @Transactional(rollbackFor = {RuntimeException.class, Error.class})
     @Override
-    public ResponseEntity<Message> auditFailed(Patent patent) {
+    public Message auditFailed(Patent patent) {
         Message message = new Message();
         //审核不通过将审核状态设为审核不通过状态2
         patent.setPatentSign(2);
         //设置条件:审核进度为审核中2,专利进度为需要审核的阶段
-        patent.setSpecialCondition("patent_sign = 1 and patent_status_id IN (0,2,3,4,5)");
+        patent.setSpecialCondition("patent_sign = 1 and patent_status_id <= " + patentStatusId);
         if (patentMapper.updatePatent(patent) != 0) {
             message.setMessage(null, 200, "驳回成功！", true);
-            return new ResponseEntity<Message>(message, HttpStatus.OK);
+            return message;
         }
-        message.setMessage(null, 400, "驳回失败！", false);
-        return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
+        message.setMessage(null, 400, "条件不符，驳回失败！", false);
+        return message;
     }
 
     /**
@@ -180,37 +207,18 @@ public class PatentServiceImpl implements PatentService {
      * @return
      */
     @Override
-    public ResponseEntity<Message> userSubmitAudit(Patent patent) {
+    public Message userSubmitAudit(Patent patent) {
         Message message = new Message();
         //提交审核:将审核状态设为审核中1
         patent.setPatentSign(1);
         //设置条件:审核进度为审核中0,专利进度为需要审核的阶段
-        patent.setSpecialCondition("patent_sign = 0 and patent_status_id IN (0,2,3,4,5)");
+        patent.setSpecialCondition("patent_sign != 1 and patent_status_id <= " + patentStatusId);
         if (patentMapper.updatePatent(patent) != 0) {
             message.setMessage(null, 200, "提交审核成功！", true);
-            return new ResponseEntity<Message>(message, HttpStatus.OK);
+            return message;
         }
-        message.setMessage(null, 200, "提交审核失败！", false);
-        return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
-    }
-
-    /**
-     * 用户回滚功能
-     * @param patent
-     * @return
-     */
-    @Override
-    public ResponseEntity<Message> userRollBack(Patent patent) {
-        Message message = new Message();
-        patent.setPatentSign(0);
-        //设置条件:审核进度为审核中2,专利进度为需要审核的阶段
-        patent.setSpecialCondition("patent_sign = 2 and patent_status_id IN (0,2,3,4,5)");
-        if (patentMapper.updatePatent(patent) != 0) {
-            message.setMessage(null, 200, "回滚成功！", true);
-            return new ResponseEntity<Message>(message, HttpStatus.OK);
-        }
-        message.setMessage(null, 200, "回滚失败！", false);
-        return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
+        message.setMessage(null, 200, "审核中，不要重复提交！", false);
+        return message;
     }
 
     /**
@@ -219,15 +227,14 @@ public class PatentServiceImpl implements PatentService {
      * @return
      */
     @Override
-    public ResponseEntity<Message> updateStatusId(Patent patent) {
-        Message message = new Message();
-        patent.setSpecialCondition("patent_status_id IN (6,7,8,9,10,11,12)"); //设置数据维护阶段可以修改的进度
+    public Message updateStatusId(Patent patent) {
+        patent.setSpecialCondition("patent_status_id > " + patentStatusId); //设置数据维护阶段可以修改的进度
         if (patentMapper.updatePatent(patent) != 0) {
             message.setMessage(null, 200, "修改进度成功！", true);
-            return new ResponseEntity<Message>(message, HttpStatus.OK);
+            return message;
         }
-        message.setMessage(null, 400, "修改进度失败！", false);
-        return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
+        message.setMessage(null, 400, "条件不符，修改进度失败！", false);
+        return message;
     }
 
     /**
@@ -236,7 +243,7 @@ public class PatentServiceImpl implements PatentService {
      * @throws IOException
      */
     @Override
-    public void exportDeviceModelMsg(HttpServletResponse response,String fileName, List<Patent> list)
+    public void exportDeviceModelMsg(HttpServletResponse response, String fileName, List<Patent> list)
             throws IOException {
         try {
             List<Patent> patentExcle = list; //获取列表数据

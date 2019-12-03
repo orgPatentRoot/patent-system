@@ -19,8 +19,8 @@ public class MyHandlerIntercepter implements HandlerInterceptor {
         if(user != null){
             return true;
         }else {
-//            response.setHeader("Content-Type", "text/html;charset=UTF-8");
-//            response.sendRedirect(request.getContextPath() + "/login");
+            response.setHeader("Content-Type", "text/html;charset=UTF-8");
+            response.sendRedirect(request.getContextPath() + "/user/nologin");
             return false;
         }
 

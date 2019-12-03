@@ -20,7 +20,7 @@ public interface HistoryMapper {
      * @return
      */
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
-    List<History> queryHistory();
+    List<History> queryHistory(History history);
 
     /**
      * 根据专利号查询专利的操作历史

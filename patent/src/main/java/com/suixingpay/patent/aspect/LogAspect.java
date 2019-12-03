@@ -30,7 +30,7 @@ public class LogAspect {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
         //获取用户名
-        //String userName = (String) request.getSession(true).getAttribute("userName");
+        String userName = (String) request.getSession(true).getAttribute("userName");
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
         //获取专利名
@@ -46,11 +46,11 @@ public class LogAspect {
         Method method = signature.getMethod();
         //获取请求的方法名
         String methodName = method.getName();
-//        if (patentId == null) {
-//            log.info("用户{}进行了{}", user.getUserName(), methodName);
-//        } else {
-//            log.info("用户{}对专利{}进行了{}", user.getUserName(), patentId, methodName);
-//        }
+        if (patentId == null) {
+            log.info("用户{}进行了{}", user.getUserName(), methodName);
+        } else {
+            log.info("用户{}对专利{}进行了{}", user.getUserName(), patentId, methodName);
+        }
 
     }
 }
