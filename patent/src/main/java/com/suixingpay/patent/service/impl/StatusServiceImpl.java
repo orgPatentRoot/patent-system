@@ -105,5 +105,21 @@ public class StatusServiceImpl implements StatusService {
         return message;
     }
 
+    @Override
+    public Message adminSelectBeforeByYml(Integer patentStatusId) {
+        Message message = new Message();
+        List<Status> list = statusMapper.adminSelectBeforeByYml(patentStatusId);
+        message.setMessage(list, 200, "查询成功", true);
+        return message;
+    }
+
+    @Override
+    public Message adminselectAllByYml(Integer patentStatusId) {
+        Message message = new Message();
+        List<Status> list = statusMapper.adminselectAllByYml(patentStatusId);
+        message.setMessage(list, 200, "查询成功", true);
+        return message;
+    }
+
 
 }

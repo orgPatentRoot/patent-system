@@ -30,4 +30,13 @@
     select status_id,status_name from status where status_id between 2 and #{patentStatusId}
   </select>
 
+  <select id="adminselectAllByYml" resultMap="StatusResultMap">
+    select status_id,status_name from status where status_id between 1 and 12
+  </select>
+
+  <select id="adminSelectBeforeByYml" resultMap="StatusResultMap">
+    select status_id,status_name from status where status_id &lt;= #{patentStatusId} and status_id != 2
+  </select>
+
+
 </mapper>
