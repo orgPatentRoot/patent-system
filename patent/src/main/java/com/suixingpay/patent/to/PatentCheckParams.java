@@ -9,7 +9,7 @@ import java.util.Date;
 
 /**
  * @Description 专利筛选查询参数组装
- * @Author 朱金圣[zhu_js@suixingpay.com]
+ * @Author zhu_jinsheng[zhu_js@suixingpay.com]
  * @Date 2019/12/2 16:00
  * @Version 1.0
  */
