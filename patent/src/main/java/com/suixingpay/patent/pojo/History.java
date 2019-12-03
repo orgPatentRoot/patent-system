@@ -16,6 +16,8 @@ public class History {
 
     private Date historyCreateTime;
 
+    private String patentCaseNum;
+
 
     public Integer getHistoryId() {
         return historyId;
@@ -55,5 +57,13 @@ public class History {
 
     public void setHistoryCreateTime(Date historyCreateTime) {
         this.historyCreateTime = historyCreateTime;
+    }
+
+    public String getPatentCaseNum() {
+        return patentCaseNum;
+    }
+
+    public void setPatentCaseNum(String patentCaseNum) {
+        this.patentCaseNum = patentCaseNum;
     }
 }
