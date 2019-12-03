@@ -22,6 +22,11 @@ public class UserController {
 
     private Message message = new Message();
 
+    @GetMapping("/message")
+    public String login(){
+        return "当前尚未登录！请登录后重试！";
+    }
+
     /**
      * 登陆页面 （包括用户登录 管理员登录）
      *

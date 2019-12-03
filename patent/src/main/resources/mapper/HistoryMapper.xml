@@ -7,7 +7,9 @@
     <result column="history_modification" property="historyModification" jdbcType="VARCHAR" />
     <result column="history_user" property="historyUser" jdbcType="VARCHAR" />
     <result column="history_create_time" property="historyCreateTime" jdbcType="TIMESTAMP" />
+    <result column="patent_case_num" property="patentCaseNum" jdbcType="VARCHAR"/>
   </resultMap>
+
 
 
   <sql id="History_Column_List" >
@@ -21,7 +23,7 @@
   </insert>
 
   <select id="queryHistory" parameterType="com.suixingpay.patent.pojo.History" resultMap="HistoryResultMap">
-    select <include refid="History_Column_List" /> from history
+    select <include refid="History_Column_List" />,patent_case_num from history LEFT JOIN patent on history_patent = patent_id
   </select>
 
   <select id="selectHistoryByPatent" parameterType="com.suixingpay.patent.pojo.History" resultMap="HistoryResultMap">

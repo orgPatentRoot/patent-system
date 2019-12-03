@@ -15,4 +15,5 @@ out/
 *.cache
 *.iml
 *.bak
+public/
 
