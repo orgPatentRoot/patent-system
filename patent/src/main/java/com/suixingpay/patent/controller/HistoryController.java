@@ -1,5 +1,6 @@
 package com.suixingpay.patent.controller;
 
+import com.suixingpay.patent.pojo.History;
 import com.suixingpay.patent.pojo.Message;
 import com.suixingpay.patent.service.HistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,8 @@ public class HistoryController {
      * @return
      */
     @RequestMapping("/queryHistory")
-    public Message queryHistory() {
-        return historyService.queryHistory();
+    public Message queryHistory(History history) {
+        return historyService.queryHistory(history);
     }
 
     /**

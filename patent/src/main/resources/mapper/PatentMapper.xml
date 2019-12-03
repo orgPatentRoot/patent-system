@@ -79,7 +79,7 @@
   </select>
 
 <!--  插入专利信息-->
-  <insert id="insertPatent" parameterType="com.suixingpay.patent.pojo.Patent" >
+  <insert id="insertPatent" parameterType="com.suixingpay.patent.pojo.Patent" useGeneratedKeys="true" keyProperty="id">
     insert into patent (patent_batch, patent_case_num,
       patent_apply_num, patent_apply_time, patent_technical_contact,
       patent_apply_person, patent_create_person,

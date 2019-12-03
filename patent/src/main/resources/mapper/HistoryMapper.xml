@@ -24,6 +24,14 @@
 
   <select id="queryHistory" parameterType="com.suixingpay.patent.pojo.History" resultMap="HistoryResultMap">
     select <include refid="History_Column_List" />,patent_case_num from history LEFT JOIN patent on history_patent = patent_id
+    <where>
+        <if test="patentCaseNum != null and != ''">
+            patent_case_num = #{patentCaseNum}
+        </if>
+        <if test="historyUser!= null and != ''">
+            history_user = #{historyUser}
+        </if>
+    </where>
   </select>
 
   <select id="selectHistoryByPatent" parameterType="com.suixingpay.patent.pojo.History" resultMap="HistoryResultMap">

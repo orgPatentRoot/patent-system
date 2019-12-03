@@ -29,9 +29,9 @@ public class HistoryServiceImpl implements HistoryService {
      * @return
      */
     @Override
-    public Message queryHistory() {
+    public Message queryHistory(History history) {
         Message message = new Message();
-        List<History> list = historyMapper.queryHistory();
+        List<History> list = historyMapper.queryHistory(history);
         message.setMessage(list,200,"查询成功",true);
         return message;
     }

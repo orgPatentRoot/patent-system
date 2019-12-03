@@ -1,4 +1,3 @@
-/*
 package com.suixingpay.patent.aspect;
 
 import com.suixingpay.patent.pojo.User;
@@ -47,12 +46,11 @@ public class LogAspect {
         Method method = signature.getMethod();
         //获取请求的方法名
         String methodName = method.getName();
-//        if (patentId == null) {
-//            log.info("用户{}进行了{}", user.getUserName(), methodName);
-//        } else {
-//            log.info("用户{}对专利{}进行了{}", user.getUserName(), patentId, methodName);
-//        }
+        if (patentId == null) {
+            log.info("用户{}进行了{}", user.getUserName(), methodName);
+        } else {
+            log.info("用户{}对专利{}进行了{}", user.getUserName(), patentId, methodName);
+        }
 
     }
 }
-*/
