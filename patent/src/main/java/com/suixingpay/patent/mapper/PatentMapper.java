@@ -5,7 +5,7 @@ import com.suixingpay.patent.pojo.Patent;
 import java.util.List;
 
 public interface PatentMapper {
-    int insertPatent(Patent patent); //插入专利
+    Integer insertPatent(Patent patent); //插入专利
 
     int updatePatent(Patent patent); //修改专利信息
 
