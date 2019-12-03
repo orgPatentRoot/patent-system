@@ -17,7 +17,7 @@ public interface HistoryService {
      * 全查数据库中的流程记录
      * @return
      */
-    Message queryHistory();
+    Message queryHistory(History history);
 
     /**
      * 根据专利号查询专利的操作历史
