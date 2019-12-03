@@ -3,6 +3,7 @@ package com.suixingpay.patent.pojo;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.NotNull;
 import java.util.Date;

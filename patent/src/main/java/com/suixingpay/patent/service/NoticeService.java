@@ -21,5 +21,4 @@ public interface NoticeService {
     ResponseEntity<Message> searchmanagerId(int noticePatenId);
 
 
-
 }

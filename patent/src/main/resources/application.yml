@@ -23,4 +23,4 @@ mybatis:
     map-underscore-to-camel-case: true
 #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
-visualpath: http://172.16.43.117:8080/
+visualpath: http://127.0.0.1:8080/

@@ -1,9 +1,10 @@
 package com.suixingpay.patent.mapper;
 
 import com.suixingpay.patent.pojo.Patent;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
-
+@Component
 public interface PatentMapper {
     int insertPatent(Patent patent); //插入专利
 
