@@ -44,6 +44,13 @@ public class UserController {
         return userService.selectUserByUserAccountAndUserPassword(userAccount, userPassword, request);
     }
 
+    @RequestMapping("/nologin")
+    public ResponseEntity<Message> NoLogin(HttpServletRequest request) {
+
+        message.setMessage(null, 401, "当前尚未登录", false);
+        return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
+
+    }
     //管理员方法
 
     /**
