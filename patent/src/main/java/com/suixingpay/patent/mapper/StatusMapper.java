@@ -1,6 +1,8 @@
 package com.suixingpay.patent.mapper;
 
+import com.suixingpay.patent.pojo.Message;
 import com.suixingpay.patent.pojo.Status;
+import lombok.Value;
 import org.apache.ibatis.annotations.Mapper;
 import java.util.List;
 @Mapper
@@ -31,4 +33,17 @@ public interface StatusMapper {
      * @return
      */
     List<Status> queryAllStatusAfter();
+
+    /**
+     * 根据配置文件读出审核前 除了新建专利（0）、发明初合（1）的所有状态
+     * @return
+     */
+
+    List<Status> selectBeforeByYml(Integer patentStatusId);
+
+    /**
+     * 根据配置文件读出审核后 所有的状态
+     * @return
+     */
+    List<Status> selectAfterByYml(Integer patentStatusId);
 }
