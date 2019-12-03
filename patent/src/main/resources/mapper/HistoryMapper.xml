@@ -25,11 +25,11 @@
   <select id="queryHistory" parameterType="com.suixingpay.patent.pojo.History" resultMap="HistoryResultMap">
     select <include refid="History_Column_List" />,patent_case_num from history LEFT JOIN patent on history_patent = patent_id
     <where>
-        <if test="patentCaseNum != null and != ''">
-            patent_case_num = #{patentCaseNum}
+        <if test="patentCaseNum != null and patentCaseNum != ''">
+            and patent_case_num like concat('%',#{patentCaseNum,jdbcType=VARCHAR},'%')
         </if>
-        <if test="historyUser!= null and != ''">
-            history_user = #{historyUser}
+        <if test="historyUser != null and historyUser != ''">
+            and history_user like concat('%',#{historyUser,jdbcType=VARCHAR},'%')
         </if>
     </where>
   </select>
