@@ -123,7 +123,7 @@ public class StatusController {
         return message;
     }
 
-    @RequestMapping("/adminselectAllByYml")
+    @RequestMapping("/adminSelectAllByYml")
     @ResponseBody
     public Message adminselectAllByYml(HttpServletResponse response) {
         if (patentStatusId < 2 && patentStatusId > 11) {

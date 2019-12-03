@@ -43,7 +43,7 @@ public class PatentChangeParams {
      * 将前端数据封装成后端需要的Patent对象
      * @return
      */
-    public Patent changeToPatent(){
+    public Patent changeToPatent() {
         Patent patent = new Patent();
         patent.setPatentId(patentId);
         patent.setPatentBatch(patentBatch);

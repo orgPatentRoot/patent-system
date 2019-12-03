@@ -49,74 +49,77 @@ public class NoticeController {
     @ResponseBody
     public ResponseEntity<Message> upload(@RequestParam("patentId") Integer patentId,
                                           @RequestParam("file") MultipartFile[] fils, HttpServletRequest request) {
-        for(MultipartFile file:fils){
+        //文件参数安全判断
+        for (MultipartFile file : fils) {
             if (patentId == null || file == null) {
-                message.setMessage(null, 400,   "没有文件ID或者文件上传", false);
+                message.setMessage(null, 200,   "没有文件ID或者文件上传", false);
                 return new ResponseEntity<Message>(message, HttpStatus.OK);
             }
 
             if  (file.isEmpty()) {
-                message.setMessage(null, 400, "没有选择上传文件", false);
+                message.setMessage(null, 200, "没有选择上传文件", false);
                 return new ResponseEntity<Message>(message, HttpStatus.OK);
             }
             if  (file.getSize() > 1024 * 1024 * 5) {
-                message.setMessage(null, 400, "文档不能超过5M", false);
+                message.setMessage(null, 200, "文档不能超过5M", false);
                 return new ResponseEntity<Message>(message, HttpStatus.OK);
             }
-
-
+            //获取文件的名字
+            String fileName = file.getOriginalFilename();
+            //文件类型仅限txt、doc、docx、ppt、pdf、rar、zip、xls、xlsx、png、jpg类型
+            if (!(fileName.endsWith(".txt") || fileName.endsWith(".doc") || fileName.endsWith(".docx")
+                    || fileName.endsWith(".ppt") || fileName.endsWith(".rar") || fileName.endsWith(".zip")
+                    || fileName.endsWith(".xls") || fileName.endsWith(".xlsx") || fileName.endsWith(".xls")
+                    || fileName.endsWith(".xlsx") || fileName.endsWith(".png") || fileName.endsWith(".jpg")
+                    || fileName.endsWith(".pdf"))) {
+                message.setMessage(null, 200, "文件类型仅限txt、doc、docx、ppt、pdf、rar、zip、xls、xlsx、png、jpg类型！", false);
+                return new ResponseEntity<Message>(message, HttpStatus.OK);
+            }
+        }
+        for (MultipartFile file : fils) {
             //获取文件的专利Id
             int filePaentId = patentId;
             //获取文件的名字
             String fileName = file.getOriginalFilename();
-            //文件类型仅限txt、doc、docx、ppt、pdf、rar、zip、xls、xlsx、png、jpg类型
-            if(fileName.endsWith(".txt") || fileName.endsWith(".doc") || fileName.endsWith(".docx") || fileName.endsWith(".ppt")
-                    || fileName.endsWith(".rar") || fileName.endsWith(".zip") || fileName.endsWith(".xls")|| fileName.endsWith(".xlsx")
-                    || fileName.endsWith(".xls") || fileName.endsWith(".xlsx") || fileName.endsWith(".png") || fileName.endsWith(".jpg")
-                    || fileName.endsWith(".pdf")) {
-                System.out.println(fileName);
-                String fileName1 = fileName.substring(fileName.lastIndexOf("."));
-                Date date = new Date();
+            System.out.println(fileName);
+            String fileName1 = fileName.substring(fileName.lastIndexOf("."));
+            Date date = new Date();
 
-                DateFormat format = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
 
-                String str  =  format.format(date);
-                fileName = fileName.substring(0, fileName.lastIndexOf(".")) + "-" + str + fileName1;
+            String str  =  format.format(date);
+            fileName = fileName.substring(0, fileName.lastIndexOf(".")) + "-" + str + fileName1;
 
-                //        //把上传的文件拼接并且放在项目的路径下
-                String projectUrl = request.getSession().getServletContext().getRealPath("/");
-                System.out.println(projectUrl);
-                String path = projectUrl  + fileName;
-                System.out.println(path);
-                String url = visualPath + fileName;
-                System.out.println(url);
-                File dest = new File(path);
-                if (!dest.getParentFile().exists()) { //判断文件父目录是否存在
-                    dest.getParentFile().mkdir();
-                }
-                //开始上传到项目路径下，并且上传到数据库
-                try {
-                    BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(dest));
-                    out.write(file.getBytes());
-                    out.flush();
-                    out.close();
-                    //成功后打印到控制台
-                    LOGGER.info("上传成功");
-                    //上传到数据库
-                    Notice files = new Notice();
-                    files.setNoticeCreateTime(new Date());
-                    files.setNoticeName(file.getOriginalFilename());
-                    files.setNoticePatentId(filePaentId);
-                    files.setNoticePath(url);
-                    files.setNoticeStatus(1);
-                    noticeService.insert(files);
+            //        //把上传的文件拼接并且放在项目的路径下
+            String projectUrl = request.getSession().getServletContext().getRealPath("/");
+            System.out.println(projectUrl);
+            String path = projectUrl  + fileName;
+            System.out.println(path);
+            String url = visualPath + fileName;
+            System.out.println(url);
+            File dest = new File(path);
+            if (!dest.getParentFile().exists()) { //判断文件父目录是否存在
+                dest.getParentFile().mkdir();
+            }
+            //开始上传到项目路径下，并且上传到数据库
+            try {
+                BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(dest));
+                out.write(file.getBytes());
+                out.flush();
+                out.close();
+                //成功后打印到控制台
+                LOGGER.info("上传成功");
+                //上传到数据库
+                Notice files = new Notice();
+                files.setNoticeCreateTime(new Date());
+                files.setNoticeName(file.getOriginalFilename());
+                files.setNoticePatentId(filePaentId);
+                files.setNoticePath(url);
+                files.setNoticeStatus(1);
+                noticeService.insert(files);
 
-                } catch (IOException e) {
-                    LOGGER.error(e.toString(), e);
-                }
-            }else {
-                message.setMessage(null, 400, "文件类型仅限txt、doc、docx、ppt、pdf、rar、zip、xls、xlsx、png、jpg类型！", false);
-                return new ResponseEntity<Message>(message, HttpStatus.OK);
+            } catch (IOException e) {
+                LOGGER.error(e.toString(), e);
             }
         }
         message.setMessage(null, 200, "上传成功", true);
@@ -164,10 +167,6 @@ public class NoticeController {
         }
         return noticeService.delete(noticeId);
     }
-
-
-
-
 
     /**
      * 用户查看

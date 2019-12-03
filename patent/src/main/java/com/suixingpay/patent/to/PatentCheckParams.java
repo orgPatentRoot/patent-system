@@ -51,6 +51,7 @@ public class PatentCheckParams {
         patent.setPatentApplyPerson(patentApplyPerson);
         patent.setPatentName(patentName);
         patent.setPatentStatusId(patentStatusId);
+        patent.setPatentInventor(patentInventor);
         patent.setIndexId(indexId);
         patent.setIndexContent(indexContent);
         return patent;
