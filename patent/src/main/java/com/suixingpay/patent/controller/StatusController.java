@@ -123,4 +123,32 @@ public class StatusController {
         return message;
     }
 
+    @RequestMapping("/adminselectAllByYml")
+    @ResponseBody
+    public Message adminselectAllByYml(HttpServletResponse response) {
+        if (patentStatusId < 2 && patentStatusId > 11) {
+            Message message = new Message();
+            message.setMessage(null,400,"状态ID不合法",false);
+            response.setStatus(message.getStatus());
+            return message;
+        }
+        Message message = statusService.adminselectAllByYml(patentStatusId);
+        response.setStatus(message.getStatus());
+        return message;
+    }
+
+    @RequestMapping("/adminSelectBeforeByYml")
+    @ResponseBody
+    public Message adminSelectBeforeByYml(HttpServletResponse response) {
+        if (patentStatusId < 2 && patentStatusId > 11) {
+            Message message = new Message();
+            message.setMessage(null,400,"状态ID不合法",false);
+            response.setStatus(message.getStatus());
+            return message;
+        }
+        Message message = statusService.adminSelectBeforeByYml(patentStatusId);
+        response.setStatus(message.getStatus());
+        return message;
+    }
+
 }

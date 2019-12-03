@@ -44,4 +44,14 @@ public interface StatusService {
      * @return
      */
     Message selectAfterByYml(Integer patentStatusId);
+
+    /**
+     * 管理员审核时查询配置文件中 审核结点之前除方案讨论（2）的所有状态
+     */
+    Message adminSelectBeforeByYml(Integer patentStatusId);
+
+    /**
+     * 管理员在专利池中查询除新建专利（0）外的所有状态
+     */
+    Message adminselectAllByYml(Integer patentStatusId);
 }
