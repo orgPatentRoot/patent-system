@@ -56,11 +56,11 @@ public class NoticeController {
             }
 
             if  (file.isEmpty()) {
-                message.setMessage(null, 400, "没有选择上传文件", false);
+                message.setMessage(null, 200, "没有选择上传文件", false);
                 return new ResponseEntity<Message>(message, HttpStatus.OK);
             }
             if  (file.getSize() > 1024 * 1024 * 5) {
-                message.setMessage(null, 400, "文档不能超过5M", false);
+                message.setMessage(null, 200, "文档不能超过5M", false);
                 return new ResponseEntity<Message>(message, HttpStatus.OK);
             }
 
@@ -115,7 +115,7 @@ public class NoticeController {
                     LOGGER.error(e.toString(), e);
                 }
             }else {
-                message.setMessage(null, 400, "文件类型仅限txt、doc、docx、ppt、pdf、rar、zip、xls、xlsx、png、jpg类型！", false);
+                message.setMessage(null, 200, "文件类型仅限txt、doc、docx、ppt、pdf、rar、zip、xls、xlsx、png、jpg类型！", false);
                 return new ResponseEntity<Message>(message, HttpStatus.OK);
             }
         }
