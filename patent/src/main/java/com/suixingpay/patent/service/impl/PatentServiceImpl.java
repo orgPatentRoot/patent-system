@@ -46,7 +46,7 @@ public class PatentServiceImpl implements PatentService {
     @Override
     public Message insertPatentService(Patent patent, String[] indexContent) {
         //统一前端时间的小时
-        DateSetting.unifyDate(patent.getPatentApplyTime());
+        patent.setPatentApplyTime(DateSetting.unifyDate(patent.getPatentApplyTime()));
         //安全参数替换，将特殊字符替换为空格
         ParamCheck.patentParamReplace(patent);
         //设置专利新建的基本信息
@@ -54,14 +54,13 @@ public class PatentServiceImpl implements PatentService {
         patent.setPatentStatusId(0); //设置专利进度状态为新建专利
         patent.setPatentWriter(0);  //设置撰写人为待认领
         try {
-            Integer patentId = patentMapper.insertPatent(patent); //返回插入的自增Id
-            if (patentId == null) {
+            if (patentMapper.insertPatent(patent) == 0) {
                 message.setMessage(null, 200, "新建专利失败！", false);
                 throw new RuntimeException("新建专利异常");
             }
             for(String str : indexContent) {
                 Index index = new Index();
-                index.setIndexPatentId(patentId);
+                index.setIndexPatentId(patent.getPatentId());
                 index.setIndexContent(str);
                 index.setIndexCreateTime(new Date());
                 if(indexMapper.insertIndexContent(index) == 0) {
@@ -85,7 +84,7 @@ public class PatentServiceImpl implements PatentService {
     @Override
     public Message updatePatentServiceByIdService(Patent patent) {
         //统一前端时间的小时
-        DateSetting.unifyDate(patent.getPatentApplyTime());
+        patent.setPatentApplyTime(DateSetting.unifyDate(patent.getPatentApplyTime()));
         //安全参数替换，将特殊字符替换为空格
         ParamCheck.patentParamReplace(patent);
         //设置条件不允许修改审核中的数据
@@ -123,7 +122,7 @@ public class PatentServiceImpl implements PatentService {
     @Override
     public List<Patent> selectPatentService(Patent patent) {
         //统一前端时间的小时
-        DateSetting.unifyDate(patent.getPatentApplyTime());
+        patent.setPatentApplyTime(DateSetting.unifyDate(patent.getPatentApplyTime()));
         //安全参数替换，将特殊字符替换为空格
         ParamCheck.patentParamReplace(patent);
         return patentMapper.selectPatent(patent);
@@ -138,7 +137,7 @@ public class PatentServiceImpl implements PatentService {
     @Override
     public List<Patent> selectPatentWithIndexService(Patent patent) {
         //统一前端时间的小时
-        DateSetting.unifyDate(patent.getPatentApplyTime());
+        patent.setPatentApplyTime(DateSetting.unifyDate(patent.getPatentApplyTime()));
         //安全参数替换，将特殊字符替换为空格
         ParamCheck.patentParamReplace(patent);
         return patentMapper.selectPatentWithIndex(patent);
