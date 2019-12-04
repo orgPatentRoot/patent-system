@@ -55,7 +55,6 @@ public class PatentServiceImpl implements PatentService {
         patent.setPatentWriter(0);  //设置撰写人为待认领
         try {
             if (patentMapper.insertPatent(patent) == 0) {
-                message.setMessage(null, 200, "新建专利失败！", false);
                 throw new RuntimeException("新建专利异常");
             }
             for(String str : indexContent) {
@@ -64,13 +63,13 @@ public class PatentServiceImpl implements PatentService {
                 index.setIndexContent(str);
                 index.setIndexCreateTime(new Date());
                 if(indexMapper.insertIndexContent(index) == 0) {
-                    message.setMessage(null, 200, "新建专利失败！", false);
                     throw new RuntimeException("新建专利插入指标异常");
                 }
             }
             message.setMessage(null, 200, "新建专利成功！", true);
         }catch (Exception e) {
             //异常事务回滚
+            message.setMessage(null, 200, "新建专利失败！", false);
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
         }
         return message;
