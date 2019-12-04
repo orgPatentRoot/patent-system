@@ -51,12 +51,15 @@ public class NoticeController {
                                           @RequestParam("file") MultipartFile[] fils, HttpServletRequest request) {
         System.out.println(fils.length);
         //文件参数安全判断
+        if(fils.length == 0) {
+            message.setMessage(null, 200,   "没有文件上传", false);
+            return new ResponseEntity<Message>(message, HttpStatus.OK);
+        }
         for (MultipartFile file : fils) {
             if (patentId == null || file == null) {
                 message.setMessage(null, 200,   "没有文件ID或者文件上传", false);
                 return new ResponseEntity<Message>(message, HttpStatus.OK);
             }
-
             if  (file.isEmpty()) {
                 message.setMessage(null, 200, "没有选择上传文件", false);
                 return new ResponseEntity<Message>(message, HttpStatus.OK);
