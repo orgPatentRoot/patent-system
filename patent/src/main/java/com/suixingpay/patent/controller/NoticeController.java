@@ -127,6 +127,8 @@ public class NoticeController {
 
             } catch (IOException e) {
                 LOGGER.error(e.toString(), e);
+                message.setMessage(null, 200, "上传失败", true);
+                return new ResponseEntity<Message>(message, HttpStatus.OK);
             }
         }
         message.setMessage(null, 200, "上传成功", true);
