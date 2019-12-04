@@ -106,7 +106,7 @@ public class ParamCheck {
     public static boolean isStatusId(Message message, List list){
         if (list.size() == 0) {
             message.setMessage(null,400,"状态ID不合法",false);
-            return true;
+            return true; 
         }
         return false;
     }
