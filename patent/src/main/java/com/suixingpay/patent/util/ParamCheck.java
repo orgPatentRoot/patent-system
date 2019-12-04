@@ -4,6 +4,8 @@ import com.suixingpay.patent.pojo.Message;
 import com.suixingpay.patent.pojo.Patent;
 import com.suixingpay.patent.pojo.User;
 
+import java.util.List;
+
 public class ParamCheck {
     public static boolean paramCheck(String... inputs) {
         for (String input : inputs) {
@@ -93,6 +95,17 @@ public class ParamCheck {
     public static boolean idIsEmpty(Message message, Integer id) {
         if (id == null) {
             message.setMessage(null, 400, "Id不能为空", false);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 状态ID不合法时，数据库查出的数据为空
+     */
+    public static boolean isStatusId(Message message, List list){
+        if (list.size() == 0) {
+            message.setMessage(null,400,"状态ID不合法",false);
             return true;
         }
         return false;

@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.lang.reflect.Method;
 
-@Aspect
+/*@Aspect
 @Slf4j
 @Component
 public class LogAspect {
@@ -53,4 +53,4 @@ public class LogAspect {
         }
 
     }
-}
+}*/
