@@ -6,7 +6,7 @@ build/
 .project
 .git/
 .svn*
-catalina*
+catalina*   
 /logs/
 .idea/
 *.log
@@ -15,4 +15,5 @@ out/
 *.cache
 *.iml
 *.bak
+public/
 
