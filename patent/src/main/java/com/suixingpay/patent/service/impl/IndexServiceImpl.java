@@ -4,11 +4,14 @@ import com.suixingpay.patent.mapper.IndexMapper;
 import com.suixingpay.patent.pojo.Index;
 import com.suixingpay.patent.pojo.Message;
 import com.suixingpay.patent.service.IndexService;
+import com.suixingpay.patent.util.ParamCheck;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class IndexServiceImpl implements IndexService {
@@ -55,6 +58,14 @@ public class IndexServiceImpl implements IndexService {
     public Message insertIndexContent(Index index) {
         Message message = new Message();
         index.setIndexCreateTime(new Date());
+        //内容特殊字符校验
+        String regEx = "^[a-zA-Z0-9\\u4E00-\\u9FA5]+$";
+        Pattern p = Pattern.compile(regEx);
+        Matcher m = p.matcher(index.getIndexContent());
+        if(!m.matches()) {
+            message.setMessage(null, 200, "插入指标不允许有特殊符号", true);
+            return message;
+        }
         if (indexMapper.insertIndexContent(index) != 0) {
             message.setMessage(null, 200, "指标添加成功", true);
             return message;

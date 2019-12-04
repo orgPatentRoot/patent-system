@@ -47,8 +47,11 @@ public class PatentServiceImpl implements PatentService {
     public Message insertPatentService(Patent patent, String[] indexContent) {
         //统一前端时间的小时
         patent.setPatentApplyTime(DateSetting.unifyDate(patent.getPatentApplyTime()));
-        //安全参数替换，将特殊字符替换为空格
-        ParamCheck.patentParamReplace(patent);
+        //参数特殊字符检查
+        if (ParamCheck.patentParamCheck(patent, indexContent)) {
+            message.setMessage(null, 200, "插入内容不允许有特殊符号！", true);
+            return message;
+        }
         //设置专利新建的基本信息
         patent.setPatentSign(0); //设置审核状态为未审核
         patent.setPatentStatusId(0); //设置专利进度状态为新建专利
@@ -84,8 +87,11 @@ public class PatentServiceImpl implements PatentService {
     public Message updatePatentServiceByIdService(Patent patent) {
         //统一前端时间的小时
         patent.setPatentApplyTime(DateSetting.unifyDate(patent.getPatentApplyTime()));
-        //安全参数替换，将特殊字符替换为空格
-        ParamCheck.patentParamReplace(patent);
+        //参数特殊字符检查
+        if (ParamCheck.patentParamCheck(patent, null)) {
+            message.setMessage(null, 200, "插入内容不允许有特殊符号！", true);
+            return message;
+        }
         //设置条件不允许修改审核中的数据
         patent.setSpecialCondition("patent_sign != 1");
         if (patentMapper.updatePatent(patent) != 0) {
