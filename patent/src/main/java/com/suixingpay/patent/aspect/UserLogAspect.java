@@ -20,7 +20,7 @@ import javax.servlet.http.HttpSession;
 import java.lang.reflect.Method;
 import java.util.Date;
 
-/*@Aspect
+@Aspect
 @Component
 public class UserLogAspect {
 
@@ -72,4 +72,4 @@ public class UserLogAspect {
         }
     }
 
-}*/
+}

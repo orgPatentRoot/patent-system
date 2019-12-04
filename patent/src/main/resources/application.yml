@@ -5,7 +5,7 @@ spring:
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/patent_system?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&useSSL=false
     username: root
-    password: 123456
+    password: root
     driverClassName: com.mysql.jdbc.Driver
   http:
     multipart:
@@ -25,5 +25,5 @@ mybatis:
 
 visualpath: http://172.16.43.117:8080/
 
-patentNeedCheckStatus: 1
+patentNeedCheckStatus: 3
 

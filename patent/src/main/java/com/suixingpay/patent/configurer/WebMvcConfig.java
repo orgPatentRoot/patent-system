@@ -16,14 +16,14 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-/*       registry.addInterceptor(myHandlerIntercepter).addPathPatterns("/**")
-                       .excludePathPatterns(notLoginInterceptPaths);*/
+       registry.addInterceptor(myHandlerIntercepter).addPathPatterns("/**")
+                       .excludePathPatterns(notLoginInterceptPaths);
     }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-  /*      registry.addResourceHandler("/public/**").addResourceLocations("file:D:/[工作]/培训/项目练习/星火四期专利需求/patent-system/public");
-        super.addResourceHandlers(registry);*/
+        registry.addResourceHandler("/public/**").addResourceLocations("file:D:/[工作]/培训/项目练习/星火四期专利需求/patent-system/public");
+        super.addResourceHandlers(registry);
     }
 
 
