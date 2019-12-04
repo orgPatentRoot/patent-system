@@ -1,6 +1,5 @@
 package com.suixingpay.patent.controller;
 
-
 import com.suixingpay.patent.annotation.UserLog;
 import com.suixingpay.patent.pojo.Message;
 import com.suixingpay.patent.service.NoticeService;
