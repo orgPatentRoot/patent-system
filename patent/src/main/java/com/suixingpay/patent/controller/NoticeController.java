@@ -49,6 +49,7 @@ public class NoticeController {
     @ResponseBody
     public ResponseEntity<Message> upload(@RequestParam("patentId") Integer patentId,
                                           @RequestParam("file") MultipartFile[] fils, HttpServletRequest request) {
+        System.out.println(fils.length);
         //文件参数安全判断
         for (MultipartFile file : fils) {
             if (patentId == null || file == null) {
@@ -66,6 +67,8 @@ public class NoticeController {
             }
             //获取文件的名字
             String fileName = file.getOriginalFilename();
+            System.out.println(fileName);
+            System.out.println(111);
             //文件类型仅限txt、doc、docx、ppt、pdf、rar、zip、xls、xlsx、png、jpg类型
             if (!(fileName.endsWith(".txt") || fileName.endsWith(".doc") || fileName.endsWith(".docx")
                     || fileName.endsWith(".ppt") || fileName.endsWith(".rar") || fileName.endsWith(".zip")
@@ -76,6 +79,7 @@ public class NoticeController {
                 return new ResponseEntity<Message>(message, HttpStatus.OK);
             }
         }
+        System.out.println(222);
         for (MultipartFile file : fils) {
             //获取文件的专利Id
             int filePaentId = patentId;
