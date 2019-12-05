@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 @Component
 public interface PatentMapper {
-    int insertPatent(Patent patent); //插入专利
+    Integer insertPatent(Patent patent); //插入专利
 
     int updatePatent(Patent patent); //修改专利信息
 

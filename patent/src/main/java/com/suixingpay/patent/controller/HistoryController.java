@@ -1,13 +1,13 @@
 package com.suixingpay.patent.controller;
 
+import com.suixingpay.patent.pojo.History;
 import com.suixingpay.patent.pojo.Message;
 import com.suixingpay.patent.service.HistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping(value = "/history", produces = "application/json; charset=utf-8")
@@ -21,8 +21,8 @@ public class HistoryController {
      * @return
      */
     @RequestMapping("/queryHistory")
-    public Message queryHistory() {
-        return historyService.queryHistory();
+    public Message queryHistory(@RequestBody History history) {
+        return historyService.queryHistory(history);
     }
 
     /**

@@ -16,10 +16,33 @@
 
   <select id="selectStatusIdByName" resultMap="StatusResultMap">
   select status_id from status where status_name = #{statusName}
-</select>
+  </select>
 
   <select id="queryAllStatusAfter" resultMap="StatusResultMap">
     select status_id,status_name from status where status_id between 6 and 12
   </select>
+
+<!--  动态配置-->
+
+<!--  数据维护-->
+  <select id="selectAfterByYml" resultMap="StatusResultMap">
+    select status_id,status_name from status where status_id &gt; #{patentStatusId} order by status_id
+  </select>
+
+<!--  根据配置文件读出审核前 除了新建专利（0）、发明初合（1）的所有状态-->
+  <select id="selectBeforeByYml" resultMap="StatusResultMap">
+    select status_id,status_name from status where status_id between 2 and #{patentStatusId} order by status_id
+  </select>
+
+<!--  管理员在专利池中查询除新建专利（0）外的所有状态-->
+  <select id="adminselectAllByYml" resultMap="StatusResultMap">
+    select status_id,status_name from status where status_id > 0  order by status_id
+  </select>
+
+  <!--  管理员审核时查询配置文件中 审核结点之前除发明初合（认领阶段不需要审核） 1 的所有状态-->
+  <select id="adminSelectBeforeByYml" resultMap="StatusResultMap">
+    select status_id,status_name from status where status_id &lt;= #{patentStatusId} and status_id != 1  order by status_id
+  </select>
+
 
 </mapper>

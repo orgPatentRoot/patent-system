@@ -1,8 +1,8 @@
 package com.suixingpay.patent.util;
 
+import com.suixingpay.patent.pojo.Message;
 import com.suixingpay.patent.pojo.Patent;
-
-import javax.servlet.http.HttpServletRequest;
+import com.suixingpay.patent.pojo.User;
 
 public class ParamCheck {
     public static boolean paramCheck(String... inputs) {
@@ -47,5 +47,54 @@ public class ParamCheck {
         if (patent.getIndexContent() != null) {
             patent.setIndexContent(patent.getIndexContent().replaceAll("[${}'%=]", " "));
         }
+    }
+
+    /**
+     * 普通用户登录判断
+     * @param message
+     * @return
+     */
+    public static boolean userIsLogin(Message message, User user) {
+        if (user == null || user.getUserId() == null) {
+            message.setMessage(null, 401, "用户没有登录", false);
+            return false;
+        } else {
+//            if (user.getUserId() == 1) {
+//                message.setMessage(null, 401, "不是普通用户登录！", false);
+//                return false;
+//            }
+        }
+        return true;
+    }
+
+    /**
+     * 管理员登录判断
+     * @param message
+     * @return
+     */
+    public static boolean userIsManagerLogin(Message message, User user) {
+        if (user == null || user.getUserId() == null) {
+            message.setMessage(null, 401, "用户没有登录", false);
+            return false;
+        } else {
+//            if (user.getUserId() != 1) {
+//                message.setMessage(null, 401, "不是管理员登录！", false);
+//                return false;
+//            }
+        }
+        return true;
+    }
+
+    /**
+     * id判断是否为空
+     * @param message
+     * @return
+     */
+    public static boolean idIsEmpty(Message message, Integer id) {
+        if (id == null) {
+            message.setMessage(null, 400, "Id不能为空", false);
+            return true;
+        }
+        return false;
     }
 }

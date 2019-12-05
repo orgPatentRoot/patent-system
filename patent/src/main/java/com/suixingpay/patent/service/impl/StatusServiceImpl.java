@@ -5,8 +5,11 @@ import com.suixingpay.patent.pojo.Message;
 import com.suixingpay.patent.pojo.Status;
 import com.suixingpay.patent.service.StatusService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLOutput;
 import java.util.List;
 
 @Service
@@ -14,6 +17,7 @@ public class StatusServiceImpl implements StatusService {
 
     @Autowired
     private StatusMapper statusMapper;
+
 
     /**
      * 查询所有的进度状态
@@ -65,6 +69,54 @@ public class StatusServiceImpl implements StatusService {
     public Message queryAllStatusAfter() {
         Message message = new Message();
         List<Status> list = statusMapper.queryAllStatusAfter();
+        message.setMessage(list, 200, "查询成功", true);
+        return message;
+    }
+
+    /**
+     * 根据配置文件读出审核前 除了新建专利（0）、发明初合（1）的所有状态
+     * @param patentStatusId
+     * @return
+     */
+    @Override
+    public Message selectBeforeByYml(Integer patentStatusId) {
+        Message message = new Message();
+        /*if (patentNeedCheckStatus == null) {
+            message.setMessage(null, 400, "查询失败", true);
+            return message;
+        }*/
+
+        List<Status> list = statusMapper.selectBeforeByYml(patentStatusId);
+        message.setMessage(list, 200, "查询成功", true);
+        return message;
+    }
+
+
+    /**
+     * 根据配置文件读出审核后 所有的状态
+     * @param patentStatusId
+     * @return
+     */
+    @Override
+    public Message selectAfterByYml(Integer patentStatusId) {
+        Message message = new Message();
+        List<Status> list = statusMapper.selectAfterByYml(patentStatusId);
+        message.setMessage(list, 200, "查询成功", true);
+        return message;
+    }
+
+    @Override
+    public Message adminSelectBeforeByYml(Integer patentStatusId) {
+        Message message = new Message();
+        List<Status> list = statusMapper.adminSelectBeforeByYml(patentStatusId);
+        message.setMessage(list, 200, "查询成功", true);
+        return message;
+    }
+
+    @Override
+    public Message adminselectAllByYml(Integer patentStatusId) {
+        Message message = new Message();
+        List<Status> list = statusMapper.adminselectAllByYml(patentStatusId);
         message.setMessage(list, 200, "查询成功", true);
         return message;
     }

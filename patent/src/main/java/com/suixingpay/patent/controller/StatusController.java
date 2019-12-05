@@ -3,19 +3,27 @@ package com.suixingpay.patent.controller;
 import com.suixingpay.patent.pojo.Message;
 import com.suixingpay.patent.service.StatusService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
 
+import static java.awt.SystemColor.info;
+
 
 @Controller
 @RequestMapping(value = "/status", produces = "application/json; charset=utf-8")
+@PropertySource("classpath:application.yml")
 public class StatusController {
 
     @Autowired
     private StatusService statusService;
+
+    @Value("${patentNeedCheckStatus}")
+    private Integer patentStatusId;
 
     /**
      * 查询所有的进度状态
@@ -79,5 +87,68 @@ public class StatusController {
         return message;
     }
 
+    /**
+     * 根据配置文件读出审核前 除了新建专利（0）、发明初合（1）的所有状态
+     * @return
+     */
+    @RequestMapping("/selectBeforeByYml")
+    @ResponseBody
+    public Message selectBeforeByYml(HttpServletResponse response) {
+        if (patentStatusId < 2 && patentStatusId > 11) {
+            Message message = new Message();
+            message.setMessage(null,400,"状态ID不合法",false);
+            response.setStatus(message.getStatus());
+            return message;
+        }
+        Message message = statusService.selectBeforeByYml(patentStatusId);
+        response.setStatus(message.getStatus());
+        return message;
+    }
+
+    /**
+     * 根据配置文件读出审核后 所有的状态
+     * @return
+     */
+    @RequestMapping("/selectAfterByYml")
+    @ResponseBody
+    public Message selectAfterByYml(HttpServletResponse response) {
+        if (patentStatusId < 2 && patentStatusId > 11) {
+            Message message = new Message();
+            message.setMessage(null,400,"状态ID不合法",false);
+            response.setStatus(message.getStatus());
+            return message;
+        }
+        Message message = statusService.selectAfterByYml(patentStatusId);
+        response.setStatus(message.getStatus());
+        return message;
+    }
+
+    @RequestMapping("/adminSelectAllByYml")
+    @ResponseBody
+    public Message adminselectAllByYml(HttpServletResponse response) {
+        if (patentStatusId < 2 && patentStatusId > 11) {
+            Message message = new Message();
+            message.setMessage(null,400,"状态ID不合法",false);
+            response.setStatus(message.getStatus());
+            return message;
+        }
+        Message message = statusService.adminselectAllByYml(patentStatusId);
+        response.setStatus(message.getStatus());
+        return message;
+    }
+
+    @RequestMapping("/adminSelectBeforeByYml")
+    @ResponseBody
+    public Message adminSelectBeforeByYml(HttpServletResponse response) {
+        if (patentStatusId < 2 && patentStatusId > 11) {
+            Message message = new Message();
+            message.setMessage(null,400,"状态ID不合法",false);
+            response.setStatus(message.getStatus());
+            return message;
+        }
+        Message message = statusService.adminSelectBeforeByYml(patentStatusId);
+        response.setStatus(message.getStatus());
+        return message;
+    }
 
 }

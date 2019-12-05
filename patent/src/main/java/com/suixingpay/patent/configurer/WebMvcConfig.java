@@ -12,7 +12,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     private MyHandlerIntercepter myHandlerIntercepter;
 
     //不需要拦截的路径
-    private final String[] notLoginInterceptPaths = {"/user/login"};
+    private final String[] notLoginInterceptPaths = {"/user/login","/user/nologin"};
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {

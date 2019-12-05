@@ -2,11 +2,11 @@ package com.suixingpay.patent.pojo;
 
 import lombok.Getter;
 import lombok.Setter;
-
-import javax.servlet.http.HttpServletResponse;
+import org.springframework.stereotype.Component;
 
 @Getter
 @Setter
+@Component
 public class Message {
     private Object object; //返回数据，没有设置为null
     private Integer status; //状态码:200 400 500等
