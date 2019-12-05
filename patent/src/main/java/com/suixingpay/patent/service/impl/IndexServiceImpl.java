@@ -59,7 +59,7 @@ public class IndexServiceImpl implements IndexService {
         Message message = new Message();
         index.setIndexCreateTime(new Date());
         //内容特殊字符校验
-        String regEx = "^[a-zA-Z0-9\\u4E00-\\u9FA5]+$";
+        String regEx = "^[a-zA-Z0-9\u4E00-\u9FA5]+$";
         Pattern p = Pattern.compile(regEx);
         Matcher m = p.matcher(index.getIndexContent());
         if(!m.matches()) {

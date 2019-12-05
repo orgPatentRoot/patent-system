@@ -36,7 +36,7 @@ public class ParamCheck {
      * @return
      */
     public static void patentParamReplace(Patent patent) {
-        String regEx = "[^a-zA-Z0-9\\\\u4E00-\\\\u9FA5]"; //去除数字，英文，汉字之外的内容
+        String regEx = "[^a-zA-Z0-9\\u4E00-\\u9FA5]"; //去除数字，英文，汉字之外的内容
         if (patent.getPatentName() != null) {
             patent.setPatentName(patent.getPatentName().replaceAll(regEx, " "));
         }
@@ -56,7 +56,7 @@ public class ParamCheck {
 
     //专利插入修改值特殊符号校验
     public static boolean patentParamCheck(Patent patent, String[] indexContent) {
-        String regEx = "^[a-zA-Z0-9\\u4E00-\\u9FA5]+$"; // 验证字符串 只包含汉字英文数字
+        String regEx = "^[a-zA-Z0-9\u4E00-\u9FA5]+$"; // 验证字符串 只包含汉字英文数字
         Pattern p = Pattern.compile(regEx);
         Matcher m;
         if (patent.getPatentBatch() != null) {

@@ -88,7 +88,7 @@ public class PatentServiceImpl implements PatentService {
         //统一前端时间的小时
         patent.setPatentApplyTime(DateSetting.unifyDate(patent.getPatentApplyTime()));
         //参数特殊字符检查
-        if (ParamCheck.patentParamCheck(patent, null)) {
+        if (ParamCheck.patentParamCheck(patent, new String[0])) {
             message.setMessage(null, 200, "插入内容不允许有特殊符号！", true);
             return message;
         }
