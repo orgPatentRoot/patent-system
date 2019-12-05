@@ -57,7 +57,6 @@ public class PatentController {
         response.setStatus(message.getStatus());
         return message;
     }
-
     /**
      * 通过专利ID修改专利信息（编辑功能）
      * @param changeParams

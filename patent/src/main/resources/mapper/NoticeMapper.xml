@@ -9,6 +9,9 @@
     <result column="notice_status" property="noticeStatus" jdbcType="INTEGER" />
     <result column="notice_create_time" property="noticeCreateTime" jdbcType="TIMESTAMP" />
   </resultMap>
+<!--
+交底书上传
+-->
   <insert id="insert" parameterType="com.suixingpay.patent.pojo.Notice" >
     insert into notice (notice_patent_id, notice_path,
       notice_status, notice_create_time,notice_name
@@ -16,15 +19,22 @@
        #{noticeStatus,jdbcType=INTEGER}, #{noticeCreateTime,jdbcType=TIMESTAMP},#{noticeName,jdbcType=VARCHAR}
       )
   </insert>
+<!--
+交底书逻辑删除
+-->
   <update id="delete">
     update notice set notice_status =0 where notice_id =#{noticeId};
   </update>
-
+<!--
+交底书下载
+-->
   <select id="selectNoticeByPatentId" resultMap="NoticeResultMap">
     select notice_id,notice_patent_id, notice_path,
       notice_status, notice_create_time,notice_name from notice where notice_id=#{noticeId}
   </select>
-
+<!--
+用户或者管理员查看
+-->
   <select id="selectByPatentId" resultMap="NoticeResultMap">
     select notice_id,notice_patent_id, notice_path,
       notice_status, notice_create_time,notice_name from notice where notice_patent_id=#{noticePatentId}

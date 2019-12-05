@@ -10,16 +10,32 @@ import java.util.List;
 @Component
 public interface NoticeMapper {
 
-    //上传
+    /**
+     * 文件上传
+     * @param record
+     * @return
+     */
     int insert(Notice record);
 
-    //逻辑删除
+    /**
+     * 逻辑删除
+     * @param noticeId
+     * @return
+     */
     int delete(int noticeId);
 
-    //下载
+    /**
+     * 文件下载
+     * @param noticeId
+     * @return
+     */
     Notice selectNoticeByPatentId(int noticeId);
 
-    //用户以及管理员查看
+    /**
+     * 用户以及管理员查看
+     * @param noticePatentId
+     * @return
+     */
     List<Notice> selectByPatentId(int noticePatentId);
 
 

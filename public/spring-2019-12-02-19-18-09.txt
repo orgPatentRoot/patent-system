@@ -1,2 +1,0 @@
-controller（控制）---->service（服务）------>service impl（业务） ----->dao（写一些操作）
-insert into table column（filePath）values(D:\test\王琦.txt.txt9ddcc6cf-c692-4952-8395-93f34ad08acf)
