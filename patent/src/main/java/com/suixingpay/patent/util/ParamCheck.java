@@ -5,6 +5,8 @@ import com.suixingpay.patent.pojo.Patent;
 import com.suixingpay.patent.pojo.User;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ParamCheck {
     public static boolean paramCheck(String... inputs) {
@@ -29,26 +31,89 @@ public class ParamCheck {
     }
 
     /**
-     * Patent参数安全校验替换
+     * Patent查询参数安全校验替换
      * @param patent
      * @return
      */
     public static void patentParamReplace(Patent patent) {
+        String regEx = "[^a-zA-Z0-9\\u4E00-\\u9FA5]"; //去除数字，英文，汉字之外的内容
         if (patent.getPatentName() != null) {
-            patent.setPatentName(patent.getPatentName().replaceAll("[${}'%=]", " "));
+            patent.setPatentName(patent.getPatentName().replaceAll(regEx, " "));
         }
         if (patent.getPatentCaseNum() != null) {
-            patent.setPatentCaseNum(patent.getPatentCaseNum().replaceAll("[${}'%=]", " "));
+            patent.setPatentCaseNum(patent.getPatentCaseNum().replaceAll(regEx, " "));
         }
         if (patent.getPatentApplyNum() != null) {
-            patent.setPatentApplyNum(patent.getPatentApplyNum().replaceAll("[${}'%=]", " "));
+            patent.setPatentApplyNum(patent.getPatentApplyNum().replaceAll(regEx, " "));
         }
         if (patent.getPatentInventor() != null) {
-            patent.setPatentInventor(patent.getPatentInventor().replaceAll("[${}'%=]", " "));
+            patent.setPatentInventor(patent.getPatentInventor().replaceAll(regEx, " "));
         }
         if (patent.getIndexContent() != null) {
-            patent.setIndexContent(patent.getIndexContent().replaceAll("[${}'%=]", " "));
+            patent.setIndexContent(patent.getIndexContent().replaceAll(regEx, " "));
         }
+    }
+
+    //专利插入修改值特殊符号校验
+    public static boolean patentParamCheck(Patent patent, String[] indexContent) {
+        String regEx = "^[a-zA-Z0-9\u4E00-\u9FA5]+$"; // 验证字符串 只包含汉字英文数字
+        Pattern p = Pattern.compile(regEx);
+        Matcher m;
+        if (patent.getPatentBatch() != null) {
+            m = p.matcher(patent.getPatentBatch());
+            if(!m.matches()) {
+                return true;
+            }
+        }
+        if (patent.getPatentCaseNum() != null) {
+            m = p.matcher(patent.getPatentCaseNum());
+            if(!m.matches()) {
+                return true;
+            }
+        }
+        if (patent.getPatentApplyNum() != null) {
+            m = p.matcher(patent.getPatentApplyNum());
+            if(!m.matches()) {
+                return true;
+            }
+        }
+        if (patent.getPatentTechnicalContact() != null) {
+            m = p.matcher(patent.getPatentTechnicalContact());
+            if(!m.matches()) {
+                return true;
+            }
+        }
+        if (patent.getPatentApplyPerson() != null) {
+            m = p.matcher(patent.getPatentApplyPerson());
+            if(!m.matches()) {
+                return true;
+            }
+        }
+        if (patent.getPatentName() != null) {
+            m = p.matcher(patent.getPatentName());
+            if(!m.matches()) {
+                return true;
+            }
+        }
+        if (patent.getPatentType() != null) {
+            m = p.matcher(patent.getPatentType());
+            if(!m.matches()) {
+                return true;
+            }
+        }
+        if (patent.getPatentInventor() != null) {
+            m = p.matcher(patent.getPatentInventor());
+            if(!m.matches()) {
+                return true;
+            }
+        }
+        for (String index : indexContent) {
+            m = p.matcher(index);
+            if(!m.matches()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
