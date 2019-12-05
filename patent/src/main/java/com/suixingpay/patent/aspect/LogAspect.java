@@ -20,6 +20,7 @@ import java.lang.reflect.Method;
 @Component
 public class LogAspect {
 
+    //扫描的方法
     @Pointcut("execution(* com.suixingpay.patent.controller.*.*(..))"
             + "&&!execution(* com.suixingpay.patent.controller.UserController.userLogin(..))")
     public void pointcut() {
@@ -27,16 +28,18 @@ public class LogAspect {
 
     @After("pointcut()")
     public void afterMethod(JoinPoint joinPoint) {
+        //获取request
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
         //获取用户名
-        String userName = (String) request.getSession(true).getAttribute("userName");
+        //String userName = (String) request.getSession(true).getAttribute("userName");
+        //获取session
         HttpSession session = request.getSession();
+        //获取登陆的用户
         User user = (User) session.getAttribute("user");
         //获取专利名
         String patentId = request.getParameter("patentId");
-
-        if(patentId == null){
+        if(patentId == null) {
             patentId = session.getAttribute("patentId") == null ? null : (String) session.getAttribute("patentId");
         }
         //从切面织入点处通过反射机制获取织入点处的方法

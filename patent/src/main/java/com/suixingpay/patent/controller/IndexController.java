@@ -68,9 +68,11 @@ public class IndexController {
         return message;
     }
 
+
     /**
      * 用户删除一条指标
      * @param indexId
+     * @param response
      * @return
      */
     @UserLog("删除指标！")

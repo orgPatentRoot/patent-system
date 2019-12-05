@@ -1,7 +1,6 @@
 package com.suixingpay.patent.aspect;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.suixingpay.patent.annotation.UserLog;
 import com.suixingpay.patent.pojo.History;
 import com.suixingpay.patent.pojo.User;
@@ -24,29 +23,31 @@ import java.util.Date;
 @Component
 public class UserLogAspect {
 
-    ObjectMapper objectMapper = new ObjectMapper();
-
     @Autowired
     private HistoryService historyService;
 
     @Autowired
     private History history;
 
+    //扫描的方法
     @Pointcut("@annotation(com.suixingpay.patent.annotation.UserLog)")
     public void logPointCut() {
     }
 
     @After("logPointCut()")
     public void saveSysLog(JoinPoint joinPoint) {
+        //获取request
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpSession session = attributes.getRequest().getSession();
+        //获取用户
         User user = (User) session.getAttribute("user");
         //获取专利ID
         String patentIds = attributes.getRequest().getParameter("patentId");
 
-        if(patentIds == null) {
+        if (patentIds == null) {
             patentIds = session.getAttribute("patentId") == null ? null : (String) session.getAttribute("patentId");
         }
+        //获取切入点
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
 
         //获取切入点所在的方法
@@ -65,9 +66,10 @@ public class UserLogAspect {
             history.setHistoryUser(user.getUserName());
             history.setHistoryCreateTime(new Date());
 
+            //将操作记录存入数据库
             historyService.insertHistory(history);
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.getMessage();
         }
     }

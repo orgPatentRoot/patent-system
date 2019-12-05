@@ -14,11 +14,15 @@ public class MyHandlerIntercepter implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
 
+        //获取session
         HttpSession session = request.getSession();
+        //获取用户
         User user = (User) session.getAttribute("user");
-        if(user != null){
+        //判断是否登录
+        if (user != null) {
             return true;
-        }else {
+        } else {
+            //没登录则返回登录页
             response.setHeader("Content-Type", "text/html;charset=UTF-8");
             response.sendRedirect(request.getContextPath() + "/user/nologin");
             return false;
