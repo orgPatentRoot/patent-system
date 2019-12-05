@@ -92,6 +92,188 @@ public class PatentController {
     }
 
     /**
+     * 管理员查看所有专利
+     * @param checkParams
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping("/selectAllPatent")
+    public Message selectAllPatentController(
+            @RequestBody PatentCheckParams checkParams,
+            HttpServletRequest request, HttpServletResponse response) {
+        //从session获取用户信息
+        User user = (User) request.getSession().getAttribute("user");
+        //判断用户是否管理员登录
+        if (!ParamCheck.userIsManagerLogin(message, user)) {
+            response.setStatus(message.getStatus());
+            return message;
+        }
+        //将前端筛选参数封装成Patent对象
+        Patent patentCondition = checkParams.changeToPatent();
+        return patentService.selectAllPatentService(patentCondition);
+    }
+
+    /**
+     * 管理员查看指标维度
+     * @param checkParams
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping("/selectAllIndexWithPatent")
+    public Message selectAllIndexWithPatentController(
+            @RequestBody PatentCheckParams checkParams,
+            HttpServletRequest request, HttpServletResponse response) {
+        //从session获取用户信息
+        User user = (User) request.getSession().getAttribute("user");
+        //判断用户是否管理员登录
+        if (!ParamCheck.userIsManagerLogin(message, user)) {
+            response.setStatus(message.getStatus());
+            return message;
+        }
+        //将前端筛选参数封装成Patent对象
+        Patent patentCondition = checkParams.changeToPatent();
+        return patentService.selectPatentWithIndexService(patentCondition);
+    }
+
+    /**
+     * 用户查看专利池查未认领的专利
+     * @param checkParams
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping("/selectAllPatentByNoWriter")
+    public Message selectAllPatentNoWriterController(
+            @RequestBody PatentCheckParams checkParams,
+            HttpServletRequest request, HttpServletResponse response) {
+        //从session获取用户信息
+        User user = (User) request.getSession().getAttribute("user");
+        //判断是否普通用户登录
+        if (!ParamCheck.userIsLogin(message, user)) {
+            response.setStatus(message.getStatus());
+            return message;
+        }
+        //将前端筛选参数封装成Patent对象
+        Patent patentCondition = checkParams.changeToPatent();
+        return patentService.selectAllPatentNoWriterService(patentCondition);
+    }
+
+    /**
+     * 个人新建专利模块筛选查询
+     * @param checkParams
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping("/selectPatentByCreatePerson")
+    public Message selectPatentByCreatePersonController(
+            @RequestBody PatentCheckParams checkParams,
+            HttpServletRequest request, HttpServletResponse response) {
+        //从session获取用户信息
+        User user = (User) request.getSession().getAttribute("user");
+        //判断是否普通用户登录
+        if (!ParamCheck.userIsLogin(message, user)) {
+            response.setStatus(message.getStatus());
+            return message;
+        }
+        //将前端筛选参数封装成Patent对象
+        Patent patentCondition = checkParams.changeToPatent();
+        patentCondition.setPatentCreatePerson(user.getUserId()); //设置创建人筛选条件
+        return patentService.selectPatentByCreatePersonService(patentCondition);
+    }
+
+    /**
+     * 个人认领专利审核阶段模块筛选查询
+     * @param checkParams
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping("/selectPatentByWriterNeekCheck")
+    public Message selectPatentByWriterController(
+            @RequestBody PatentCheckParams checkParams,
+            HttpServletRequest request, HttpServletResponse response) {
+        //从session获取用户信息
+        User user = (User) request.getSession().getAttribute("user");
+        //判断是否普通用户登录
+        if (!ParamCheck.userIsLogin(message, user)) {
+            response.setStatus(message.getStatus());
+            return message;
+        }
+        //将前端筛选参数封装成Patent对象
+        Patent patentCondition = checkParams.changeToPatent();
+        patentCondition.setPatentWriter(user.getUserId()); //设置撰写人筛选条件
+        return patentService.selectPatentByWriterService(patentCondition);
+    }
+
+    /**
+     * 个人认领专利数据维护阶段模块筛选查询
+     * @param checkParams
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping("/selectPatentByWriterNoCheck")
+    public Message selectPatentByWriterNoCheckController(
+            @RequestBody PatentCheckParams checkParams,
+            HttpServletRequest request, HttpServletResponse response) {
+        //从session获取用户信息
+        User user = (User) request.getSession().getAttribute("user");
+        //判断是否普通用户登录
+        if (!ParamCheck.userIsLogin(message, user)) {
+            response.setStatus(message.getStatus());
+            return message;
+        }
+        //将前端筛选参数封装成Patent对象
+        Patent patentCondition = checkParams.changeToPatent();
+        patentCondition.setPatentWriter(user.getUserId()); //设置撰写人筛选条件
+        return patentService.selectPatentByWriterNoCheckService(patentCondition);
+    }
+
+    /**
+     * 通过专利Id查询专利信息
+     * @param patentId
+     * @param response
+     * @return
+     */
+    @RequestMapping("/selectPatentByPatentId")
+    public Message selectPatentByIDController(
+            Integer patentId,
+            HttpServletResponse response) {
+        //判断专利Id不能为空
+        if (ParamCheck.idIsEmpty(message, patentId)) {
+            response.setStatus(message.getStatus());
+            return message;
+        }
+        Patent patentCondition = new Patent(); //重置筛选条件
+        patentCondition.setPatentId(patentId); //设置专利ID筛选条件
+        return patentService.selectPatentByIDService(patentCondition);
+    }
+
+    /**
+     * 查找所有待审核的专利信息
+     * @param checkParams
+     * @return
+     */
+    @RequestMapping("/selectExamine")
+    public Message selectExamineController(
+            @RequestBody PatentCheckParams checkParams,
+            HttpServletRequest request, HttpServletResponse response) {
+        //从session获取用户信息
+        User user = (User) request.getSession().getAttribute("user");
+        //判断用户是否管理员登录
+        if (!ParamCheck.userIsManagerLogin(message, user)) {
+            response.setStatus(message.getStatus());
+            return message;
+        }
+        //将前端参数形成筛选条件
+        Patent patentCondition = checkParams.changeToPatent();
+        return patentService.selectExamineService(patentCondition);
+    }
+
+    /**
      * 通过专利ID修改专利撰写人信息（认领功能）
      * @param patentId
      * @param request
@@ -122,215 +304,6 @@ public class PatentController {
         patentCondition.setPatentId(patentId);
         patentCondition.setPatentWriter(user.getUserId()); //通过session设置撰写人id
         return patentService.updatePatentWriterByIdService(patentCondition);
-    }
-
-    /**
-     * 管理员查看所有专利
-     * @param checkParams
-     * @param request
-     * @param response
-     * @return
-     */
-    @RequestMapping("/selectAllPatent")
-    public Message selectAllPatentController(
-            @RequestBody PatentCheckParams checkParams,
-            HttpServletRequest request, HttpServletResponse response) {
-        //从session获取用户信息
-        User user = (User) request.getSession().getAttribute("user");
-        //判断用户是否管理员登录
-        if (!ParamCheck.userIsManagerLogin(message, user)) {
-            response.setStatus(message.getStatus());
-            return message;
-        }
-        //将前端筛选参数封装成Patent对象
-        Patent patentCondition = checkParams.changeToPatent();
-        patentCondition.setSpecialCondition("patent_status_id != 0");
-        List<Patent> list = patentService.selectPatentService(patentCondition);
-        message.setMessage(list, 200, "查询成功！", true);
-        return message;
-    }
-
-    /**
-     * 管理员查看指标维度
-     * @param checkParams
-     * @param request
-     * @param response
-     * @return
-     */
-    @RequestMapping("/selectAllIndexWithPatent")
-    public Message selectAllIndexWithPatentController(
-            @RequestBody PatentCheckParams checkParams,
-            HttpServletRequest request, HttpServletResponse response) {
-        //从session获取用户信息
-        User user = (User) request.getSession().getAttribute("user");
-        //判断用户是否管理员登录
-        if (!ParamCheck.userIsManagerLogin(message, user)) {
-            response.setStatus(message.getStatus());
-            return message;
-        }
-        //将前端筛选参数封装成Patent对象
-        Patent patentCondition = checkParams.changeToPatent();
-        patentCondition.setSpecialCondition("patent_status_id != 0");
-        List<Patent> list = patentService.selectPatentWithIndexService(patentCondition);
-        message.setMessage(list, 200, "查询成功！", true);
-        return message;
-    }
-
-    /**
-     * 用户查看专利池查未认领的专利
-     * @param checkParams
-     * @param request
-     * @param response
-     * @return
-     */
-    @RequestMapping("/selectAllPatentByNoWriter")
-    public Message selectAllPatentNoWriterController(
-            @RequestBody PatentCheckParams checkParams,
-            HttpServletRequest request, HttpServletResponse response) {
-        //从session获取用户信息
-        User user = (User) request.getSession().getAttribute("user");
-        //判断是否普通用户登录
-        if (!ParamCheck.userIsLogin(message, user)) {
-            response.setStatus(message.getStatus());
-            return message;
-        }
-        //将前端筛选参数封装成Patent对象
-        Patent patentCondition = checkParams.changeToPatent();
-        patentCondition.setPatentStatusId(1); //设置专利进度筛选条件--1、发明初合
-        patentCondition.setPatentWriter(0); //设置撰写人为0，未认领
-        List<Patent> list = patentService.selectPatentService(patentCondition);
-        message.setMessage(list, 200, "查询成功！", true);
-        return message;
-    }
-
-    /**
-     * 个人新建专利模块筛选查询
-     * @param checkParams
-     * @param request
-     * @param response
-     * @return
-     */
-    @RequestMapping("/selectPatentByCreatePerson")
-    public Message selectPatentByCreatePersonController(
-            @RequestBody PatentCheckParams checkParams,
-            HttpServletRequest request, HttpServletResponse response) {
-        //从session获取用户信息
-        User user = (User) request.getSession().getAttribute("user");
-        //判断是否普通用户登录
-        if (!ParamCheck.userIsLogin(message, user)) {
-            response.setStatus(message.getStatus());
-            return message;
-        }
-        //将前端筛选参数封装成Patent对象
-        Patent patentCondition = checkParams.changeToPatent();
-        patentCondition.setPatentStatusId(0); //设置专利进度筛选条件--新建专利进度
-        patentCondition.setPatentCreatePerson(user.getUserId()); //设置创建人筛选条件
-        List<Patent> list = patentService.selectPatentService(patentCondition);
-        message.setMessage(list, 200, "查询成功！", true);
-        return message;
-    }
-
-    /**
-     * 个人认领专利审核阶段模块筛选查询
-     * @param checkParams
-     * @param request
-     * @param response
-     * @return
-     */
-    @RequestMapping("/selectPatentByWriterNeekCheck")
-    public Message selectPatentByWriterController(
-            @RequestBody PatentCheckParams checkParams,
-            HttpServletRequest request, HttpServletResponse response) {
-        //从session获取用户信息
-        User user = (User) request.getSession().getAttribute("user");
-        //判断是否普通用户登录
-        if (!ParamCheck.userIsLogin(message, user)) {
-            response.setStatus(message.getStatus());
-            return message;
-        }
-        //将前端筛选参数封装成Patent对象
-        Patent patentCondition = checkParams.changeToPatent();
-        patentCondition.setPatentWriter(user.getUserId()); //设置撰写人筛选条件
-        //设置需要的审核进度
-        patentCondition.setSpecialCondition("patent_status_id not in(0,1) and patent_status_id <= " + patentStatusId);
-        List<Patent> list = patentService.selectPatentService(patentCondition);
-        message.setMessage(list, 200, "查询成功！", true);
-        return message;
-    }
-
-    /**
-     * 个人认领专利数据维护阶段模块筛选查询
-     * @param checkParams
-     * @param request
-     * @param response
-     * @return
-     */
-    @RequestMapping("/selectPatentByWriterNoCheck")
-    public Message selectPatentByConditionController(
-            @RequestBody PatentCheckParams checkParams,
-            HttpServletRequest request, HttpServletResponse response) {
-        //从session获取用户信息
-        User user = (User) request.getSession().getAttribute("user");
-        //判断是否普通用户登录
-        if (!ParamCheck.userIsLogin(message, user)) {
-            response.setStatus(message.getStatus());
-            return message;
-        }
-        //将前端筛选参数封装成Patent对象
-        Patent patentCondition = checkParams.changeToPatent();
-        patentCondition.setPatentWriter(user.getUserId()); //设置撰写人筛选条件
-        patentCondition.setSpecialCondition("patent_status_id > " + patentStatusId); //设置数据维护的进度
-        List<Patent> list = patentService.selectPatentService(patentCondition);
-        message.setMessage(list, 200, "查询成功！", true);
-        return message;
-    }
-
-    /**
-     * 通过专利Id查询专利信息
-     * @param patentId
-     * @param response
-     * @return
-     */
-    @RequestMapping("/selectPatentByPatentId")
-    public Message selectPatentByIDController(
-            Integer patentId,
-            HttpServletResponse response) {
-        //判断专利Id不能为空
-        if (ParamCheck.idIsEmpty(message, patentId)) {
-            response.setStatus(message.getStatus());
-            return message;
-        }
-        Patent patentCondition = new Patent(); //重置筛选条件
-        patentCondition.setPatentId(patentId); //设置专利ID筛选条件
-        List<Patent> list = patentService.selectPatentService(patentCondition);
-        message.setMessage(list, 200, "查询成功！", true);
-        return message;
-    }
-
-    /**
-     * 查找所有待审核的专利信息
-     * @param checkParams
-     * @return
-     */
-    @RequestMapping("/selectExamine")
-    public Message selectExamine(
-            @RequestBody PatentCheckParams checkParams,
-            HttpServletRequest request, HttpServletResponse response) {
-        //从session获取用户信息
-        User user = (User) request.getSession().getAttribute("user");
-        //判断用户是否管理员登录
-        if (!ParamCheck.userIsManagerLogin(message, user)) {
-            response.setStatus(message.getStatus());
-            return message;
-        }
-        //将前端参数形成筛选条件
-        Patent patentCondition = checkParams.changeToPatent();
-        patentCondition.setPatentSign(1); //设置审核状态为审核中
-        //设置需要的审核进度
-        patentCondition.setSpecialCondition("patent_status_id not in(1) and patent_status_id <= " + patentStatusId);
-        List<Patent> list = patentService.selectPatentService(patentCondition);
-        message.setMessage(list, 200, "查询成功！", true);
-        return message;
     }
 
     /**
@@ -488,7 +461,7 @@ public class PatentController {
             response.setStatus(message.getStatus());
             return message;
         }
-        List<Patent> list = patentService.selectPatentWithIndexService(patent);
+        List<Patent> list = (List<Patent>) patentService.selectPatentWithIndexService(patent).getObject();
         patentService.exportDeviceModelMsg(response, "patentWithIndexExcel", list);
         message.setMessage("http://172.16.43.117:8080/patentWithIndexExcel.xls", 200, "导出成功！", true);
         return message;
