@@ -59,11 +59,12 @@ public class IndexServiceImpl implements IndexService {
         Message message = new Message();
         index.setIndexCreateTime(new Date());
         //内容特殊字符校验
-        String regEx = "^[a-zA-Z0-9\u4E00-\u9FA5]+$";
+        //指标只允许输入汉字、英文、数字、+*/=!@#$^&(),.;:'"！……{}_|“”，。《》<>~（）、-
+        String regEx = "^[a-zA-Z0-9\u4E00-\u9FA5+*/=!@#$^&(),.;:'\"！……{}_|“”，。《》<>~（）、-]+$";
         Pattern p = Pattern.compile(regEx);
         Matcher m = p.matcher(index.getIndexContent());
         if(!m.matches()) {
-            message.setMessage(null, 200, "插入指标不允许有特殊符号", true);
+            message.setMessage(null, 200, "指标只允许输入汉字、英文、数字、+、-、*、/、=", true);
             return message;
         }
         if (indexMapper.insertIndexContent(index) != 0) {

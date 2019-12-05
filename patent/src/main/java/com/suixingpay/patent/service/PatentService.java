@@ -26,19 +26,11 @@ public interface PatentService {
     Message updatePatentServiceByIdService(Patent patent);
 
     /**
-     * 通过专利Id修改撰写人信息（认领功能）
+     * 管理员查看所有专利
      * @param patent
      * @return
      */
-    Message updatePatentWriterByIdService(Patent patent);
-
-    /**
-     * 查询专利信息
-     * 通过专利id查询、案件文号查询、申请号查询、申请日期查询、进度查询、发明人姓名查询、创建人id查询、撰写人id查询、其他条件
-     * @param patent
-     * @return
-     */
-    List<Patent> selectPatentService(Patent patent);
+    Message selectAllPatentService(Patent patent);
 
     /**
      * 指标维度查询
@@ -46,7 +38,55 @@ public interface PatentService {
      * @param patent
      * @return
      */
-    List<Patent> selectPatentWithIndexService(Patent patent);
+    Message selectPatentWithIndexService(Patent patent);
+
+    /**
+     * 用户查看专利池查未认领的专利
+     * @param patent
+     */
+    Message selectAllPatentNoWriterService(Patent patent);
+
+    /**
+     * 个人新建专利模块筛选查询
+     * @param patent
+     * @return
+     */
+    Message selectPatentByCreatePersonService(Patent patent);
+
+    /**
+     * 个人认领专利审核阶段模块筛选查询
+     * @param patent
+     * @return
+     */
+    Message selectPatentByWriterService(Patent patent);
+
+    /**
+     * 个人认领专利数据维护阶段模块筛选查询
+     * @param patent
+     * @return
+     */
+    Message selectPatentByWriterNoCheckService(Patent patent);
+
+    /**
+     * 通过专利Id查询专利信息
+     * @param patent
+     * @return
+     */
+    Message selectPatentByIDService(Patent patent);
+
+    /**
+     * 查找所有待审核的专利信息
+     * @param patent
+     * @return
+     */
+    Message selectExamineService(Patent patent);
+
+    /**
+     * 通过专利Id修改撰写人信息（认领功能）
+     * @param patent
+     * @return
+     */
+    Message updatePatentWriterByIdService(Patent patent);
 
     /**
      * 审核通过功能

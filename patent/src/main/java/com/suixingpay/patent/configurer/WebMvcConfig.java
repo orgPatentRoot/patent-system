@@ -12,17 +12,20 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     private MyHandlerIntercepter myHandlerIntercepter;
 
     //不需要拦截的路径
-    private final String[] notLoginInterceptPaths = {"/user/login","/user/nologin"};
+    private final String[] notLoginInterceptPaths = {"/user/login", "/user/nologin"};
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-       registry.addInterceptor(myHandlerIntercepter).addPathPatterns("/**")
+         //添加拦截
+        registry.addInterceptor(myHandlerIntercepter).addPathPatterns("/**")
                        .excludePathPatterns(notLoginInterceptPaths);
     }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/public/**").addResourceLocations("file:D:/[工作]/培训/项目练习/星火四期专利需求/patent-system/public");
+        //添加静态文件
+        registry.addResourceHandler("/public/**")
+                .addResourceLocations("file:D:/[工作]/培训/项目练习/星火四期专利需求/patent-system/public");
         super.addResourceHandlers(registry);
     }
 

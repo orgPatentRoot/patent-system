@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -49,7 +50,7 @@ public class PatentServiceImpl implements PatentService {
         patent.setPatentApplyTime(DateSetting.unifyDate(patent.getPatentApplyTime()));
         //参数特殊字符检查
         if (ParamCheck.patentParamCheck(patent, indexContent)) {
-            message.setMessage(null, 200, "插入内容不允许有特殊符号！", true);
+            message.setMessage(null, 200, "插入内容不允许有空格或百分号！", true);
             return message;
         }
         //设置专利新建的基本信息
@@ -60,17 +61,17 @@ public class PatentServiceImpl implements PatentService {
             if (patentMapper.insertPatent(patent) == 0) {
                 throw new RuntimeException("新建专利异常");
             }
-            for(String str : indexContent) {
+            for (String str : indexContent) {
                 Index index = new Index();
                 index.setIndexPatentId(patent.getPatentId());
                 index.setIndexContent(str);
                 index.setIndexCreateTime(new Date());
-                if(indexMapper.insertIndexContent(index) == 0) {
+                if (indexMapper.insertIndexContent(index) == 0) {
                     throw new RuntimeException("新建专利插入指标异常");
                 }
             }
             message.setMessage(null, 200, "新建专利成功！", true);
-        }catch (Exception e) {
+        } catch (Exception e) {
             //异常事务回滚
             message.setMessage(null, 200, "新建专利失败！", false);
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -89,7 +90,7 @@ public class PatentServiceImpl implements PatentService {
         patent.setPatentApplyTime(DateSetting.unifyDate(patent.getPatentApplyTime()));
         //参数特殊字符检查
         if (ParamCheck.patentParamCheck(patent, new String[0])) {
-            message.setMessage(null, 200, "插入内容不允许有特殊符号！", true);
+            message.setMessage(null, 200, "编辑内容不允许有空格或百分号！", false);
             return message;
         }
         //设置条件不允许修改审核中的数据
@@ -99,6 +100,173 @@ public class PatentServiceImpl implements PatentService {
             return message;
         }
         message.setMessage(null, 400, "非待审核状态，不允许修改！", false);
+        return message;
+    }
+
+
+    /**
+     * 管理员查看所有专利
+     * @param patent
+     * @return
+     */
+    @Override
+    public Message selectAllPatentService(Patent patent) {
+        //统一前端时间的小时
+        patent.setPatentApplyTime(DateSetting.unifyDate(patent.getPatentApplyTime()));
+        //参数特殊字符检查
+        if (ParamCheck.patentParamCheck(patent, new String[0])) {
+            message.setMessage(new ArrayList<>(), 200, "查询条件不允许有空格或百分号！", false);
+            return message;
+        }
+        //专利池专利不包含新建专利
+        patent.setSpecialCondition("patent_status_id != 0");
+        List<Patent> list = patentMapper.selectPatent(patent);
+        message.setMessage(list, 200, "查询成功！", true);
+        return message;
+    }
+
+    /**
+     * 指标维度查询
+     * 通过指标内容、专利名称、案件文号查询、申请号查询、申请日期查询、进度查询、发明人姓名查询
+     * @param patent
+     * @return
+     */
+    @Override
+    public Message selectPatentWithIndexService(Patent patent) {
+        //统一前端时间的小时
+        patent.setPatentApplyTime(DateSetting.unifyDate(patent.getPatentApplyTime()));
+        //参数特殊字符检查
+        if (ParamCheck.patentParamCheck(patent, new String[0])) {
+            message.setMessage(new ArrayList<>(), 200, "查询条件不允许有空格或百分号！", false);
+            return message;
+        }
+        //指标维度不包含新建专利
+        patent.setSpecialCondition("patent_status_id != 0");
+        List<Patent> list = patentMapper.selectPatentWithIndex(patent);
+        message.setMessage(list, 200, "查询成功！", true);
+        return message;
+    }
+
+    /**
+     * 用户查看专利池查未认领的专利
+     * @param patent
+     */
+    @Override
+    public Message selectAllPatentNoWriterService(Patent patent) {
+        //统一前端时间的小时
+        patent.setPatentApplyTime(DateSetting.unifyDate(patent.getPatentApplyTime()));
+        //参数特殊字符检查
+        if (ParamCheck.patentParamCheck(patent, new String[0])) {
+            message.setMessage(new ArrayList<>(), 200, "查询条件不允许有空格或百分号！", false);
+            return message;
+        }
+        patent.setPatentStatusId(1); //设置专利进度筛选条件--1、发明初合
+        patent.setPatentWriter(0); //设置撰写人为0，未认领
+        List<Patent> list = patentMapper.selectPatent(patent);
+        message.setMessage(list, 200, "查询成功！", true);
+        return message;
+    }
+
+    /**
+     * 个人新建专利模块筛选查询
+     * @param patent
+     * @return
+     */
+    @Override
+    public Message selectPatentByCreatePersonService(Patent patent) {
+        //统一前端时间的小时
+        patent.setPatentApplyTime(DateSetting.unifyDate(patent.getPatentApplyTime()));
+        //参数特殊字符检查
+        if (ParamCheck.patentParamCheck(patent, new String[0])) {
+            message.setMessage(new ArrayList<>(), 200, "查询条件不允许有空格或百分号！", false);
+            return message;
+        }
+        patent.setPatentStatusId(0); //设置专利进度筛选条件--新建专利进度
+        List<Patent> list = patentMapper.selectPatent(patent);
+        message.setMessage(list, 200, "查询成功！", true);
+        return message;
+    }
+
+    /**
+     * 个人认领专利审核阶段模块筛选查询
+     * @param patent
+     * @return
+     */
+    @Override
+    public Message selectPatentByWriterService(Patent patent) {
+        //统一前端时间的小时
+        patent.setPatentApplyTime(DateSetting.unifyDate(patent.getPatentApplyTime()));
+        //参数特殊字符检查
+        if (ParamCheck.patentParamCheck(patent, new String[0])) {
+            message.setMessage(new ArrayList<>(), 200, "查询条件不允许有空格或百分号！", false);
+            return message;
+        }
+        //设置需要的审核进度
+        patent.setSpecialCondition("patent_status_id not in(0,1) and patent_status_id <= " + patentStatusId);
+        List<Patent> list = patentMapper.selectPatent(patent);
+        message.setMessage(list, 200, "查询成功！", true);
+        return message;
+    }
+
+    /**
+     * 个人认领专利数据维护阶段模块筛选查询
+     * @param patent
+     * @return
+     */
+    @Override
+    public Message selectPatentByWriterNoCheckService(Patent patent) {
+        //统一前端时间的小时
+        patent.setPatentApplyTime(DateSetting.unifyDate(patent.getPatentApplyTime()));
+        //参数特殊字符检查
+        if (ParamCheck.patentParamCheck(patent, new String[0])) {
+            message.setMessage(new ArrayList<>(), 200, "查询条件不允许有空格或百分号！", false);
+            return message;
+        }
+        patent.setSpecialCondition("patent_status_id > " + patentStatusId); //设置数据维护的进度
+        List<Patent> list = patentMapper.selectPatent(patent);
+        message.setMessage(list, 200, "查询成功！", true);
+        return message;
+    }
+
+    /**
+     * 通过专利Id查询专利信息
+     * @param patent
+     * @return
+     */
+    @Override
+    public Message selectPatentByIDService(Patent patent) {
+        //统一前端时间的小时
+        patent.setPatentApplyTime(DateSetting.unifyDate(patent.getPatentApplyTime()));
+        //参数特殊字符检查
+        if (ParamCheck.patentParamCheck(patent, new String[0])) {
+            message.setMessage(new ArrayList<>(), 200, "查询条件不允许有空格或百分号！", false);
+            return message;
+        }
+        List<Patent> list = patentMapper.selectPatent(patent);
+        message.setMessage(list, 200, "查询成功！", true);
+        return message;
+    }
+
+    /**
+     * 查找所有待审核的专利信息
+     * @param patent
+     * @return
+     */
+    @Override
+    public Message selectExamineService(Patent patent) {
+        //统一前端时间的小时
+        patent.setPatentApplyTime(DateSetting.unifyDate(patent.getPatentApplyTime()));
+        //参数特殊字符检查
+        if (ParamCheck.patentParamCheck(patent, new String[0])) {
+            message.setMessage(new ArrayList<>(), 200, "查询条件不允许有空格或百分号！", false);
+            return message;
+        }
+        //设置审核状态为审核中
+        patent.setPatentSign(1);
+        //设置需要的审核进度
+        patent.setSpecialCondition("patent_status_id not in(1) and patent_status_id <= " + patentStatusId);
+        List<Patent> list = patentMapper.selectPatent(patent);
+        message.setMessage(list, 200, "查询成功！", true);
         return message;
     }
 
@@ -116,36 +284,6 @@ public class PatentServiceImpl implements PatentService {
         }
         message.setMessage(null, 400, "条件不符，认领失败！", false);
         return message;
-    }
-
-    /**
-     * 查询专利信息
-     * 通过专利id查询、案件文号查询、申请号查询、申请日期查询、进度查询、发明人姓名查询、创建人id查询、撰写人id查询、其他条件
-     * @param patent
-     * @return
-     */
-    @Override
-    public List<Patent> selectPatentService(Patent patent) {
-        //统一前端时间的小时
-        patent.setPatentApplyTime(DateSetting.unifyDate(patent.getPatentApplyTime()));
-        //安全参数替换，将特殊字符替换为空格
-        ParamCheck.patentParamReplace(patent);
-        return patentMapper.selectPatent(patent);
-    }
-
-    /**
-     * 指标维度查询
-     * 通过指标内容、专利名称、案件文号查询、申请号查询、申请日期查询、进度查询、发明人姓名查询
-     * @param patent
-     * @return
-     */
-    @Override
-    public List<Patent> selectPatentWithIndexService(Patent patent) {
-        //统一前端时间的小时
-        patent.setPatentApplyTime(DateSetting.unifyDate(patent.getPatentApplyTime()));
-        //安全参数替换，将特殊字符替换为空格
-        ParamCheck.patentParamReplace(patent);
-        return patentMapper.selectPatentWithIndex(patent);
     }
 
     /**

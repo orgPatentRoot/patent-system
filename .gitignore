@@ -6,7 +6,7 @@ build/
 .project
 .git/
 .svn*
-catalina*
+catalina*   
 /logs/
 .idea/
 *.log

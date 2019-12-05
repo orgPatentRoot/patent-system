@@ -1,141 +1,52 @@
 package com.suixingpay.patent.controller;
 
+
 import com.suixingpay.patent.annotation.UserLog;
 import com.suixingpay.patent.pojo.Message;
 import com.suixingpay.patent.service.NoticeService;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.UnsupportedEncodingException;
 import java.net.UnknownHostException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import com.suixingpay.patent.pojo.Notice;
 
-@RestController
-@RequestMapping("/file")
-@Slf4j
+@RestController         //返回json
+@RequestMapping("/file")//配置映射
 public class NoticeController {
-    //使用指定类初始化日志对象,在日志输出的时候，可以打印出日志信息所在类
-    private static final Logger LOGGER = LoggerFactory.getLogger(NoticeController.class);
-    /**
-     * 文件上传
-     * 要一个文件以及文件的专利id
-     */
+
     @Autowired
     private NoticeService noticeService;
     private Message message = new Message();
 
-    @Value("${visualpath}")
-    private String visualPath;
+
 
     @UserLog("上传交底书！")
     @RequestMapping("/upload")
     @ResponseBody
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
+
+
+
+    /**
+     * 交底书上传
+     */
     public ResponseEntity<Message> upload(@RequestParam("patentId") Integer patentId,
                                           @RequestParam("file") MultipartFile[] fils, HttpServletRequest request) {
-        //文件参数安全判断
-        if(fils.length == 0) {
-            message.setMessage(null, 200,   "没有文件上传", false);
-            return new ResponseEntity<Message>(message, HttpStatus.OK);
-        }
-        for (MultipartFile file : fils) {
-            if (patentId == null || file == null) {
-                message.setMessage(null, 200,   "没有文件ID或者文件上传", false);
-                return new ResponseEntity<Message>(message, HttpStatus.OK);
-            }
-            if  (file.isEmpty()) {
-                message.setMessage(null, 200, "没有选择上传文件", false);
-                return new ResponseEntity<Message>(message, HttpStatus.OK);
-            }
-            if  (file.getSize() > 1024 * 1024 * 5) {
-                message.setMessage(null, 200, "文档不能超过5M", false);
-                return new ResponseEntity<Message>(message, HttpStatus.OK);
-            }
-            //获取文件的名字
-            String fileName = file.getOriginalFilename();
-            //文件类型仅限txt、doc、docx、ppt、pdf、rar、zip、xls、xlsx、png、jpg类型
-            if (!(fileName.endsWith(".txt") || fileName.endsWith(".doc") || fileName.endsWith(".docx")
-                    || fileName.endsWith(".ppt") || fileName.endsWith(".rar") || fileName.endsWith(".zip")
-                    || fileName.endsWith(".xls") || fileName.endsWith(".xlsx") || fileName.endsWith(".xls")
-                    || fileName.endsWith(".xlsx") || fileName.endsWith(".png") || fileName.endsWith(".jpg")
-                    || fileName.endsWith(".pdf"))) {
-                message.setMessage(null, 200, "文件类型仅限txt、doc、docx、ppt、pdf、rar、zip、xls、xlsx、png、jpg类型！", false);
-                return new ResponseEntity<Message>(message, HttpStatus.OK);
-            }
-        }
-        for (MultipartFile file : fils) {
-            //获取文件的专利Id
-            int filePaentId = patentId;
-            //获取文件的名字
-            String fileName = file.getOriginalFilename();
-            System.out.println(fileName);
-            String fileName1 = fileName.substring(fileName.lastIndexOf("."));
-            Date date = new Date();
-
-            DateFormat format = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-
-            String str  =  format.format(date);
-            fileName = fileName.substring(0, fileName.lastIndexOf(".")) + "-" + str + fileName1;
-
-            //        //把上传的文件拼接并且放在项目的路径下
-            String projectUrl = request.getSession().getServletContext().getRealPath("/");
-            System.out.println(projectUrl);
-            String path = projectUrl  + fileName;
-            System.out.println(path);
-            String url = visualPath + fileName;
-            System.out.println(url);
-            File dest = new File(path);
-            if (!dest.getParentFile().exists()) { //判断文件父目录是否存在
-                dest.getParentFile().mkdir();
-            }
-            //开始上传到项目路径下，并且上传到数据库
-            try {
-                BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(dest));
-                out.write(file.getBytes());
-                out.flush();
-                out.close();
-                //成功后打印到控制台
-                LOGGER.info("上传成功");
-                //上传到数据库
-                Notice files = new Notice();
-                files.setNoticeCreateTime(new Date());
-                files.setNoticeName(file.getOriginalFilename());
-                files.setNoticePatentId(filePaentId);
-                files.setNoticePath(url);
-                files.setNoticeStatus(1);
-                noticeService.insert(files);
-
-            } catch (IOException e) {
-                LOGGER.error(e.toString(), e);
-                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-                message.setMessage(null, 200, "上传失败", true);
-                return new ResponseEntity<Message>(message, HttpStatus.OK);
-            }
-        }
-        message.setMessage(null, 200, "上传成功", true);
-        return new ResponseEntity<Message>(message, HttpStatus.OK);
+        return noticeService.insert(patentId, fils, request);
     }
 
     /**
-     *
+     *交底书下载
      * @param noticeId  文件的id主键自增长
      * @param response
      * @return
@@ -144,13 +55,15 @@ public class NoticeController {
     @RequestMapping("/download")
     public ResponseEntity<Message>  downloadFile(@Param("noticeId") Integer noticeId,
             HttpServletResponse response) throws UnsupportedEncodingException, UnknownHostException {
+        //判断交底书ID
         if (noticeId == null) {
             message.setMessage(null, 400,   "没有需要下载文件ID", false);
             return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
         }
+        //返回数据库内的所有信息
         Notice notice = noticeService.selectNoticeByPatentId(noticeId);
         if (notice == null) {
-            message.setMessage(null, 400, "文件ID不存在", false);
+            message.setMessage(null, 400, "文件不存在", false);
             return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
         }
         //获取文件地址
@@ -158,6 +71,10 @@ public class NoticeController {
         message.setMessage(noticePath, 200, "文件下载成功", true);
         return new ResponseEntity<Message>(message, HttpStatus.OK);
     }
+
+
+
+
 
 
     /**
@@ -169,12 +86,17 @@ public class NoticeController {
     @UserLog("删除交底书！")
     @RequestMapping("/delete")
     public ResponseEntity<Message> delete(Integer noticeId) {
+        //判断交底书ID是否存在
         if (noticeId == null) {
             message.setMessage(null, 400,   "没有文件ID", false);
             return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
         }
         return noticeService.delete(noticeId);
     }
+
+
+
+
 
     /**
      * 用户查看
@@ -183,13 +105,18 @@ public class NoticeController {
      */
     @RequestMapping("/select")
     public ResponseEntity<Message>  selectByPatentId(Integer noticePatentId) {
+        //判断交底书专利ID是否存在
         if (noticePatentId == null) {
             message.setMessage(null, 400,   "没有文件ID", false);
             return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
         }
-        System.out.println(noticePatentId);
         return  noticeService.selectByPatentId(noticePatentId);
     }
+
+
+
+
+
     /**
      * 管理员查看
      * @param noticePatentId
@@ -197,6 +124,7 @@ public class NoticeController {
      */
     @RequestMapping("/searchManager")
     public ResponseEntity<Message>  searchmanagerId(Integer noticePatentId) {
+        //判断交底书专利是否存在
         if (noticePatentId == null) {
             message.setMessage(null, 400,   "没有文件ID", false);
             return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
