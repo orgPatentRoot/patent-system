@@ -49,6 +49,7 @@
       <if test="patentWriter!=null"> and patent_writer=#{patentWriter,jdbcType=INTEGER}</if>
       <if test="specialCondition!=null"> and ${specialCondition}</if>
     </trim>
+    order by patent_status_id
     ) p
      left join status s on p.patent_status_id=s.status_id
      left join user u1 on p. patent_create_person=u1.user_id
@@ -75,11 +76,13 @@
       <if test="patentApplyTime!=null"> and patent_apply_time =#{patentApplyTime,jdbcType=TIMESTAMP}</if>
       <if test="patentStatusId!=null"> and patent_status_id=#{patentStatusId,jdbcType=INTEGER}</if>
       <if test="patentInventor!=null"> and patent_inventor like concat('%',#{patentInventor,jdbcType=VARCHAR},'%') </if>
+      <if test="specialCondition!=null"> and ${specialCondition}</if>
     </trim>
+    order by patent_status_id
   </select>
 
 <!--  插入专利信息-->
-  <insert id="insertPatent" parameterType="com.suixingpay.patent.pojo.Patent" useGeneratedKeys="true" keyProperty="id">
+  <insert id="insertPatent" parameterType="com.suixingpay.patent.pojo.Patent" useGeneratedKeys="true" keyProperty="patentId">
     insert into patent (patent_batch, patent_case_num,
       patent_apply_num, patent_apply_time, patent_technical_contact,
       patent_apply_person, patent_create_person,

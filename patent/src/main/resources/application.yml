@@ -25,5 +25,5 @@ mybatis:
 
 visualpath: http://172.16.43.117:8080/
 
-patentNeedCheckStatus: 4
+patentNeedCheckStatus: 3
 

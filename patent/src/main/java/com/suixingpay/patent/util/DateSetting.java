@@ -11,7 +11,7 @@ import java.util.Date;
  * @Version 1.0
  */
 public class DateSetting {
-    public static void unifyDate(Date date) {
+    public static Date unifyDate(Date date) {
         if(date != null) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
             String timeStr = sdf.format(date);
@@ -21,5 +21,6 @@ public class DateSetting {
                 e.printStackTrace();
             }
         }
+        return date;
     }
 }

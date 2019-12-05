@@ -8,7 +8,7 @@ import java.util.Date;
 
 /**
  * @Description 专利对接前端传来的插入、修改数据
- * @Author 朱金圣[zhu_js@suixingpay.com]
+ * @Author zhu_jinsheng[zhu_js@suixingpay.com]
  * @Date 2019/12/2 17:28
  * @Version 1.0
  */
@@ -43,7 +43,7 @@ public class PatentChangeParams {
      * 将前端数据封装成后端需要的Patent对象
      * @return
      */
-    public Patent changeToPatent(){
+    public Patent changeToPatent() {
         Patent patent = new Patent();
         patent.setPatentId(patentId);
         patent.setPatentBatch(patentBatch);

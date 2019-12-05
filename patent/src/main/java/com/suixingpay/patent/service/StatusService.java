@@ -46,7 +46,7 @@ public interface StatusService {
     Message selectAfterByYml(Integer patentStatusId);
 
     /**
-     * 管理员审核时查询配置文件中 审核结点之前除方案讨论（2）的所有状态
+     * 管理员审核时查询配置文件中 审核结点之前除发明初合（认领阶段不需要审核） 1 的所有状态
      */
     Message adminSelectBeforeByYml(Integer patentStatusId);
 

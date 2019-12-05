@@ -57,7 +57,6 @@ public class PatentController {
         response.setStatus(message.getStatus());
         return message;
     }
-
     /**
      * 通过专利ID修改专利信息（编辑功能）
      * @param changeParams
@@ -145,6 +144,7 @@ public class PatentController {
         }
         //将前端筛选参数封装成Patent对象
         Patent patentCondition = checkParams.changeToPatent();
+        patentCondition.setSpecialCondition("patent_status_id != 0");
         List<Patent> list = patentService.selectPatentService(patentCondition);
         message.setMessage(list, 200, "查询成功！", true);
         return message;
@@ -170,6 +170,7 @@ public class PatentController {
         }
         //将前端筛选参数封装成Patent对象
         Patent patentCondition = checkParams.changeToPatent();
+        patentCondition.setSpecialCondition("patent_status_id != 0");
         List<Patent> list = patentService.selectPatentWithIndexService(patentCondition);
         message.setMessage(list, 200, "查询成功！", true);
         return message;
@@ -326,7 +327,7 @@ public class PatentController {
         Patent patentCondition = checkParams.changeToPatent();
         patentCondition.setPatentSign(1); //设置审核状态为审核中
         //设置需要的审核进度
-        patentCondition.setSpecialCondition("patent_status_id not in(1,2) and patent_status_id <= " + patentStatusId);
+        patentCondition.setSpecialCondition("patent_status_id not in(1) and patent_status_id <= " + patentStatusId);
         List<Patent> list = patentService.selectPatentService(patentCondition);
         message.setMessage(list, 200, "查询成功！", true);
         return message;
