@@ -438,7 +438,7 @@ public class PatentController {
             response.setStatus(message.getStatus());
             return message;
         }
-        List<Patent> list = patentService.selectPatentService(patent);
+        List<Patent> list = (List<Patent>) patentService.selectAllPatentService(patent).getObject();
         patentService.exportDeviceModelMsg(response, "patentExcel", list);
         message.setMessage("http://172.16.43.117:8080/patentExcel.xls", 200, "导出成功！", true);
         return message;
