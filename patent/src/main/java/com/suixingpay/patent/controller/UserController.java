@@ -23,7 +23,7 @@ public class UserController {
     private Message message = new Message();
 
     @GetMapping("/message")
-    public String login(){
+    public String login() {
         return "当前尚未登录！请登录后重试！";
     }
 
@@ -45,7 +45,7 @@ public class UserController {
     }
 
     @RequestMapping("/nologin")
-    public ResponseEntity<Message> NoLogin(HttpServletRequest request) {
+    public ResponseEntity<Message> noLogin(HttpServletRequest request) {
 
         message.setMessage(null, 401, "当前尚未登录", false);
         return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
