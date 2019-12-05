@@ -126,21 +126,6 @@ public class PatentServiceImpl implements PatentService {
     }
 
     /**
-     * 查询专利信息
-     * 通过专利id查询、案件文号查询、申请号查询、申请日期查询、进度查询、发明人姓名查询、创建人id查询、撰写人id查询、其他条件
-     * @param patent
-     * @return
-     */
-    @Override
-    public List<Patent> selectPatentService(Patent patent) {
-        //统一前端时间的小时
-        patent.setPatentApplyTime(DateSetting.unifyDate(patent.getPatentApplyTime()));
-        //安全参数替换，将特殊字符替换为空格
-        ParamCheck.patentParamReplace(patent);
-        return patentMapper.selectPatent(patent);
-    }
-
-    /**
      * 指标维度查询
      * 通过指标内容、专利名称、案件文号查询、申请号查询、申请日期查询、进度查询、发明人姓名查询
      * @param patent
@@ -157,7 +142,7 @@ public class PatentServiceImpl implements PatentService {
         }
         //指标维度不包含新建专利
         patent.setSpecialCondition("patent_status_id != 0");
-        List<Patent> list = patentMapper.selectPatent(patent);
+        List<Patent> list = patentMapper.selectPatentWithIndex(patent);
         message.setMessage(list, 200, "查询成功！", true);
         return message;
     }

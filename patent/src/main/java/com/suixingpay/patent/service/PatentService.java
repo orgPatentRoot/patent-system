@@ -33,14 +33,6 @@ public interface PatentService {
     Message selectAllPatentService(Patent patent);
 
     /**
-     * 查询专利信息
-     * 通过专利id查询、案件文号查询、申请号查询、申请日期查询、进度查询、发明人姓名查询、创建人id查询、撰写人id查询、其他条件
-     * @param patent
-     * @return
-     */
-    List<Patent> selectPatentService(Patent patent);
-
-    /**
      * 指标维度查询
      * 通过指标内容、专利名称、案件文号查询、申请号查询、申请日期查询、进度查询、发明人姓名查询
      * @param patent
