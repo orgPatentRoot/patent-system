@@ -30,31 +30,6 @@ public class ParamCheck {
         return true;
     }
 
-    /**
-     * Patent查询参数安全校验替换
-     * @param patent
-     * @return
-     */
-    public static void patentParamReplace(Patent patent) {
-        String regEx = regEx = "[ %]"; //不允许输入空格和百分号，存在则将其替换成_防止SQL注入
-        if (patent.getPatentName() != null) {
-            patent.setPatentName(patent.getPatentName().replaceAll(" ", ""));
-            patent.setPatentName(patent.getPatentName().replaceAll("%", " "));
-        }
-        if (patent.getPatentCaseNum() != null) {
-            patent.setPatentCaseNum(patent.getPatentCaseNum().replaceAll(regEx, "❀"));
-        }
-        if (patent.getPatentApplyNum() != null) {
-            patent.setPatentApplyNum(patent.getPatentApplyNum().replaceAll(regEx, "❀"));
-        }
-        if (patent.getPatentInventor() != null) {
-            patent.setPatentInventor(patent.getPatentInventor().replaceAll(regEx, "❀"));
-        }
-        if (patent.getIndexContent() != null) {
-            patent.setIndexContent(patent.getIndexContent().replaceAll(regEx, "❀"));
-        }
-    }
-
     //专利插入修改值特殊符号校验
     public static boolean patentParamCheck(Patent patent, String[] indexContent) {
         String regEx = regEx = "[ %]"; //不允许输入空格和百分号

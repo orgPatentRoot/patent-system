@@ -45,11 +45,6 @@ public class NoticeController {
         return noticeService.insert(patentId, fils, request);
     }
 
-
-
-
-
-
     /**
      *交底书下载
      * @param noticeId  文件的id主键自增长
