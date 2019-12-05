@@ -1,32 +1,32 @@
 package com.suixingpay.patent.controller;
 
-import com.suixingpay.patent.annotation.UserLog;
-import com.suixingpay.patent.pojo.Message;
-import com.suixingpay.patent.service.NoticeService;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.annotations.Param;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
+        import com.suixingpay.patent.annotation.UserLog;
+        import com.suixingpay.patent.pojo.Message;
+        import com.suixingpay.patent.service.NoticeService;
+        import lombok.extern.slf4j.Slf4j;
+        import org.apache.ibatis.annotations.Param;
+        import org.slf4j.Logger;
+        import org.slf4j.LoggerFactory;
+        import org.springframework.beans.factory.annotation.Autowired;
+        import org.springframework.beans.factory.annotation.Value;
+        import org.springframework.http.HttpStatus;
+        import org.springframework.http.ResponseEntity;
+        import org.springframework.transaction.annotation.Transactional;
+        import org.springframework.transaction.interceptor.TransactionAspectSupport;
+        import org.springframework.web.bind.annotation.RequestMapping;
+        import org.springframework.web.bind.annotation.RequestParam;
+        import org.springframework.web.bind.annotation.ResponseBody;
+        import org.springframework.web.bind.annotation.RestController;
+        import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.*;
-import java.net.UnknownHostException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import com.suixingpay.patent.pojo.Notice;
+        import javax.servlet.http.HttpServletRequest;
+        import javax.servlet.http.HttpServletResponse;
+        import java.io.*;
+        import java.net.UnknownHostException;
+        import java.text.DateFormat;
+        import java.text.SimpleDateFormat;
+        import java.util.Date;
+        import com.suixingpay.patent.pojo.Notice;
 
 @RestController
 @RequestMapping("/file")
@@ -50,7 +50,7 @@ public class NoticeController {
     @ResponseBody
     @Transactional
     public ResponseEntity<Message> upload(@RequestParam("patentId") Integer patentId,
-                                          @RequestParam("file") MultipartFile[] fils, HttpServletRequest request) {
+            @RequestParam("file") MultipartFile[] fils, HttpServletRequest request) {
         System.out.println(fils.length);
         //文件参数安全判断
         if(fils.length == 0) {
@@ -59,7 +59,7 @@ public class NoticeController {
         }
         for (MultipartFile file : fils) {
             if (patentId == null || file == null) {
-                message.setMessage(null, 200,   "没有文件ID或者文件上传", false);
+                message.setMessage(null, 200,  "没有文件ID或者文件上传", false);
                 return new ResponseEntity<Message>(message, HttpStatus.OK);
             }
             if  (file.isEmpty()) {
@@ -208,8 +208,4 @@ public class NoticeController {
         return  noticeService.searchmanagerId(noticePatentId);
     }
 }
-
-
-
-
 
