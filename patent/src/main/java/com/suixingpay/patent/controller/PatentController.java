@@ -47,11 +47,6 @@ public class PatentController {
         Patent patent = changeParams.changeToPatent(); //获取前端值
         //从session获取用户信息
         User user = (User) request.getSession().getAttribute("user");
-        //判断是否普通用户登录
-        if (!ParamCheck.userIsLogin(message, user)) {
-            response.setStatus(message.getStatus());
-            return message;
-        }
         patent.setPatentCreatePerson(user.getUserId()); //通过session设置创建人id
         message = patentService.insertPatentService(patent, changeParams.getIndexContent());
         response.setStatus(message.getStatus());
@@ -71,11 +66,6 @@ public class PatentController {
             HttpServletRequest request, HttpServletResponse response) {
         //从session获取用户信息
         User user = (User) request.getSession().getAttribute("user");
-        //判断用户是否登录
-        if (!ParamCheck.userIsLogin(message, user)) {
-            response.setStatus(message.getStatus());
-            return message;
-        }
         //判断专利Id不能为空
         if (ParamCheck.idIsEmpty(message, changeParams.getPatentId())) {
             response.setStatus(message.getStatus());
@@ -104,11 +94,6 @@ public class PatentController {
             HttpServletRequest request, HttpServletResponse response) {
         //从session获取用户信息
         User user = (User) request.getSession().getAttribute("user");
-        //判断用户是否管理员登录
-        if (!ParamCheck.userIsManagerLogin(message, user)) {
-            response.setStatus(message.getStatus());
-            return message;
-        }
         //将前端筛选参数封装成Patent对象
         Patent patentCondition = checkParams.changeToPatent();
         return patentService.selectAllPatentService(patentCondition);
@@ -127,11 +112,6 @@ public class PatentController {
             HttpServletRequest request, HttpServletResponse response) {
         //从session获取用户信息
         User user = (User) request.getSession().getAttribute("user");
-        //判断用户是否管理员登录
-        if (!ParamCheck.userIsManagerLogin(message, user)) {
-            response.setStatus(message.getStatus());
-            return message;
-        }
         //将前端筛选参数封装成Patent对象
         Patent patentCondition = checkParams.changeToPatent();
         return patentService.selectPatentWithIndexService(patentCondition);
@@ -150,11 +130,6 @@ public class PatentController {
             HttpServletRequest request, HttpServletResponse response) {
         //从session获取用户信息
         User user = (User) request.getSession().getAttribute("user");
-        //判断是否普通用户登录
-        if (!ParamCheck.userIsLogin(message, user)) {
-            response.setStatus(message.getStatus());
-            return message;
-        }
         //将前端筛选参数封装成Patent对象
         Patent patentCondition = checkParams.changeToPatent();
         return patentService.selectAllPatentNoWriterService(patentCondition);
@@ -173,11 +148,6 @@ public class PatentController {
             HttpServletRequest request, HttpServletResponse response) {
         //从session获取用户信息
         User user = (User) request.getSession().getAttribute("user");
-        //判断是否普通用户登录
-        if (!ParamCheck.userIsLogin(message, user)) {
-            response.setStatus(message.getStatus());
-            return message;
-        }
         //将前端筛选参数封装成Patent对象
         Patent patentCondition = checkParams.changeToPatent();
         patentCondition.setPatentCreatePerson(user.getUserId()); //设置创建人筛选条件
@@ -197,11 +167,6 @@ public class PatentController {
             HttpServletRequest request, HttpServletResponse response) {
         //从session获取用户信息
         User user = (User) request.getSession().getAttribute("user");
-        //判断是否普通用户登录
-        if (!ParamCheck.userIsLogin(message, user)) {
-            response.setStatus(message.getStatus());
-            return message;
-        }
         //将前端筛选参数封装成Patent对象
         Patent patentCondition = checkParams.changeToPatent();
         patentCondition.setPatentWriter(user.getUserId()); //设置撰写人筛选条件
@@ -221,11 +186,6 @@ public class PatentController {
             HttpServletRequest request, HttpServletResponse response) {
         //从session获取用户信息
         User user = (User) request.getSession().getAttribute("user");
-        //判断是否普通用户登录
-        if (!ParamCheck.userIsLogin(message, user)) {
-            response.setStatus(message.getStatus());
-            return message;
-        }
         //将前端筛选参数封装成Patent对象
         Patent patentCondition = checkParams.changeToPatent();
         patentCondition.setPatentWriter(user.getUserId()); //设置撰写人筛选条件
@@ -263,11 +223,6 @@ public class PatentController {
             HttpServletRequest request, HttpServletResponse response) {
         //从session获取用户信息
         User user = (User) request.getSession().getAttribute("user");
-        //判断用户是否管理员登录
-        if (!ParamCheck.userIsManagerLogin(message, user)) {
-            response.setStatus(message.getStatus());
-            return message;
-        }
         //将前端参数形成筛选条件
         Patent patentCondition = checkParams.changeToPatent();
         return patentService.selectExamineService(patentCondition);
@@ -287,11 +242,6 @@ public class PatentController {
             HttpServletRequest request, HttpServletResponse response) {
         //从session获取用户信息
         User user = (User) request.getSession().getAttribute("user");
-        //判断用户是否登录
-        if (!ParamCheck.userIsLogin(message, user)) {
-            response.setStatus(message.getStatus());
-            return message;
-        }
         //判断专利Id不能为空
         if (ParamCheck.idIsEmpty(message, patentId)) {
             response.setStatus(message.getStatus());
@@ -325,11 +275,6 @@ public class PatentController {
         }
         //从session获取用户信息
         User user = (User) request.getSession().getAttribute("user");
-        //判断用户是否管理员登录
-        if (!ParamCheck.userIsManagerLogin(message, user)) {
-            response.setStatus(message.getStatus());
-            return message;
-        }
         Patent patentCondition = new Patent();
         patentCondition.setPatentId(patentId);
         message = patentService.auditPass(patentCondition);
@@ -356,11 +301,6 @@ public class PatentController {
         }
         //从session获取用户信息
         User user = (User) request.getSession().getAttribute("user");
-        //判断用户是否管理员登录
-        if (!ParamCheck.userIsManagerLogin(message, user)) {
-            response.setStatus(message.getStatus());
-            return message;
-        }
         Patent patentCondition = new Patent();
         patentCondition.setPatentId(patentId);
         message = patentService.auditFailed(patentCondition);
@@ -387,11 +327,6 @@ public class PatentController {
         }
         //从session获取用户信息
         User user = (User) request.getSession().getAttribute("user");
-        //判断是否普通用户登录
-        if (!ParamCheck.userIsLogin(message, user)) {
-            response.setStatus(message.getStatus());
-            return message;
-        }
         Patent patentCondition = new Patent();
         patentCondition.setPatentId(patentId);
         message = patentService.userSubmitAudit(patentCondition);
@@ -408,11 +343,6 @@ public class PatentController {
             HttpServletRequest request, HttpServletResponse response) {
         //从session获取用户信息
         User user = (User) request.getSession().getAttribute("user");
-        //判断是否普通用户登录
-        if (!ParamCheck.userIsLogin(message, user)) {
-            response.setStatus(message.getStatus());
-            return message;
-        }
         Patent patentCondition = new Patent();
         patentCondition.setPatentId(checkParams.getPatentId());
         patentCondition.setPatentStatusId(checkParams.getPatentStatusId());
@@ -433,11 +363,6 @@ public class PatentController {
             HttpServletRequest request, HttpServletResponse response) throws IOException {
         //从session获取用户信息
         User user = (User) request.getSession().getAttribute("user");
-        //判断用户是否管理员登录
-        if (!ParamCheck.userIsManagerLogin(message, user)) {
-            response.setStatus(message.getStatus());
-            return message;
-        }
         List<Patent> list = (List<Patent>) patentService.selectAllPatentService(patent).getObject();
         patentService.exportDeviceModelMsg(response, "patentExcel", list);
         message.setMessage("http://172.16.43.117:8080/patentExcel.xls", 200, "导出成功！", true);
@@ -456,11 +381,6 @@ public class PatentController {
             HttpServletRequest request, HttpServletResponse response) throws IOException {
         //从session获取用户信息
         User user = (User) request.getSession().getAttribute("user");
-        //判断用户是否管理员登录
-        if (!ParamCheck.userIsManagerLogin(message, user)) {
-            response.setStatus(message.getStatus());
-            return message;
-        }
         List<Patent> list = (List<Patent>) patentService.selectPatentWithIndexService(patent).getObject();
         patentService.exportDeviceModelMsg(response, "patentWithIndexExcel", list);
         message.setMessage("http://172.16.43.117:8080/patentWithIndexExcel.xls", 200, "导出成功！", true);
